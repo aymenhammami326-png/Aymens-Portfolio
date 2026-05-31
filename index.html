@@ -705,6 +705,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 </footer>
 
 <audio id="bgAudio" src="song.mp3" loop preload="none"></audio>
+<script src="config.js"></script>
 
 <div class="modal" id="modal">
   <div class="modal-bg" id="modalBg"></div>
@@ -1200,7 +1201,7 @@ function closeModal() { document.getElementById('modal').classList.remove('open'
 
 function loadProjects() {
   const grid=document.getElementById('projGrid'); if(!grid) return;
-  const projects=db_get('projects',DEFAULT_PROJECTS);
+  const projects=db_get('projects', window.portfolioConfig?.projects || DEFAULT_PROJECTS);
   grid.innerHTML='';
   projects.forEach(p => {
     const card=document.createElement('div'); card.className='proj-card rv';
@@ -1307,7 +1308,7 @@ function loadAdminOverview() {
   const today=new Date().toDateString();
   document.getElementById('sVisitors').textContent=visitors.length;
   document.getElementById('sTodayVisitors').textContent=visitors.filter(v=>new Date(v.lastSeen).toDateString()===today).length;
-  document.getElementById('sProjects').textContent=db_get('projects',DEFAULT_PROJECTS).length;
+  document.getElementById('sProjects').textContent=db_get('projects', window.portfolioConfig?.projects || DEFAULT_PROJECTS).length;
   document.getElementById('sChats').textContent=db_get('chatCount',0);
   document.getElementById('recentVisitorsList').innerHTML=buildVisitorTable(visitors.slice(0,5));
 }
