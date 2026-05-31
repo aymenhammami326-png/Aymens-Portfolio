@@ -299,7 +299,7 @@ nav.sc{background:rgba(240,246,255,0.94);backdrop-filter:blur(24px);border-botto
   PAST WORKS — STYLING IMPROVEMENTS
   Enhanced hover overlay, clearer badges, image scale and responsive tweaks
   ============================================ */
-.pw-section-intro{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+.pw-section-intro{display:none;}
 .pw-filter-row{display:flex;gap:6px;flex-wrap:wrap;}
 .pw-filter{font-family:var(--mono);font-size:.52rem;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:999px;border:1px solid var(--border);color:var(--text3);background:rgba(255,255,255,0.6);cursor:pointer;transition:all .18s ease;}
 .pw-filter:hover{border-color:var(--border2);color:var(--text);}
@@ -326,12 +326,8 @@ nav.sc{background:rgba(240,246,255,0.94);backdrop-filter:blur(24px);border-botto
 .pw-av{width:88px;height:88px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,0.08);position:relative;z-index:2;box-shadow:0 8px 30px rgba(2,6,23,0.6);transition:transform .36s,border-color .36s;}
 .pw-card:hover .pw-av{transform:translateY(-6px) scale(1.06);border-color:rgba(59,130,246,0.35);}
 
-/* Hover overlay with CTA */
-.pw-hover-overlay{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;opacity:0;transition:opacity .28s ease;}
-.pw-card:hover .pw-hover-overlay{opacity:1}
-.pw-hover-title{font-weight:800;color:#fff;font-size:1.02rem;margin-bottom:6px;text-shadow:0 10px 30px rgba(2,6,23,0.6)}
-.pw-hover-sub{font-size:.88rem;color:rgba(255,255,255,0.9);margin-bottom:10px}
-.pw-hover-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;border-radius:999px;font-weight:700;font-size:.9rem;box-shadow:0 12px 36px rgba(37,99,235,0.18)}
+/* Hover overlay — hidden per user request */
+.pw-hover-overlay{display:none;}
 
 /* Shimmer on hover (subtle) */
 .pw-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,0.02) 0%,transparent 50%,rgba(8,145,178,0.02) 100%);opacity:0;transition:opacity .35s;z-index:1;border-radius:18px}
@@ -770,14 +766,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       <h2 class="sec-title">Past <span class="hi">Works</span></h2>
       <p class="sec-sub">Server & Projekte, an denen ich mitgearbeitet habe.</p>
     </div>
-    <div class="pw-section-intro rv">
-      <div class="pw-filter-row" id="pwFilterRow">
-        <button class="pw-filter on" data-filter="all">Alle</button>
-        <button class="pw-filter" data-filter="active">Aktiv</button>
-        <button class="pw-filter" data-filter="closed">Geschlossen</button>
-        <button class="pw-filter" data-filter="fivem">FiveM</button>
-      </div>
-    </div>
     <div class="pw-grid" id="pwGrid"></div>
   </div>
 </section>
@@ -807,7 +795,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </footer>
 
-<audio id="bgAudio" src="Lights.mp3" loop preload="none"></audio>
+<audio id="bgAudio" src="Lights.mp3" loop preload="auto"></audio>
 <script src="config.js"></script>
 
 <div class="modal" id="modal">
@@ -1135,27 +1123,13 @@ let pwCurrentFilter = 'all';
 function loadPastWorks() {
   const grid = document.getElementById('pwGrid'); if (!grid) return;
   renderPastWorks();
-  // Filter buttons
-  document.querySelectorAll('.pw-filter').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.pw-filter').forEach(b => b.classList.remove('on'));
-      btn.classList.add('on');
-      pwCurrentFilter = btn.dataset.filter;
-      renderPastWorks();
-    });
-  });
+  // Filter buttons removed per user request
 }
 
 function renderPastWorks() {
   const grid = document.getElementById('pwGrid'); if (!grid) return;
   grid.innerHTML = '';
-  const filtered = PAST_WORKS.filter(p => {
-    if (pwCurrentFilter === 'all') return true;
-    if (pwCurrentFilter === 'active') return p.status === 'active';
-    if (pwCurrentFilter === 'closed') return p.status === 'closed';
-    if (pwCurrentFilter === 'fivem') return p.category === 'FIVEM' || p.type?.includes('FiveM') || p.category?.toLowerCase().includes('fivem') || p.category?.toLowerCase().includes('crimelife');
-    return true;
-  });
+  const filtered = PAST_WORKS.slice(); // Display all without filtering
   filtered.forEach((p, i) => {
     const card = document.createElement('div');
     card.className = 'pw-card rv';
@@ -1180,17 +1154,8 @@ function renderPastWorks() {
           <span class="pw-mi"><i class="fas fa-location-dot"></i>${p.location}</span>
         </div>
       </div>
-      <div class="pw-hover-overlay">
-        <div class="pw-hover-title">${p.title}</div>
-        <div class="pw-hover-sub">${catLine}</div>
-        <div class="pw-hover-stats">
-          <div class="pw-hs"><div class="pw-hs-n">${p.users}</div><div class="pw-hs-l">User</div></div>
-          <div class="pw-hs"><div class="pw-hs-n">${p.year}</div><div class="pw-hs-l">Jahr</div></div>
-          <div class="pw-hs"><div class="pw-hs-n">${p.status === 'active' ? '🟢' : '⚫'}</div><div class="pw-hs-l">Status</div></div>
-        </div>
-        <div class="pw-hover-btn"><i class="fas fa-info-circle"></i>Details ansehen</div>
-      </div>`;
-    // Click disabled per user request
+      `;
+    // Hover overlay and click disabled per user request
     grid.appendChild(card);
   });
   const ob = new IntersectionObserver(es => {
