@@ -1067,7 +1067,7 @@ function startDiscordOAuth() {
   sessionStorage.setItem('oauth_state', state);
   const params = new URLSearchParams({
     client_id: DISCORD_CLIENT_ID,
-    redirect_uri: 'http://localhost:8080',
+    redirect_uri: 'https://aymens-portfolio-opal.vercel.app/',
     response_type: 'token',
     scope: DISCORD_SCOPE,
     state: state
