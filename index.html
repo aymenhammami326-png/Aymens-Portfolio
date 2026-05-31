@@ -42,77 +42,48 @@ button{cursor:none;font-family:var(--font);background:none;border:none;}
 /* ====== LOGIN SCREEN ====== */
 #loginScreen{
   position:fixed;inset:0;z-index:9995;
-  background:#050c1a;
+  background:#f8fbff;
   display:flex;align-items:center;justify-content:center;
-  transition:opacity .9s cubic-bezier(.16,1,.3,1),visibility .9s;overflow:hidden;
+  transition:opacity .5s ease,visibility .5s ease;
 }
 #loginScreen.out{opacity:0;visibility:hidden;pointer-events:none;}
-
-/* Grid bg */
-.ls-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,0.05) 1px,transparent 1px);background-size:80px 80px;animation:gridPan 20s linear infinite;}
-@keyframes gridPan{from{background-position:0 0}to{background-position:80px 80px}}
-
-/* Orbs */
-.ls-orb{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none;}
-.ls-orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(37,99,235,0.18) 0%,transparent 70%);top:-200px;left:-100px;animation:orbFloat1 8s ease-in-out infinite;}
-.ls-orb2{width:400px;height:400px;background:radial-gradient(circle,rgba(8,145,178,0.12) 0%,transparent 70%);bottom:-100px;right:-50px;animation:orbFloat2 10s ease-in-out infinite;}
-.ls-orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(139,92,246,0.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:orbFloat3 6s ease-in-out infinite;}
-@keyframes orbFloat1{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,30px)}}
-@keyframes orbFloat2{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,-20px)}}
-@keyframes orbFloat3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.2)}}
-
-/* Stars */
-.ls-star{position:absolute;border-radius:50%;background:#fff;}
 
 /* Login container */
 .ls-wrap{position:relative;z-index:2;width:min(400px,92vw);display:flex;flex-direction:column;gap:0;}
 
-/* Floating name above card */
-.ls-brand{text-align:center;margin-bottom:32px;animation:brandFloat 4s ease-in-out infinite;}
-@keyframes brandFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.ls-brand-name{font-family:var(--display);font-size:3rem;font-weight:800;letter-spacing:-0.04em;background:linear-gradient(135deg,#fff 0%,rgba(100,160,255,1) 50%,rgba(8,145,178,0.9) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
-.ls-brand-sub{font-family:var(--mono);font-size:.55rem;color:rgba(255,255,255,0.25);letter-spacing:4px;text-transform:uppercase;margin-top:8px;}
-.ls-brand-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-right:6px;animation:pulse 2s ease-out infinite;vertical-align:middle;}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+/* Brand */
+.ls-brand{text-align:center;margin-bottom:24px;}
+.ls-brand-name{font-family:var(--display);font-size:2.8rem;font-weight:800;color:#0f172a;line-height:1;}
+.ls-brand-sub{font-family:var(--mono);font-size:.8rem;color:#475569;letter-spacing:1.5px;text-transform:uppercase;margin-top:10px;}
 
 /* Login card */
 .ls-card{
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:24px;padding:36px 32px;
-  backdrop-filter:blur(30px);
-  box-shadow:0 40px 80px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.08);
+  background:#ffffff;
+  border:1px solid rgba(15,23,42,0.08);
+  border-radius:24px;
+  padding:32px 28px;
+  box-shadow:0 16px 40px rgba(15,23,42,0.08);
 }
-.ls-card-title{font-family:var(--display);font-size:1.3rem;font-weight:800;color:#fff;text-align:center;margin-bottom:4px;letter-spacing:-0.02em;}
-.ls-card-sub{font-family:var(--mono);font-size:.52rem;color:rgba(255,255,255,0.3);text-align:center;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;}
+.ls-card-title{font-family:var(--display);font-size:1.35rem;font-weight:800;color:#0f172a;text-align:center;margin-bottom:10px;}
+.ls-card-sub{font-family:var(--mono);font-size:.8rem;color:#475569;text-align:center;letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;}
 
 /* Discord button — the main CTA */
 .ls-discord-btn{
-  width:100%;display:flex;align-items:center;justify-content:center;gap:12px;
-  padding:16px 24px;border-radius:14px;
-  background:linear-gradient(135deg,#5865f2 0%,#4752c4 100%);
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:15px 22px;border-radius:14px;
+  background:#2563eb;
   color:#fff;font-size:1rem;font-weight:700;
-  border:none;cursor:pointer;position:relative;overflow:hidden;
+  border:none;cursor:pointer;
   transition:transform .2s,box-shadow .2s;
-  box-shadow:0 8px 32px rgba(88,101,242,0.45),0 0 0 1px rgba(255,255,255,0.05);
-  letter-spacing:-0.01em;
+  box-shadow:0 12px 28px rgba(37,99,235,0.18);
 }
-.ls-discord-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent 60%);pointer-events:none;}
-.ls-discord-btn:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(88,101,242,0.6),0 0 0 1px rgba(255,255,255,0.1);}
+.ls-discord-btn:hover{transform:translateY(-1px);box-shadow:0 16px 34px rgba(37,99,235,0.22);}
 .ls-discord-btn:active{transform:translateY(0);}
-.ls-discord-btn i{font-size:1.25rem;}
-.ls-discord-btn .btn-arrow{margin-left:auto;opacity:0.6;font-size:.75rem;transition:transform .2s;}
-.ls-discord-btn:hover .btn-arrow{transform:translateX(3px);}
+.ls-discord-btn i{font-size:1.1rem;}
+.ls-discord-btn .btn-arrow{margin-left:auto;opacity:0.85;font-size:.82rem;transition:transform .2s;}
+.ls-discord-btn:hover .btn-arrow{transform:translateX(2px);}
 
-.ls-sep{display:flex;align-items:center;gap:12px;margin:20px 0;}
-.ls-sep::before,.ls-sep::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
-.ls-sep span{font-family:var(--mono);font-size:.45rem;color:rgba(255,255,255,0.18);letter-spacing:2px;text-transform:uppercase;}
-
-.ls-pills{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
-.ls-pill{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:.48rem;color:rgba(255,255,255,0.3);letter-spacing:1px;}
-.ls-pill i{color:rgba(37,99,235,0.7);font-size:.5rem;}
-
-.ls-note{font-family:var(--mono);font-size:.44rem;color:rgba(255,255,255,0.12);text-align:center;margin-top:20px;letter-spacing:1px;line-height:1.8;}
+.ls-note{font-family:var(--mono);font-size:.85rem;color:#475569;text-align:center;margin-top:22px;line-height:1.7;}
 
 /* ====== WELCOME SCREEN ====== */
 #welcomeScreen{
@@ -584,31 +555,20 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 
 <!-- ===== LOGIN SCREEN ===== -->
 <div id="loginScreen">
-  <div class="ls-grid"></div>
-  <div class="ls-orb ls-orb1"></div>
-  <div class="ls-orb ls-orb2"></div>
-  <div class="ls-orb ls-orb3"></div>
-  <div class="ls-stars" id="lsStars"></div>
   <div class="ls-wrap">
     <div class="ls-brand">
-      <div class="ls-brand-name">Aymen༄</div>
-      <div class="ls-brand-sub"><span class="ls-brand-dot"></span>Available for Work</div>
+      <div class="ls-brand-name">Discord Login</div>
+      <div class="ls-brand-sub">Autorisierung erforderlich</div>
     </div>
     <div class="ls-card">
-      <div class="ls-card-title">Willkommen zurück</div>
-      <div class="ls-card-sub">Login erforderlich</div>
+      <div class="ls-card-title">Einfach einloggen</div>
+      <div class="ls-card-sub">Verbinde deinen Discord-Account</div>
       <button class="ls-discord-btn" id="discordLoginBtn" onclick="startDiscordOAuth()">
         <i class="fab fa-discord"></i>
-        Mit Discord anmelden
+        Discord autorisieren
         <i class="fas fa-arrow-right btn-arrow"></i>
       </button>
-      <div class="ls-sep"><span>features</span></div>
-      <div class="ls-pills">
-        <div class="ls-pill"><i class="fas fa-lock"></i> Sicher &amp; Privat</div>
-        <div class="ls-pill"><i class="fas fa-bolt"></i> Instant Access</div>
-        <div class="ls-pill"><i class="fas fa-shield-halved"></i> Discord OAuth2</div>
-      </div>
-      <div class="ls-note">Deine Daten werden nur zur Anzeige genutzt.<br>Keine sensiblen Informationen werden gespeichert.</div>
+      <div class="ls-note">Nur die notwendigen Discord-Daten werden verwendet.</div>
     </div>
   </div>
 </div>
@@ -649,7 +609,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       <a href="#home" class="nl on" data-s="home">Home</a>
       <a href="#about" class="nl" data-s="about">About</a>
       <a href="#projects" class="nl" data-s="projects">Projects</a>
-      <a href="#changelog" class="nl" data-s="changelog">Changelog</a>
       <a href="#connect" class="nl" data-s="connect">Connect</a>
     </div>
     <div class="nav-r">
@@ -698,10 +657,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
     <div class="admin-tabs">
       <button class="admin-tab on" data-tab="overview">Overview</button>
       <button class="admin-tab" data-tab="visitors">Visitors</button>
-      <button class="admin-tab" data-tab="changelog">Changelog</button>
-      <button class="admin-tab" data-tab="projects">Projects</button>
-      <button class="admin-tab" data-tab="announcement">Announcement</button>
-      <button class="admin-tab" data-tab="settings">Settings</button>
     </div>
     <div class="admin-body">
       <!-- OVERVIEW -->
@@ -711,7 +666,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
           <div class="admin-stat"><div class="admin-stat-n" id="sVisitors">0</div><div class="admin-stat-l">Total Visitors</div></div>
           <div class="admin-stat"><div class="admin-stat-n" id="sTodayVisitors">0</div><div class="admin-stat-l">Today</div></div>
           <div class="admin-stat"><div class="admin-stat-n" id="sProjects">0</div><div class="admin-stat-l">Projects</div></div>
-          <div class="admin-stat"><div class="admin-stat-n" id="sChangelogs">0</div><div class="admin-stat-l">Changelogs</div></div>
           <div class="admin-stat"><div class="admin-stat-n" id="sChats">0</div><div class="admin-stat-l">AI Chats</div></div>
         </div>
         <div class="admin-section-title">Recent Visitors</div>
@@ -723,90 +677,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
         <div id="allVisitorsList"></div>
         <div style="margin-top:14px;display:flex;gap:8px;">
           <button class="admin-btn-sm del" onclick="if(confirm('Visitor-Log leeren?')){db_set('visitors',[]);renderVisitors();showToast('Log geleert');}"><i class="fas fa-trash"></i> Clear Log</button>
-        </div>
-      </div>
-      <!-- CHANGELOG -->
-      <div class="admin-section" id="tab-changelog">
-        <div class="admin-cl-list" id="adminClList"></div>
-        <div class="admin-form">
-          <div class="admin-form-title">+ Neuer Eintrag</div>
-          <div class="admin-row">
-            <div class="admin-field"><label class="admin-label">Version</label><input class="admin-input" id="clVer" placeholder="v3.1.0"></div>
-            <div class="admin-field"><label class="admin-label">Datum</label><input class="admin-input" id="clDate" placeholder="Jun 2026"></div>
-            <div class="admin-field" style="min-width:60px;max-width:80px;"><label class="admin-label">Badge</label><input class="admin-input" id="clBadge" placeholder="New"></div>
-          </div>
-          <div class="admin-field" style="margin-bottom:14px;">
-            <label class="admin-label">Nachricht</label>
-            <textarea class="admin-textarea" id="clMsg" placeholder="Was hat sich geändert..."></textarea>
-          </div>
-          <button class="admin-btn-sm primary" onclick="addChangelogEntry()"><i class="fas fa-plus"></i> Hinzufügen &amp; Veröffentlichen</button>
-        </div>
-      </div>
-      <!-- PROJECTS -->
-      <div class="admin-section" id="tab-projects">
-        <div class="admin-proj-list" id="adminProjList"></div>
-        <div class="admin-form">
-          <div class="admin-form-title">+ Projekt hinzufügen</div>
-          <div class="admin-row">
-            <div class="admin-field"><label class="admin-label">Name</label><input class="admin-input" id="pName" placeholder="Project Name"></div>
-            <div class="admin-field"><label class="admin-label">Kategorie</label><input class="admin-input" id="pCat" placeholder="Discord Bot"></div>
-          </div>
-          <div class="admin-row">
-            <div class="admin-field"><label class="admin-label">Status</label><select class="admin-input" id="pStatus"><option value="ps-dev">Aktiv</option><option value="ps-disc">Geschlossen</option></select></div>
-            <div class="admin-field"><label class="admin-label">Link (optional)</label><input class="admin-input" id="pLink" placeholder="https://..."></div>
-          </div>
-          <div class="admin-field" style="margin-bottom:14px;">
-            <label class="admin-label">Beschreibung</label>
-            <textarea class="admin-textarea" id="pDesc" placeholder="Was macht das Projekt?"></textarea>
-          </div>
-          <button class="admin-btn-sm primary" onclick="addProject()"><i class="fas fa-plus"></i> Hinzufügen &amp; Veröffentlichen</button>
-        </div>
-      </div>
-      <!-- ANNOUNCEMENT -->
-      <div class="admin-section" id="tab-announcement">
-        <div class="admin-announcement">
-          <div class="admin-announcement-row">
-            <span style="font-size:.85rem;font-weight:700;color:rgba(255,255,255,.8)">Announcement Banner</span>
-            <label class="admin-switch">
-              <input type="checkbox" id="annToggle" onchange="toggleAnnouncement()">
-              <div class="admin-switch-track"></div>
-              <div class="admin-switch-thumb"></div>
-            </label>
-          </div>
-          <div class="admin-field">
-            <label class="admin-label">Text</label>
-            <textarea class="admin-textarea" id="annInput" placeholder="🔥 Neues Projekt veröffentlicht!"></textarea>
-          </div>
-          <div style="margin-top:10px;display:flex;gap:8px;">
-            <button class="admin-btn-sm primary" onclick="saveAnnouncement()"><i class="fas fa-save"></i> Speichern &amp; Veröffentlichen</button>
-            <button class="admin-btn-sm" onclick="clearAnnouncement()"><i class="fas fa-trash"></i> Löschen</button>
-          </div>
-        </div>
-      </div>
-      <!-- SETTINGS -->
-      <div class="admin-section" id="tab-settings">
-        <div class="admin-form">
-          <div class="admin-form-title">Hero Beschreibung</div>
-          <div class="admin-field" style="margin-bottom:12px;">
-            <label class="admin-label">Text</label>
-            <textarea class="admin-textarea" id="setDesc" placeholder="Deine Hero-Beschreibung..."></textarea>
-          </div>
-          <button class="admin-btn-sm primary" onclick="saveSettings()"><i class="fas fa-save"></i> Speichern</button>
-        </div>
-        <div class="admin-form">
-          <div class="admin-form-title">Hero Stats</div>
-          <div class="admin-row">
-            <div class="admin-field"><label class="admin-label">Projekte</label><input class="admin-input" id="stProjects" placeholder="17" type="number"></div>
-            <div class="admin-field"><label class="admin-label">Jahre Erfahrung</label><input class="admin-input" id="stYears" placeholder="4" type="number"></div>
-            <div class="admin-field"><label class="admin-label">Followers</label><input class="admin-input" id="stFollowers" placeholder="3000" type="number"></div>
-          </div>
-          <button class="admin-btn-sm primary" onclick="saveStats()"><i class="fas fa-save"></i> Speichern</button>
-        </div>
-        <div class="admin-form">
-          <div class="admin-form-title" style="color:#f87171;">Danger Zone</div>
-          <button class="admin-btn-sm del" onclick="if(confirm('Alles zurücksetzen?')){db_set('changelog',DEFAULT_CHANGELOG);db_set('projects',DEFAULT_PROJECTS);db_set('settings',{});db_set('announcement',{active:false,text:''});showToast('Alles zurückgesetzt');}">
-            <i class="fas fa-rotate-left"></i> Auf Standard zurücksetzen
-          </button>
         </div>
       </div>
     </div>
@@ -937,14 +807,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </section>
 
-<!-- CHANGELOG -->
-<section class="sec" id="changelog">
-  <div class="sec-in">
-    <div class="sec-hdr rv"><div class="sec-tag">// Changelog</div><h2 class="sec-title">Site <span class="hi">Updates</span></h2><p class="sec-sub">Was neu ist. Die Seite entwickelt sich ständig weiter.</p></div>
-    <div class="cl-list" id="changelogList"></div>
-  </div>
-</section>
-
 <!-- CONNECT -->
 <section class="sec" id="connect">
   <div class="sec-in">
@@ -961,7 +823,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 <footer>
   <div class="ft-in">
     <span class="ft-logo">[ A༄ ]</span>
-    <div class="ft-links"><a href="#home">Home</a><a href="#about">About</a><a href="#projects">Projekte</a><a href="#changelog">Changelog</a><a href="#connect">Kontakt</a></div>
+    <div class="ft-links"><a href="#home">Home</a><a href="#about">About</a><a href="#projects">Projekte</a><a href="#connect">Kontakt</a></div>
     <span class="ft-copy">© 2026 Aymen༄</span>
   </div>
 </footer>
@@ -1619,7 +1481,7 @@ async function openAdmin() {
   document.getElementById('adminOverlay').classList.add('open');
   document.body.style.overflow='hidden';
   await db_init(); // Re-sync
-  renderAdminChangelog(); renderAdminProjects(); renderVisitors(); loadAdminOverview(); loadAdminSettings(); loadAdminAnnouncement();
+  renderVisitors(); loadAdminOverview();
 }
 function closeAdmin() { document.getElementById('adminOverlay').classList.remove('open'); document.body.style.overflow=''; }
 window.closeAdmin=closeAdmin;
@@ -1654,7 +1516,6 @@ function loadAdminOverview() {
   document.getElementById('sVisitors').textContent=visitors.length;
   document.getElementById('sTodayVisitors').textContent=visitors.filter(v=>new Date(v.lastSeen).toDateString()===today).length;
   document.getElementById('sProjects').textContent=db_get('projects',DEFAULT_PROJECTS).length;
-  document.getElementById('sChangelogs').textContent=db_get('changelog',DEFAULT_CHANGELOG).length;
   document.getElementById('sChats').textContent=db_get('chatCount',0);
   document.getElementById('recentVisitorsList').innerHTML=buildVisitorTable(visitors.slice(0,5));
 }
