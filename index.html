@@ -269,6 +269,28 @@ nav.sc{background:rgba(240,246,255,0.94);backdrop-filter:blur(24px);border-botto
 .proj-arr{font-size:.6rem;color:var(--text3);transition:all .2s;}
 .proj-card:hover .proj-arr{transform:translateX(3px);color:var(--blue);}
 .proj-load{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:60px 0;color:var(--text3);font-family:var(--mono);font-size:.65rem;letter-spacing:1px;}
+/* ── Past Works ── */
+.pw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+.pw-card{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);background:rgba(255,255,255,0.85);transition:all .3s;cursor:default;position:relative;}
+.pw-card.linked{cursor:pointer;}
+.pw-card:hover{border-color:var(--border2);box-shadow:0 12px 32px rgba(37,99,235,.12);transform:translateY(-4px);}
+.pw-thumb{width:100%;height:130px;overflow:hidden;position:relative;background:#0a1020;display:flex;align-items:center;justify-content:center;}
+.pw-thumb img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.15);position:relative;z-index:1;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+.pw-thumb-bg{position:absolute;inset:0;opacity:.2;background-size:cover;background-position:center;filter:blur(10px) saturate(1.4);transform:scale(1.1);}
+.pw-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 35%,rgba(10,16,28,.75));}
+.pw-info{padding:14px 16px 16px;}
+.pw-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px;}
+.pw-name{font-size:.9rem;font-weight:700;color:var(--text);line-height:1.2;}
+.pw-st{font-family:var(--mono);font-size:.46rem;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:3px;flex-shrink:0;margin-top:2px;}
+.pw-st.active{background:rgba(22,163,74,.08);color:#15803d;border:1px solid rgba(22,163,74,.22);}
+.pw-st.closed{background:rgba(107,114,128,.07);color:#6b7280;border:1px solid rgba(107,114,128,.18);}
+.pw-cat{font-family:var(--mono);font-size:.55rem;color:var(--text3);letter-spacing:.5px;margin-bottom:10px;}
+.pw-meta{display:flex;flex-wrap:wrap;gap:6px;}
+.pw-mi{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:.52rem;color:var(--text3);}
+.pw-mi i{color:var(--blue);font-size:.55rem;}
+@media(max-width:600px){.pw-grid{grid-template-columns:1fr 1fr;}.pw-thumb{height:100px;}.pw-thumb img{width:60px;height:60px;}}
+@media(max-width:380px){.pw-grid{grid-template-columns:1fr;}}
+/* ── Connect ── */
 .conn-list{display:flex;flex-direction:column;gap:3px;}
 .conn-row{display:flex;align-items:center;justify-content:space-between;padding:17px 20px;border-radius:var(--r);background:rgba(255,255,255,0.85);border:1px solid var(--border);color:var(--text);transition:all .3s;position:relative;overflow:hidden;}
 .conn-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:background .3s;}
@@ -458,6 +480,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       <a href="#home" class="nl on" data-s="home">Home</a>
       <a href="#about" class="nl" data-s="about">About</a>
       <a href="#projects" class="nl" data-s="projects">Projects</a>
+      <a href="#pastworks" class="nl" data-s="pastworks">Works</a>
       <a href="#connect" class="nl" data-s="connect">Connect</a>
     </div>
     <div class="nav-r">
@@ -656,6 +679,17 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </section>
 
+<section class="sec" id="pastworks">
+  <div class="sec-in">
+    <div class="sec-hdr rv">
+      <div class="sec-tag">// Vergangenheit</div>
+      <h2 class="sec-title">Ausgewählte <span class="hi">Arbeiten</span></h2>
+      <p class="sec-sub">Server & Projekte, an denen ich mitgewirkt habe.</p>
+    </div>
+    <div class="pw-grid" id="pwGrid"></div>
+  </div>
+</section>
+
 <section class="sec" id="connect">
   <div class="sec-in">
     <div class="sec-hdr rv"><div class="sec-tag">// Kontakt</div><h2 class="sec-title">Lass uns <span class="hi">verbinden</span></h2><p class="sec-sub">Finde mich im Internet.</p></div>
@@ -671,7 +705,13 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 <footer>
   <div class="ft-in">
     <span class="ft-logo">[ A༄ ]</span>
-    <div class="ft-links"><a href="#home">Home</a><a href="#about">About</a><a href="#projects">Projekte</a><a href="#connect">Kontakt</a></div>
+    <div class="ft-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projekte</a>
+      <a href="#pastworks">Works</a>
+      <a href="#connect">Kontakt</a>
+    </div>
     <span class="ft-copy">© 2026 Aymen༄</span>
   </div>
 </footer>
@@ -695,7 +735,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 const DC_ID = '1477023843489939487';
 const ADMIN_DC_ID = '1477023843489939487';
 const DISCORD_CLIENT_ID = '1502858431676153897';
-const USE_JSONBIN = false;
 
 let dbCache = {};
 let dbSynced = false;
@@ -719,6 +758,14 @@ const DEFAULT_PROJECTS = [
   {id:1,name:'Discord AI Bot',desc:'Ein leistungsstarker KI-Discord-Bot mit Slash-Commands, Moderation und GPT-Integration.',status:'ps-dev',statusLabel:'Aktiv',tags:['discord.js','OpenAI','Node.js'],link:'',icon:'fab fa-discord'},
   {id:2,name:'FiveM RP Framework',desc:'Eigenes FiveM Roleplay-Framework mit erweitertem Job-System, Wirtschaft und Wohnhäusern.',status:'ps-dev',statusLabel:'Aktiv',tags:['Lua','FiveM','MySQL'],link:'',icon:'fas fa-gamepad'},
   {id:3,name:'Portfolio V3',desc:'Diese Seite! Gebaut mit vanilla HTML/CSS/JS, Lanyard API, Discord OAuth2 und Admin Dashboard.',status:'ps-dev',statusLabel:'Aktiv',tags:['HTML','CSS','JS'],link:'',icon:'fas fa-code'},
+];
+
+const PAST_WORKS = [
+  {id:1,title:'Dunya Roleplay',category:'Roleplay Server',type:'',year:'2026',location:'Germany',users:'250+',status:'active',image:'https://cdn.discordapp.com/icons/1056594216869974096/a_afd5ef9e70e3ff7ea6b62a4de6ccfdb7.gif?animated=true&size=1024',link:''},
+  {id:2,title:'Qseng CL',category:'FIVEM',type:'Crimelife Server',year:'2026',location:'Germany',users:'500+',status:'closed',image:'https://cdn.discordapp.com/icons/1486818585732059218/a_feeba58018b2df926877319e16f7282c.gif?animated=true&size=1024',link:''},
+  {id:3,title:'Naava CL',category:'FIVEM',type:'Crimelife Server',year:'2025',location:'Germany',users:'10,000+',status:'closed',image:'https://cdn.discordapp.com/icons/1478829157273178297/a_8acfe7c07ed00d6487f9c809f5d5bfc4.gif?animated=true&size=1024',link:''},
+  {id:4,title:'Shoot CL',category:'FIVEM',type:'Roleplay Server',year:'2026',location:'Germany',users:'100+',status:'active',image:'https://cdn.discordapp.com/icons/1275718191821094934/a_fb6e8b7ff53c705d715621245c5c4756.gif?animated=true&size=1024',link:''},
+  {id:5,title:'Laint CL',category:'Crimelife Server',type:'',year:'2026',location:'Germany',users:'4,000+',status:'closed',image:'https://cdn.discordapp.com/icons/1429505501950906380/a_3314b03a586492609f0b13ea4523ddf0.gif?animated=true&size=1024',link:''},
 ];
 
 let currentUser = null;
@@ -834,7 +881,7 @@ async function recordVisitor(user) {
 }
 
 function startSite() {
-  startReveal(); initLanyard(); initDC(); showChatBtn(); loadProjects(); checkAnnouncement();
+  startReveal(); initLanyard(); initDC(); showChatBtn(); loadProjects(); loadPastWorks(); checkAnnouncement();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -847,7 +894,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       rx += (e.clientX - rx) * .14; ry += (e.clientY - ry) * .14;
       ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
     });
-    document.querySelectorAll('a,button,.proj-card,.dc-act,.conn-row').forEach(el => {
+    document.querySelectorAll('a,button,.proj-card,.dc-act,.conn-row,.pw-card').forEach(el => {
       el.addEventListener('mouseenter', () => { dot.classList.add('xl'); ring.classList.add('xl'); });
       el.addEventListener('mouseleave', () => { dot.classList.remove('xl'); ring.classList.remove('xl'); });
     });
@@ -941,7 +988,7 @@ function startReveal() {
       if (e.isIntersecting) {
         const sib = Array.from(e.target.parentElement.children).filter(c => ['rv','rv-l','rv-sc'].some(cls => c.classList.contains(cls)));
         const idx = sib.indexOf(e.target);
-        const inGrid = e.target.closest('.bento,.proj-grid,.conn-list');
+        const inGrid = e.target.closest('.bento,.proj-grid,.conn-list,.pw-grid');
         setTimeout(() => e.target.classList.add('in'), inGrid ? idx * 80 : 0);
         obs.unobserve(e.target);
       }
@@ -1140,12 +1187,9 @@ async function sendChat() {
       reply = data.choices?.[0]?.message?.content || '';
       if (reply) chatHistory.push({ role: 'assistant', content: reply });
     } else {
-      const err = await res.json().catch(() => ({}));
-      console.error('API Error:', err);
       reply = 'KI gerade nicht verfügbar. Discord: @aymen0323423';
     }
   } catch(e) {
-    console.error('Fetch error:', e);
     reply = 'Verbindungsfehler. Versuch es nochmal.';
   }
   typing.remove();
@@ -1178,6 +1222,45 @@ function loadProjects() {
   });
   const ob=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const d=Array.from(e.target.parentElement.children).indexOf(e.target)*80;setTimeout(()=>e.target.classList.add('in'),d);ob.unobserve(e.target);}});},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
   grid.querySelectorAll('.rv').forEach(el=>ob.observe(el));
+}
+
+function loadPastWorks() {
+  const grid = document.getElementById('pwGrid'); if (!grid) return;
+  grid.innerHTML = '';
+  PAST_WORKS.forEach((p) => {
+    const card = document.createElement('div');
+    card.className = 'pw-card rv' + (p.link ? ' linked' : '');
+    const catLine = [p.category, p.type].filter(Boolean).join(' · ');
+    card.innerHTML = `
+      <div class="pw-thumb">
+        <div class="pw-thumb-bg" style="background-image:url('${p.image}')"></div>
+        <img src="${p.image}" alt="${p.title}" onerror="this.style.opacity='0'">
+      </div>
+      <div class="pw-info">
+        <div class="pw-top">
+          <span class="pw-name">${p.title}</span>
+          <span class="pw-st ${p.status}">${p.status === 'active' ? 'Aktiv' : 'Geschlossen'}</span>
+        </div>
+        <div class="pw-cat">${catLine}</div>
+        <div class="pw-meta">
+          <span class="pw-mi"><i class="fas fa-users"></i>${p.users} User</span>
+          <span class="pw-mi"><i class="fas fa-calendar"></i>${p.year}</span>
+          <span class="pw-mi"><i class="fas fa-location-dot"></i>${p.location}</span>
+        </div>
+      </div>`;
+    if (p.link) card.addEventListener('click', () => window.open(p.link, '_blank'));
+    grid.appendChild(card);
+  });
+  const ob = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (e.isIntersecting) {
+        const d = Array.from(e.target.parentElement.children).indexOf(e.target) * 80;
+        setTimeout(() => e.target.classList.add('in'), d);
+        ob.unobserve(e.target);
+      }
+    });
+  }, {threshold:.08, rootMargin:'0px 0px -30px 0px'});
+  grid.querySelectorAll('.rv').forEach(el => ob.observe(el));
 }
 
 function checkAnnouncement() {
