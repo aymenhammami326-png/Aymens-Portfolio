@@ -558,7 +558,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
     <div class="nav-links" id="navLinks">
       <a href="#home" class="nl on" data-s="home">Home</a>
       <a href="#about" class="nl" data-s="about">About</a>
-      <a href="#projects" class="nl" data-s="projects">Projects</a>
       <a href="#pastworks" class="nl" data-s="pastworks">Past Works</a>
       <a href="#connect" class="nl" data-s="connect">Connect</a>
     </div>
@@ -753,12 +752,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </section>
 
-<section class="sec" id="projects">
-  <div class="sec-in">
-    <div class="sec-hdr rv"><div class="sec-tag">// Projekte</div><h2 class="sec-title">Projekte</h2><p class="sec-sub">Was ich gebaut habe. Mehr kommt bald.</p></div>
-    <div class="proj-grid" id="projGrid"><div class="proj-load"><div style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);border-top-color:var(--blue);animation:spn2 .9s linear infinite;"></div><span>Wird geladen...</span></div></div>
-  </div>
-</section>
+<!-- Projects section removed as requested -->
 
 <!-- PAST WORKS — NEW SECTION -->
 <section class="sec" id="pastworks" style="background:linear-gradient(180deg,rgba(240,246,255,0) 0%,rgba(5,12,26,0.03) 100%);">
@@ -798,7 +792,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
     <div class="ft-links">
       <a href="#home">Home</a>
       <a href="#about">About</a>
-      <a href="#projects">Projekte</a>
       <a href="#pastworks">Past Works</a>
       <a href="#connect">Kontakt</a>
     </div>
@@ -850,11 +843,7 @@ async function db_set(key, val) {
   try { localStorage.setItem('ay_' + key, JSON.stringify(val)); } catch(e) {}
 }
 
-const DEFAULT_PROJECTS = [
-  {id:1,name:'Discord AI Bot',desc:'Ein leistungsstarker KI-Discord-Bot mit Slash-Commands, Moderation und GPT-Integration.',status:'ps-dev',statusLabel:'Aktiv',tags:['discord.js','OpenAI','Node.js'],link:'',icon:'fab fa-discord'},
-  {id:2,name:'FiveM RP Framework',desc:'Eigenes FiveM Roleplay-Framework mit erweitertem Job-System, Wirtschaft und Wohnhäusern.',status:'ps-dev',statusLabel:'Aktiv',tags:['Lua','FiveM','MySQL'],link:'',icon:'fas fa-gamepad'},
-  {id:3,name:'Portfolio V3',desc:'Diese Seite! Gebaut mit vanilla HTML/CSS/JS, Lanyard API, Discord OAuth2 und Admin Dashboard.',status:'ps-dev',statusLabel:'Aktiv',tags:['HTML','CSS','JS'],link:'',icon:'fas fa-code'},
-];
+// DEFAULT_PROJECTS removed — projects are now sourced from `config.js` (window.portfolioConfig.projects)
 
 const PAST_WORKS = [
   {id:1,title:'Dunya Roleplay',category:'Roleplay Server',type:'Rang Teamleitung',year:'2026',location:'Germany',users:'10,000+',status:'active',image:'https://cdn.discordapp.com/icons/1056594216869974096/a_afd5ef9e70e3ff7ea6b62a4de6ccfdb7.gif?animated=true&size=1024',link:'',gradient:'linear-gradient(135deg,#0a0a0a 0%,#2a2a2a 100%)'},
@@ -1039,7 +1028,7 @@ async function onUserLoggedIn(user,showWelcome=false){await recordVisitor(user);
 
 async function recordVisitor(user){const ext=user.avatar?.startsWith('a_')?'gif':'png';const avUrl=user.avatar?`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=64`:`https://cdn.discordapp.com/embed/avatars/0.png`;const visitors=db_get('visitors',[]);const existing=visitors.find(v=>v.id===user.id);if(existing){existing.lastSeen=Date.now();existing.visits=(existing.visits||1)+1;existing.avatar=avUrl;existing.username=user.global_name||user.username;}else{visitors.unshift({id:user.id,username:user.global_name||user.username,discriminator:user.discriminator,handle:user.username,avatar:avUrl,firstSeen:Date.now(),lastSeen:Date.now(),visits:1});if(visitors.length>500)visitors.length=500;}await db_set('visitors',visitors);}
 
-function startSite(){startReveal();initLanyard();showChatBtn();loadProjects();loadPastWorks();checkAnnouncement();}
+function startSite(){startReveal();initLanyard();showChatBtn();loadPastWorks();checkAnnouncement();}
 
 document.addEventListener('DOMContentLoaded',async()=>{
   await db_init();
@@ -1131,14 +1120,7 @@ function openModal(p) {
 }
 function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
 
-function loadProjects(){
-  const grid=document.getElementById('projGrid');if(!grid)return;
-  const projects=db_get('projects',window.portfolioConfig?.projects||DEFAULT_PROJECTS);
-  grid.innerHTML='';
-  projects.forEach(p=>{const card=document.createElement('div');card.className='proj-card rv';card.innerHTML=`<div class="proj-l"><div class="proj-ico"><i class="${p.icon||'fas fa-code'}" style="color:var(--blue)"></i></div><div class="proj-meta"><span class="proj-nm">${p.name}</span><div class="proj-tags">${(p.tags||[]).map(t=>`<span class="ptag">${t}</span>`).join('')}</div></div></div><div class="proj-r"><span class="pst ${p.status}">${p.statusLabel}</span><i class="fas fa-arrow-right proj-arr"></i></div>`;card.addEventListener('click',()=>{if(p.link)window.open(p.link,'_blank');else openModal(p);});grid.appendChild(card);});
-  const ob=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const d=Array.from(e.target.parentElement.children).indexOf(e.target)*80;setTimeout(()=>e.target.classList.add('in'),d);ob.unobserve(e.target);}});},{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-  grid.querySelectorAll('.rv').forEach(el=>ob.observe(el));
-}
+// loadProjects removed — Projects section was deleted
 
 let pwCurrentFilter = 'all';
 
@@ -1243,7 +1225,7 @@ function buildVisitorTable(visitors){if(!visitors.length)return '<div class="no-
 
 function renderVisitors(){const visitors=db_get('visitors',[]);document.getElementById('allVisitorsList').innerHTML=buildVisitorTable(visitors);}
 
-function loadAdminOverview(){const visitors=db_get('visitors',[]);const today=new Date().toDateString();document.getElementById('sVisitors').textContent=visitors.length;document.getElementById('sTodayVisitors').textContent=visitors.filter(v=>new Date(v.lastSeen).toDateString()===today).length;document.getElementById('sProjects').textContent=db_get('projects',window.portfolioConfig?.projects||DEFAULT_PROJECTS).length;document.getElementById('sChats').textContent=db_get('chatCount',0);document.getElementById('recentVisitorsList').innerHTML=buildVisitorTable(visitors.slice(0,5));}
+function loadAdminOverview(){const visitors=db_get('visitors',[]);const today=new Date().toDateString();document.getElementById('sVisitors').textContent=visitors.length;document.getElementById('sTodayVisitors').textContent=visitors.filter(v=>new Date(v.lastSeen).toDateString()===today).length;document.getElementById('sProjects').textContent=db_get('projects',window.portfolioConfig?.projects||[]).length;document.getElementById('sChats').textContent=db_get('chatCount',0);document.getElementById('recentVisitorsList').innerHTML=buildVisitorTable(visitors.slice(0,5));}
 
 function renderChatLog(){const logs=db_get('chatLog',[]);const container=document.getElementById('chatLogList');if(!logs.length){container.innerHTML='<div class="chat-log-empty">Noch keine Chat-Nachrichten gespeichert.</div>';return;}container.innerHTML=logs.map(log=>`<div class="chat-log-item"><div class="chat-log-meta"><img class="chat-log-av" src="${log.avatar}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><span class="chat-log-user">${escHtml(log.username)}</span><span class="chat-log-time">${timeAgo(log.ts)} · ${new Date(log.ts).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</span></div><div class="chat-log-label">Frage</div><div class="chat-log-q">${escHtml(log.question)}</div><div class="chat-log-label" style="margin-top:8px">Antwort</div><div class="chat-log-a">${escHtml(log.answer)}</div></div>`).join('');}
 
