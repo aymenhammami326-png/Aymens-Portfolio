@@ -338,7 +338,7 @@ nav.sc{background:rgba(240,246,255,0.94);backdrop-filter:blur(24px);border-botto
 @media(max-width:460px){.pw-grid-new{grid-template-columns:1fr;grid-auto-rows:200px;}.pw-item:nth-child(n){grid-column:span 1 !important;}}
 
 /* ============================================================
-   FEEDBACK SECTION — Epic Design
+   FEEDBACK SECTION
    ============================================================ */
 #feedback{background:linear-gradient(180deg,rgba(240,246,255,0) 0%,rgba(37,99,235,0.03) 50%,rgba(240,246,255,0) 100%);position:relative;overflow:hidden;}
 #feedback::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,0.04) 0%,transparent 70%);pointer-events:none;}
@@ -385,8 +385,13 @@ nav.sc{background:rgba(240,246,255,0.94);backdrop-filter:blur(24px);border-botto
 .fb-bar-track{flex:1;height:5px;background:rgba(37,99,235,.08);border-radius:99px;overflow:hidden;}
 .fb-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#f59e0b,#fbbf24);transition:width .8s cubic-bezier(.16,1,.3,1);}
 .fb-bar-c{font-family:var(--mono);font-size:.42rem;color:var(--text3);width:14px;}
-.fb-card{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;transition:border-color .3s,box-shadow .3s,transform .3s;position:relative;overflow:hidden;}
-.fb-card:hover{border-color:var(--border2);box-shadow:0 8px 28px rgba(37,99,235,.08);transform:translateY(-2px);}
+
+/* ===== FEEDBACK KARUSSELL ===== */
+.fb-carousel-wrap{position:relative;overflow:hidden;min-height:180px;}
+.fb-carousel-inner{display:flex;transition:transform .55s cubic-bezier(.16,1,.3,1);}
+.fb-carousel-item{min-width:100%;box-sizing:border-box;}
+.fb-card{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;transition:border-color .3s,box-shadow .3s;position:relative;overflow:hidden;}
+.fb-card:hover{border-color:var(--border2);box-shadow:0 8px 28px rgba(37,99,235,.08);}
 .fb-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--blue),var(--cyan));}
 .fb-card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
 .fb-card-av{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--border2);flex-shrink:0;}
@@ -404,9 +409,15 @@ nav.sc{background:rgba(240,246,255,0.94);backdrop-filter:blur(24px);border-botto
 .fb-card-del.visible{display:flex;}
 .fb-empty{text-align:center;padding:40px 20px;color:var(--text3);font-family:var(--mono);font-size:.6rem;letter-spacing:2px;border:1px dashed var(--border);border-radius:var(--r);}
 .fb-new-badge{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:.42rem;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(8,145,178,.08));color:var(--blue);border:1px solid rgba(37,99,235,.2);padding:2px 8px;border-radius:999px;}
-.fb-scroll-area{max-height:520px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-right:4px;}
-.fb-scroll-area::-webkit-scrollbar{width:3px;}
-.fb-scroll-area::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* Karussell Dots & Nav */
+.fb-carousel-dots{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;}
+.fb-carousel-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all .3s;cursor:pointer;border:none;}
+.fb-carousel-dot.active{width:18px;border-radius:3px;background:var(--blue);}
+.fb-carousel-nav{display:flex;gap:8px;align-items:center;margin-top:10px;justify-content:center;}
+.fb-carousel-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.9);border:1px solid var(--border);color:var(--text3);display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:all .2s;cursor:pointer;}
+.fb-carousel-btn:hover{border-color:var(--border2);color:var(--blue);}
+.fb-carousel-counter{font-family:var(--mono);font-size:.52rem;color:var(--text3);}
 
 /* CONNECT */
 .conn-list{display:flex;flex-direction:column;gap:3px;}
@@ -521,13 +532,19 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 .admin-stat-n{font-family:var(--display);font-size:2rem;font-weight:800;color:rgba(100,160,255,.9);}
 .admin-stat-l{font-family:var(--mono);font-size:.48rem;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
 .admin-section-title{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06);}
+
+/* ===== VISITORS TABLE — vollständig ===== */
 .visitors-table{width:100%;border-collapse:collapse;}
 .visitors-table th{font-family:var(--mono);font-size:.48rem;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.25);padding:8px 12px;text-align:left;border-bottom:1px solid rgba(255,255,255,.06);}
 .visitors-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.78rem;color:rgba(255,255,255,.65);vertical-align:middle;}
-.visitor-av{width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid rgba(37,99,235,.3);margin-right:8px;vertical-align:middle;}
-.visitor-name{font-weight:700;color:rgba(255,255,255,.85);}
-.visitor-id{font-family:var(--mono);font-size:.55rem;color:rgba(255,255,255,.25);}
-.visitor-time{font-family:var(--mono);font-size:.55rem;color:rgba(255,255,255,.3);}
+.visitor-row:hover td{background:rgba(37,99,235,.05);}
+.visitor-av{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid rgba(37,99,235,.3);margin-right:8px;vertical-align:middle;flex-shrink:0;}
+.visitor-name{font-weight:700;color:rgba(255,255,255,.9);font-size:.85rem;}
+.visitor-handle{font-family:var(--mono);font-size:.55rem;color:rgba(100,160,255,.6);}
+.visitor-id{font-family:var(--mono);font-size:.52rem;color:rgba(255,255,255,.25);}
+.visitor-time{font-family:var(--mono);font-size:.52rem;color:rgba(255,255,255,.3);}
+.visitor-badge{display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);font-size:.44rem;letter-spacing:1px;padding:2px 7px;border-radius:999px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.2);color:rgba(100,160,255,.8);}
+.visitor-cnt{font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.5);font-weight:700;}
 .no-data{text-align:center;padding:40px;font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.2);letter-spacing:2px;}
 .admin-btn-sm{font-family:var(--mono);font-size:.54rem;padding:6px 14px;border-radius:7px;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.45);transition:all .2s;}
 .admin-btn-sm:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.8);}
@@ -546,15 +563,18 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 .chat-log-q{font-size:.82rem;color:rgba(255,255,255,.75);margin-bottom:6px;padding:8px 10px;background:rgba(37,99,235,.08);border-radius:6px;border-left:2px solid rgba(37,99,235,.4);}
 .chat-log-a{font-size:.78rem;color:rgba(255,255,255,.45);padding:8px 10px;background:rgba(255,255,255,.03);border-radius:6px;border-left:2px solid rgba(255,255,255,.1);line-height:1.55;}
 .chat-log-label{font-family:var(--mono);font-size:.44rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:3px;}
+
+/* Admin Feedback Items */
 .admin-fb-item{padding:14px 16px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;}
-.admin-fb-av{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid rgba(37,99,235,.3);flex-shrink:0;}
+.admin-fb-av{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(37,99,235,.3);flex-shrink:0;}
+.admin-fb-av-fallback{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#0891b2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.85rem;flex-shrink:0;}
 .admin-fb-info{flex:1;min-width:0;}
-.admin-fb-user{font-family:var(--mono);font-size:.58rem;color:rgba(100,160,255,.8);font-weight:700;}
-.admin-fb-stars{color:#f59e0b;font-size:.75rem;margin:2px 0;}
-.admin-fb-text{font-size:.82rem;color:rgba(255,255,255,.65);line-height:1.5;}
-.admin-fb-time{font-family:var(--mono);font-size:.46rem;color:rgba(255,255,255,.2);margin-top:4px;}
-.admin-fb-del{padding:4px 10px;border-radius:5px;border:1px solid rgba(220,38,38,.25);color:#f87171;font-family:var(--mono);font-size:.5rem;cursor:pointer;transition:all .2s;flex-shrink:0;}
-.admin-fb-del:hover{background:rgba(220,38,38,.1);}
+.admin-fb-user{font-family:var(--mono);font-size:.6rem;color:rgba(100,160,255,.9);font-weight:700;margin-bottom:2px;}
+.admin-fb-stars{color:#f59e0b;font-size:.85rem;margin-bottom:4px;letter-spacing:1px;}
+.admin-fb-text{font-size:.83rem;color:rgba(255,255,255,.7);line-height:1.6;}
+.admin-fb-time{font-family:var(--mono);font-size:.46rem;color:rgba(255,255,255,.2);margin-top:5px;}
+.admin-fb-del{padding:5px 12px;border-radius:6px;border:1px solid rgba(220,38,38,.25);color:#f87171;font-family:var(--mono);font-size:.5rem;cursor:pointer;transition:all .2s;flex-shrink:0;margin-top:2px;}
+.admin-fb-del:hover{background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.4);}
 
 /* REVEAL ANIMATIONS */
 .rv{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
@@ -914,9 +934,19 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
           </div>
           <div class="fb-bar-rows" id="fbBarRows"></div>
         </div>
-        <div class="fb-scroll-area" id="fbList">
-          <div class="fb-empty">Noch keine Bewertungen. Sei der Erste! ✨</div>
+        <!-- KARUSSELL -->
+        <div class="fb-carousel-wrap" id="fbCarouselWrap">
+          <div class="fb-carousel-inner" id="fbCarouselInner"></div>
         </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;" id="fbCarouselControls" style="display:none">
+          <button class="fb-carousel-btn" id="fbPrevBtn"><i class="fas fa-chevron-left"></i></button>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+            <div class="fb-carousel-dots" id="fbCarouselDots"></div>
+            <div class="fb-carousel-counter" id="fbCarouselCounter"></div>
+          </div>
+          <button class="fb-carousel-btn" id="fbNextBtn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div id="fbEmptyMsg" class="fb-empty" style="display:none">Noch keine Bewertungen. Sei der Erste! ✨</div>
       </div>
     </div>
   </div>
@@ -996,7 +1026,7 @@ async function fb_recordVisitor(user) {
   try {
     const ext = user.avatar?.startsWith('a_') ? 'gif' : 'png';
     const avUrl = user.avatar
-      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=64`
+      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=128`
       : `https://cdn.discordapp.com/embed/avatars/0.png`;
     const visitorRef = _ref(_db, `visitors/${user.id}`);
     const snap = await _get(visitorRef);
@@ -1171,7 +1201,163 @@ function showVisitorNotification(v) {
 }
 
 // ============================================================
-// FEEDBACK UI
+// FEEDBACK KARUSSELL
+// ============================================================
+let fbCarouselIndex = 0;
+let fbCarouselItems = [];
+let fbCarouselTimer = null;
+
+function renderFeedbackCards(feedbacks) {
+  fbCarouselItems = feedbacks;
+  fbCarouselIndex = 0;
+
+  const inner = document.getElementById('fbCarouselInner');
+  const dotsEl = document.getElementById('fbCarouselDots');
+  const controls = document.getElementById('fbCarouselControls');
+  const emptyMsg = document.getElementById('fbEmptyMsg');
+  const counter = document.getElementById('fbCarouselCounter');
+
+  updateAvgBar(feedbacks);
+
+  if (!feedbacks.length) {
+    inner.innerHTML = '';
+    if (dotsEl) dotsEl.innerHTML = '';
+    if (controls) controls.style.display = 'none';
+    if (emptyMsg) emptyMsg.style.display = 'block';
+    stopCarousel();
+    return;
+  }
+
+  if (emptyMsg) emptyMsg.style.display = 'none';
+  if (controls) controls.style.display = 'flex';
+
+  // Render alle Karten als Slides
+  inner.innerHTML = feedbacks.map((fb, idx) => buildFeedbackCard(fb, idx)).join('');
+
+  // Dots rendern
+  if (dotsEl) {
+    dotsEl.innerHTML = feedbacks.map((_, i) =>
+      `<button class="fb-carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}"></button>`
+    ).join('');
+    dotsEl.querySelectorAll('.fb-carousel-dot').forEach(dot => {
+      dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.i)));
+    });
+  }
+
+  updateCarouselUI();
+  startCarousel();
+}
+
+function buildFeedbackCard(fb, idx) {
+  const isAdmin = currentUser?.id === ADMIN_DC_ID;
+  const starsHtml = Array.from({ length: 5 }, (_, i) =>
+    `<span class="fb-card-star">${i < fb.stars ? '★' : '☆'}</span>`
+  ).join('');
+  const timeAgoStr = timeAgo(fb.ts);
+  const isNew = (Date.now() - fb.ts) < 3600000;
+  const initials = (fb.username || 'U').slice(0, 2).toUpperCase();
+  const avHtml = fb.avatar
+    ? `<img class="fb-card-av" src="${escHtml(fb.avatar)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  const fallbackHtml = `<div class="fb-card-av-fallback" style="${fb.avatar ? 'display:none' : ''}">${initials}</div>`;
+
+  return `<div class="fb-carousel-item">
+    <div class="fb-card">
+      ${isNew ? '<div class="fb-new-badge">NEU</div>' : ''}
+      <div class="fb-card-head">
+        ${avHtml}${fallbackHtml}
+        <div class="fb-card-info">
+          <div class="fb-card-name">${escHtml(fb.username || 'Anonym')}</div>
+          <div class="fb-card-handle">@${escHtml(fb.handle || 'user')}</div>
+        </div>
+        <div class="fb-card-stars">${starsHtml}</div>
+      </div>
+      <div class="fb-card-text">${escHtml(fb.text)}</div>
+      <div class="fb-card-footer">
+        <div class="fb-card-time">${timeAgoStr}</div>
+        ${isAdmin ? `<div class="fb-card-del visible" onclick="adminDeleteFeedback('${fb.key}',this)"><i class="fas fa-trash"></i> Löschen</div>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function goToSlide(idx) {
+  if (!fbCarouselItems.length) return;
+  fbCarouselIndex = (idx + fbCarouselItems.length) % fbCarouselItems.length;
+  updateCarouselUI();
+  resetCarouselTimer();
+}
+
+function updateCarouselUI() {
+  const inner = document.getElementById('fbCarouselInner');
+  const dots = document.querySelectorAll('.fb-carousel-dot');
+  const counter = document.getElementById('fbCarouselCounter');
+  if (inner) inner.style.transform = `translateX(-${fbCarouselIndex * 100}%)`;
+  dots.forEach((d, i) => d.classList.toggle('active', i === fbCarouselIndex));
+  if (counter) counter.textContent = `${fbCarouselIndex + 1} / ${fbCarouselItems.length}`;
+}
+
+function startCarousel() {
+  stopCarousel();
+  if (fbCarouselItems.length <= 1) return;
+  fbCarouselTimer = setInterval(() => {
+    fbCarouselIndex = (fbCarouselIndex + 1) % fbCarouselItems.length;
+    updateCarouselUI();
+  }, 3000);
+}
+
+function stopCarousel() {
+  if (fbCarouselTimer) { clearInterval(fbCarouselTimer); fbCarouselTimer = null; }
+}
+
+function resetCarouselTimer() {
+  if (fbCarouselItems.length <= 1) return;
+  stopCarousel();
+  startCarousel();
+}
+
+function updateAvgBar(feedbacks) {
+  if (!feedbacks.length) {
+    document.getElementById('fbAvgNum').textContent = '—';
+    document.getElementById('fbAvgStars').innerHTML = '';
+    document.getElementById('fbAvgCount').textContent = 'Noch keine Bewertungen';
+    document.getElementById('fbBarRows').innerHTML = '';
+    return;
+  }
+  const avg = feedbacks.reduce((s, f) => s + f.stars, 0) / feedbacks.length;
+  document.getElementById('fbAvgNum').textContent = avg.toFixed(1);
+  document.getElementById('fbAvgCount').textContent = `${feedbacks.length} Bewertung${feedbacks.length !== 1 ? 'en' : ''}`;
+
+  const starsEl = document.getElementById('fbAvgStars');
+  starsEl.innerHTML = Array.from({ length: 5 }, (_, i) => {
+    const fill = Math.min(1, Math.max(0, avg - i));
+    if (fill >= 1) return '<span class="fb-avg-star">★</span>';
+    if (fill >= 0.5) return '<span class="fb-avg-star half">★</span>';
+    return '<span class="fb-avg-star empty">★</span>';
+  }).join('');
+
+  const counts = [0, 0, 0, 0, 0];
+  feedbacks.forEach(f => { if (f.stars >= 1 && f.stars <= 5) counts[f.stars - 1]++; });
+  const max = Math.max(...counts, 1);
+  document.getElementById('fbBarRows').innerHTML = [5, 4, 3, 2, 1].map(n => {
+    const c = counts[n - 1];
+    const pct = Math.round((c / max) * 100);
+    return `<div class="fb-bar-row">
+      <span class="fb-bar-lbl">${n}</span>
+      <div class="fb-bar-track"><div class="fb-bar-fill" style="width:${pct}%"></div></div>
+      <span class="fb-bar-c">${c}</span>
+    </div>`;
+  }).join('');
+}
+
+window.adminDeleteFeedback = async function(key, el) {
+  if (!confirm('Dieses Feedback löschen?')) return;
+  await fb_deleteFeedback(key);
+  showToast('Feedback gelöscht');
+};
+
+// ============================================================
+// FEEDBACK FORM
 // ============================================================
 let fbSelectedStars = 0;
 const starHints = ['', 'Schwach 😕', 'Okay 😐', 'Gut 👍', 'Super 🔥', 'Legendär 🚀'];
@@ -1226,90 +1412,17 @@ function initFeedbackForm() {
       submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Feedback absenden';
     }
   });
+
+  // Karussell Buttons
+  document.getElementById('fbPrevBtn')?.addEventListener('click', () => goToSlide(fbCarouselIndex - 1));
+  document.getElementById('fbNextBtn')?.addEventListener('click', () => goToSlide(fbCarouselIndex + 1));
+
+  // Pause bei Hover
+  document.getElementById('fbCarouselWrap')?.addEventListener('mouseenter', stopCarousel);
+  document.getElementById('fbCarouselWrap')?.addEventListener('mouseleave', () => {
+    if (fbCarouselItems.length > 1) startCarousel();
+  });
 }
-
-function renderFeedbackCards(feedbacks) {
-  const container = document.getElementById('fbList');
-  const isAdmin = currentUser?.id === ADMIN_DC_ID;
-
-  if (!feedbacks.length) {
-    container.innerHTML = '<div class="fb-empty">Noch keine Bewertungen. Sei der Erste! ✨</div>';
-    updateAvgBar([]);
-    return;
-  }
-
-  updateAvgBar(feedbacks);
-
-  const now = Date.now();
-  container.innerHTML = feedbacks.map((fb, idx) => {
-    const starsHtml = Array.from({ length: 5 }, (_, i) => `<span class="fb-card-star">${i < fb.stars ? '★' : '☆'}</span>`).join('');
-    const timeAgoStr = timeAgo(fb.ts);
-    const isNew = (now - fb.ts) < 3600000;
-    const initials = (fb.username || 'U').slice(0, 2).toUpperCase();
-    const avHtml = fb.avatar
-      ? `<img class="fb-card-av" src="${escHtml(fb.avatar)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-      : '';
-    const fallbackHtml = `<div class="fb-card-av-fallback" style="${fb.avatar ? 'display:none' : ''}">${initials}</div>`;
-    return `<div class="fb-card" style="animation:msgIn .4s ease ${idx * .06}s both">
-      ${isNew ? '<div class="fb-new-badge">NEU</div>' : ''}
-      <div class="fb-card-head">
-        ${avHtml}${fallbackHtml}
-        <div class="fb-card-info">
-          <div class="fb-card-name">${escHtml(fb.username || 'Anonym')}</div>
-          <div class="fb-card-handle">@${escHtml(fb.handle || 'user')}</div>
-        </div>
-        <div class="fb-card-stars">${starsHtml}</div>
-      </div>
-      <div class="fb-card-text">${escHtml(fb.text)}</div>
-      <div class="fb-card-footer">
-        <div class="fb-card-time">${timeAgoStr}</div>
-        ${isAdmin ? `<div class="fb-card-del visible" onclick="adminDeleteFeedback('${fb.key}',this)"><i class="fas fa-trash"></i> Löschen</div>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function updateAvgBar(feedbacks) {
-  if (!feedbacks.length) {
-    document.getElementById('fbAvgNum').textContent = '—';
-    document.getElementById('fbAvgStars').innerHTML = '';
-    document.getElementById('fbAvgCount').textContent = 'Noch keine Bewertungen';
-    document.getElementById('fbBarRows').innerHTML = '';
-    return;
-  }
-  const avg = feedbacks.reduce((s, f) => s + f.stars, 0) / feedbacks.length;
-  document.getElementById('fbAvgNum').textContent = avg.toFixed(1);
-  document.getElementById('fbAvgCount').textContent = `${feedbacks.length} Bewertung${feedbacks.length !== 1 ? 'en' : ''}`;
-
-  // Stars display
-  const starsEl = document.getElementById('fbAvgStars');
-  starsEl.innerHTML = Array.from({ length: 5 }, (_, i) => {
-    const fill = Math.min(1, Math.max(0, avg - i));
-    if (fill >= 1) return '<span class="fb-avg-star">★</span>';
-    if (fill >= 0.5) return '<span class="fb-avg-star half">★</span>';
-    return '<span class="fb-avg-star empty">★</span>';
-  }).join('');
-
-  // Distribution bars
-  const counts = [0, 0, 0, 0, 0];
-  feedbacks.forEach(f => { if (f.stars >= 1 && f.stars <= 5) counts[f.stars - 1]++; });
-  const max = Math.max(...counts, 1);
-  document.getElementById('fbBarRows').innerHTML = [5, 4, 3, 2, 1].map(n => {
-    const c = counts[n - 1];
-    const pct = Math.round((c / max) * 100);
-    return `<div class="fb-bar-row">
-      <span class="fb-bar-lbl">${n}</span>
-      <div class="fb-bar-track"><div class="fb-bar-fill" style="width:${pct}%"></div></div>
-      <span class="fb-bar-c">${c}</span>
-    </div>`;
-  }).join('');
-}
-
-window.adminDeleteFeedback = async function(key, el) {
-  if (!confirm('Dieses Feedback löschen?')) return;
-  await fb_deleteFeedback(key);
-  showToast('Feedback gelöscht');
-};
 
 // ============================================================
 // MUSIC
@@ -1640,9 +1753,45 @@ function timeAgo(ts){
 
 function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+// ===== VISITORS TABLE — VOLLSTÄNDIG mit allen Discord-Infos =====
 function buildVisitorTable(visitors) {
-  if(!visitors.length) return '<div class="no-data">Noch keine Besucher.</div>';
-  return `<table class="visitors-table"><thead><tr><th>Benutzer</th><th>Discord ID</th><th>Besuche</th><th>Zuletzt</th><th>Erstmals</th></tr></thead><tbody>${visitors.map(v=>`<tr><td><img class="visitor-av" src="${v.avatar}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><span class="visitor-name">${escHtml(v.username)}</span><br><span class="visitor-id">@${escHtml(v.handle)}</span></td><td><span class="visitor-id">${v.id}</span></td><td>${v.visits||1}</td><td class="visitor-time">${timeAgo(v.lastSeen)}</td><td class="visitor-time">${new Date(v.firstSeen).toLocaleDateString('de-DE')}</td></tr>`).join('')}</tbody></table>`;
+  if (!visitors.length) return '<div class="no-data">Noch keine Besucher.</div>';
+
+  const rows = visitors.map((v, idx) => {
+    const joinDate = v.firstSeen ? new Date(v.firstSeen).toLocaleDateString('de-DE', { day:'2-digit', month:'2-digit', year:'numeric' }) : '—';
+    const lastDate = v.lastSeen ? new Date(v.lastSeen).toLocaleString('de-DE', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' }) : '—';
+    const discordHandle = v.discriminator && v.discriminator !== '0'
+      ? `${escHtml(v.handle)}#${v.discriminator}`
+      : `@${escHtml(v.handle || '—')}`;
+
+    return `<tr class="visitor-row">
+      <td style="white-space:nowrap;">
+        <img class="visitor-av" src="${escHtml(v.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png')}" alt=""
+          onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+        <span class="visitor-name">${escHtml(v.username || 'Unbekannt')}</span><br>
+        <span class="visitor-handle">${discordHandle}</span>
+      </td>
+      <td><span class="visitor-id">${escHtml(v.id || '—')}</span></td>
+      <td><span class="visitor-cnt">${v.visits || 1}x</span></td>
+      <td><span class="visitor-time">${timeAgo(v.lastSeen)}<br><span style="font-size:.44rem;opacity:.5">${lastDate}</span></span></td>
+      <td><span class="visitor-time">${joinDate}</span></td>
+    </tr>`;
+  }).join('');
+
+  return `<div style="overflow-x:auto;">
+    <table class="visitors-table">
+      <thead>
+        <tr>
+          <th>Discord Nutzer</th>
+          <th>ID</th>
+          <th>Besuche</th>
+          <th>Zuletzt online</th>
+          <th>Erstbesuch</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
 }
 
 async function loadAdminOverview() {
@@ -1656,9 +1805,10 @@ async function loadAdminOverview() {
   document.getElementById('recentVisitorsList').innerHTML = buildVisitorTable(recent);
 }
 
+// ===== ALLE VISITORS laden =====
 async function renderVisitors() {
   document.getElementById('allVisitorsList').innerHTML='<div class="no-data">Lädt...</div>';
-  const visitors = await fb_getVisitors(0);
+  const visitors = await fb_getVisitors(0); // 0 = kein Limit → alle laden
   document.getElementById('visitorCountLabel').textContent = visitors.length;
   document.getElementById('allVisitorsList').innerHTML = buildVisitorTable(visitors);
 }
@@ -1672,23 +1822,46 @@ async function renderChatLog() {
   container.innerHTML = logs.map(log=>`<div class="chat-log-item"><div class="chat-log-meta"><img class="chat-log-av" src="${log.avatar}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><span class="chat-log-user">${escHtml(log.username)}</span><span class="chat-log-time">${timeAgo(log.ts)} · ${new Date(log.ts).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</span></div><div class="chat-log-label">Frage</div><div class="chat-log-q">${escHtml(log.question)}</div><div class="chat-log-label" style="margin-top:8px">Antwort</div><div class="chat-log-a">${escHtml(log.answer)}</div></div>`).join('');
 }
 
+// ===== ALLE FEEDBACKS im Admin anzeigen =====
 async function renderAdminFeedbacks() {
   document.getElementById('adminFbList').innerHTML='<div class="no-data">Lädt...</div>';
-  const feedbacks = await fb_getFeedbacks();
+  const feedbacks = await fb_getFeedbacks(); // lädt ALLE ohne Limit
   document.getElementById('fbCountLabel').textContent = feedbacks.length;
   const container = document.getElementById('adminFbList');
-  if(!feedbacks.length){container.innerHTML='<div class="no-data">Noch keine Feedbacks.</div>';return;}
-  container.innerHTML = feedbacks.map(fb=>{
-    const stars = '★'.repeat(fb.stars)+'☆'.repeat(5-fb.stars);
+
+  if (!feedbacks.length) {
+    container.innerHTML='<div class="no-data">Noch keine Feedbacks vorhanden.</div>';
+    return;
+  }
+
+  container.innerHTML = feedbacks.map(fb => {
+    const starsStr = '★'.repeat(fb.stars) + '☆'.repeat(5 - fb.stars);
+    const joinDate = new Date(fb.ts).toLocaleString('de-DE', {
+      day: '2-digit', month: '2-digit', year: '2-digit',
+      hour: '2-digit', minute: '2-digit'
+    });
+    const initials = (fb.username || 'U').slice(0, 2).toUpperCase();
+    const avHtml = fb.avatar
+      ? `<img class="admin-fb-av" src="${escHtml(fb.avatar)}" alt=""
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      : '';
+    const fallback = `<div class="admin-fb-av-fallback" style="${fb.avatar ? 'display:none' : ''}">${initials}</div>`;
+
     return `<div class="admin-fb-item">
-      <img class="admin-fb-av" src="${fb.avatar}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+      ${avHtml}${fallback}
       <div class="admin-fb-info">
-        <div class="admin-fb-user">${escHtml(fb.username)} <span style="color:rgba(255,255,255,.2);font-weight:400">@${escHtml(fb.handle)}</span></div>
-        <div class="admin-fb-stars">${stars}</div>
+        <div class="admin-fb-user">
+          ${escHtml(fb.username || 'Anonym')}
+          <span style="color:rgba(255,255,255,.25);font-weight:400;margin-left:4px">@${escHtml(fb.handle || 'user')}</span>
+          <span style="font-family:var(--mono);font-size:.44rem;color:rgba(100,160,255,.5);margin-left:6px">${escHtml(fb.userId || '')}</span>
+        </div>
+        <div class="admin-fb-stars">${starsStr} <span style="font-family:var(--mono);font-size:.52rem;color:rgba(255,255,255,.3);margin-left:4px">${fb.stars}/5</span></div>
         <div class="admin-fb-text">${escHtml(fb.text)}</div>
-        <div class="admin-fb-time">${timeAgo(fb.ts)} · ${new Date(fb.ts).toLocaleDateString('de-DE')}</div>
+        <div class="admin-fb-time">${timeAgo(fb.ts)} · ${joinDate}</div>
       </div>
-      <button class="admin-fb-del" onclick="adminDelFbFromPanel('${fb.key}',this)"><i class="fas fa-trash"></i></button>
+      <button class="admin-fb-del" onclick="adminDelFbFromPanel('${fb.key}',this)">
+        <i class="fas fa-trash"></i>
+      </button>
     </div>`;
   }).join('');
 }
