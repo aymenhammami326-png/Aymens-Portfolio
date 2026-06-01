@@ -1235,6 +1235,7 @@ let adminAuditSearch = '';
 let adminAuditActionFilter = 'all';
 let adminAutoRefreshTimer = null;
 let adminLogoutTimer = null;
+let appMaintenanceMode = null;
 const bgAudio = document.getElementById('bgAudio');
 let musicReady = false, musicOn = false;
 
@@ -1250,6 +1251,32 @@ function assignFB() {
   _db = window._fbDb; _ref = window._fbRef; _set = window._fbSet;
   _get = window._fbGet; _push = window._fbPush; _onValue = window._fbOnValue;
   _serverTimestamp = window._fbServerTimestamp; _remove = window._fbRemove;
+}
+
+async function fb_getAppSetting(key, defaultValue) {
+  if (!_db) return defaultValue;
+  try {
+    const snap = await _get(_ref(_db, `appSettings/${key}`));
+    return snap.exists() ? snap.val() : defaultValue;
+  } catch (e) {
+    console.warn('FB getAppSetting error', e);
+    return defaultValue;
+  }
+}
+
+async function fb_setAppSetting(key, value) {
+  if (!_db) return;
+  try {
+    await _set(_ref(_db, `appSettings/${key}`), value);
+  } catch (e) {
+    console.warn('FB setAppSetting error', e);
+  }
+}
+
+async function refreshMaintenanceMode() {
+  appMaintenanceMode = await fb_getAppSetting('maintenanceMode', false);
+  setAdminSetting('adminMaintenanceMode', appMaintenanceMode);
+  return appMaintenanceMode;
 }
 
 // ============================================================
@@ -1298,11 +1325,13 @@ function updateVisitorNotifications() {
 }
 
 function checkMaintenanceMode() {
-  const enabled = getAdminSetting('adminMaintenanceMode', false);
+  const enabled = appMaintenanceMode === null ? getAdminSetting('adminMaintenanceMode', false) : appMaintenanceMode;
   const overlay = document.getElementById('maintenanceScreen');
-  if (!overlay) return;
+  if (!overlay) return false;
   if (enabled && (!currentUser || currentUser.id !== ADMIN_DC_ID)) {
     overlay.style.display = 'flex';
+    document.getElementById('redirectScreen')?.classList.add('out');
+    document.getElementById('welcomeScreen')?.classList.remove('show');
     document.body.style.overflow = 'hidden';
     return true;
   }
@@ -1869,6 +1898,7 @@ async function onUserLoggedIn(user, showWelcome = false) {
     document.getElementById('adminNavBtn').style.display = 'flex';
     fb_listenVisitors();
   }
+  if (checkMaintenanceMode()) return;
   document.getElementById('redirectScreen').classList.add('out');
     
 
@@ -2037,12 +2067,16 @@ async function sendChat() {
     const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'system',content:SYSTEM_PROMPT},...chatHistory.slice(-10)]})});
     if(res.ok){const data=await res.json();reply=data.choices?.[0]?.message?.content||'';if(reply)chatHistory.push({role:'assistant',content:reply});}
     else{reply='KI gerade nicht verfügbar. Discord: @aymen0323423';}
-  } catch(e){reply='Verbindungsfehler. Versuch es nochmal.';}
+  } catch(e){
+    reply='Verbindungsfehler. Versuch es nochmal.';
+    if (shouldReportErrors()) console.error('sendChat error', e);
+  }
   console.log('sendChat reply', reply);
   typing.remove(); appendMsg('bot',reply||'Keine Antwort erhalten.');
   send.disabled=false; inp.focus();
   if (getAdminSetting('adminChatAutoSave', true)) {
     await fb_saveChatLog(q,reply||'[Fehler]',currentUser);
+    if (shouldShowChatNotifications()) showToast('Chat gespeichert. Admin-Notifikation aktiv.');
   }
 }
 
@@ -2089,9 +2123,11 @@ function loadPastWorks() {
 // ============================================================
 async function openAdmin() {
   if(!currentUser||currentUser.id!==ADMIN_DC_ID) return;
+  if (getAdminSetting('adminSecurityLock', false) && !confirm('Admin-Sicherheitsmodus ist aktiviert. Zugang bestätigen?')) return;
   document.getElementById('adminOverlay').classList.add('open');
   document.body.style.overflow='hidden';
   await waitForFirebase();
+  await refreshMaintenanceMode();
   document.getElementById('dbDot').className='db-dot ok';
   document.getElementById('dbStatusText').textContent='Firebase Realtime DB · Verbunden ✓';
   await loadAdminOverview();
@@ -2414,6 +2450,8 @@ function showChatBtn(){setTimeout(()=>document.getElementById('chatBtn').classLi
 document.addEventListener('DOMContentLoaded', async () => {
   document.body.style.overflow='hidden';
   await waitForFirebase();
+  await refreshMaintenanceMode();
+  checkMaintenanceMode();
 
   const handled = await handleOAuthCallback();
   if(!handled) {
@@ -2557,7 +2595,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('clearAuditBtn')?.addEventListener('click', async ()=>{ if(!confirm('Audit-Log löschen?')) return; await fb_clearAuditLogs(); await renderAuditLog(); showToast('Audit-Log gelöscht'); await fb_logAction('clearAuditLog', currentUser?.id, null, 'Audit log cleared'); });
   document.getElementById('settingStartDark')?.addEventListener('change', e=>{ const dark = e.target.checked; setAdminSetting('siteTheme', dark ? 'dark' : 'light'); applySiteTheme(dark ? 'dark' : 'light'); showToast('Start-Theme: '+(dark ? 'dark' : 'light')); });
   document.getElementById('settingAutoRefresh')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminAutoRefresh', enabled); updateAdminAutoRefresh(enabled); showToast('Live Refresh: '+(enabled ? 'AN' : 'AUS')); });
-  document.getElementById('settingMaintenanceMode')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminMaintenanceMode', enabled); checkMaintenanceMode(); showToast('Wartungsmodus: '+(enabled ? 'aktiv' : 'deaktiviert')); });
+  document.getElementById('settingMaintenanceMode')?.addEventListener('change', async e=>{ const enabled = e.target.checked; setAdminSetting('adminMaintenanceMode', enabled); await fb_setAppSetting('maintenanceMode', enabled); appMaintenanceMode = enabled; checkMaintenanceMode(); showToast('Wartungsmodus: '+(enabled ? 'aktiv' : 'deaktiviert')); if(currentUser?.id) await fb_logAction('setMaintenanceMode', currentUser.id, null, `Maintenance ${enabled ? 'ON' : 'OFF'}`); });
   document.getElementById('settingVisitorNotifications')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminVisitorNotifications', enabled); updateVisitorNotifications(); showToast('Besucher-Benachrichtigungen: '+(enabled ? 'AN' : 'AUS')); });
   document.getElementById('settingSortVisitorsRecent')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminSortVisitorsByRecent', enabled); renderVisitors(); showToast('Besucher sortieren: '+(enabled ? 'Zuletzt aktiv' : 'Alphabetisch')); });
   document.getElementById('settingChatAutoSave')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminChatAutoSave', enabled); showToast('Chat-Protokollierung: '+(enabled ? 'AN' : 'AUS')); });
@@ -2570,7 +2608,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('settingCompactVisitorRows')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminCompactVisitorRows', enabled); applyVisitorListDensity(enabled); showToast('Kompakte Besucheransicht: '+(enabled ? 'AN' : 'AUS')); });
   document.getElementById('settingChatNotifications')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminChatNotifications', enabled); showToast('Chat-Benachrichtigungen: '+(enabled ? 'AN' : 'AUS')); });
   document.getElementById('settingErrorReporting')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminErrorReporting', enabled); showToast('Fehlerbericht: '+(enabled ? 'AN' : 'AUS')); });
-  document.getElementById('resetAdminPrefsBtn')?.addEventListener('click', async ()=>{ if(!confirm('Admin-Einstellungen zurücksetzen?')) return; localStorage.removeItem('adminAutoRefresh'); localStorage.removeItem('siteTheme'); localStorage.removeItem('adminMaintenanceMode'); localStorage.removeItem('adminVisitorNotifications'); localStorage.removeItem('adminSortVisitorsByRecent'); localStorage.removeItem('adminChatAutoSave'); localStorage.removeItem('adminSecurityLock'); localStorage.removeItem('adminDebugLogging'); localStorage.removeItem('adminMusicAutoStart'); localStorage.removeItem('adminReducedAnimations'); localStorage.removeItem('adminDisableParticles'); localStorage.removeItem('adminAutoLogout'); localStorage.removeItem('adminCompactVisitorRows'); localStorage.removeItem('adminChatNotifications'); localStorage.removeItem('adminErrorReporting'); applySiteTheme('dark'); renderAdminSettings(); showToast('Admin-Einstellungen zurückgesetzt'); await fb_logAction('resetSettings', currentUser?.id, null, 'Cleared admin preferences'); });
+  document.getElementById('resetAdminPrefsBtn')?.addEventListener('click', async ()=>{ if(!confirm('Admin-Einstellungen zurücksetzen?')) return; localStorage.removeItem('adminAutoRefresh'); localStorage.removeItem('siteTheme'); localStorage.removeItem('adminMaintenanceMode'); localStorage.removeItem('adminVisitorNotifications'); localStorage.removeItem('adminSortVisitorsByRecent'); localStorage.removeItem('adminChatAutoSave'); localStorage.removeItem('adminSecurityLock'); localStorage.removeItem('adminDebugLogging'); localStorage.removeItem('adminMusicAutoStart'); localStorage.removeItem('adminReducedAnimations'); localStorage.removeItem('adminDisableParticles'); localStorage.removeItem('adminAutoLogout'); localStorage.removeItem('adminCompactVisitorRows'); localStorage.removeItem('adminChatNotifications'); localStorage.removeItem('adminErrorReporting'); if(currentUser?.id) { appMaintenanceMode=false; await fb_setAppSetting('maintenanceMode', false); } applySiteTheme('dark'); renderAdminSettings(); showToast('Admin-Einstellungen zurückgesetzt'); await fb_logAction('resetSettings', currentUser?.id, null, 'Cleared admin preferences'); });
 
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdmin();closeModal();}if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();openAdmin();}});
 
