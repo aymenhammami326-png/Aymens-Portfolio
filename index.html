@@ -1318,7 +1318,18 @@ function launchConfettiOnce(){
 }
 
 // Attach confetti and blacklist close behaviour
-document.getElementById('blacklistCloseBtn')?.addEventListener('click',()=>{document.getElementById('blacklistScreen').classList.remove('show'); document.body.style.overflow='';});
+document.getElementById('blacklistCloseBtn')?.addEventListener('click',()=>{
+  // Clear session and kick user off the site when they acknowledge the blacklist
+  try{
+    sessionStorage.removeItem('dc_user');
+    sessionStorage.removeItem('oauth_state');
+    localStorage.removeItem('adminTheme');
+    window.currentUser = null;
+  }catch(e){}
+  const bs = document.getElementById('blacklistScreen'); if(bs) bs.classList.remove('show'); document.body.style.overflow='';
+  // Redirect to homepage (reload without session)
+  window.location.href = window.location.origin + window.location.pathname;
+});
 
 
 async function exportUserChats(userId){
