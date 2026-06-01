@@ -480,6 +480,10 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 #adminOverlay[data-admin-theme="dark"]{--bg:#071122;--bg1:#061526;--surface:rgba(255,255,255,0.02);--surface2:rgba(255,255,255,0.04);--text:#e6eef9;--text2:rgba(230,238,249,0.9);--text3:rgba(230,238,249,0.6);} 
 #adminOverlay[data-admin-theme="dark"] .admin-box{background:linear-gradient(180deg,#071122,#061018);border:1px solid rgba(255,255,255,0.03);} 
 #adminOverlay[data-admin-theme="dark"] .top-user{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
+#adminOverlay[data-admin-theme="dark"] .audit-entry{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);}
+#adminOverlay[data-admin-theme="dark"] .setting-row{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.08);}
+#adminOverlay[data-admin-theme="dark"] .switch .slider{background:rgba(255,255,255,0.08);}
+#adminOverlay[data-admin-theme="dark"] .switch input:checked + .slider{background:rgba(37,99,235,0.75);}
 
 .modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--text);transition:all .2s;}
 .modal-close:hover{background:var(--surface2);}
@@ -768,6 +772,8 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       <button class="admin-tab on" data-tab="overview">Overview</button>
       <button class="admin-tab" data-tab="visitors">Visitors</button>
       <button class="admin-tab" data-tab="chats">Chats</button>
+      <button class="admin-tab" data-tab="audit">Audit</button>
+      <button class="admin-tab" data-tab="settings">Einstellungen</button>
     </div>
     <div class="admin-body">
       <div class="admin-section on" id="tab-overview">
@@ -807,7 +813,46 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
           <button class="admin-btn-sm del" id="clearChatsBtn"><i class="fas fa-trash"></i> Clear All Chats</button>
         </div>
       </div>
-      
+      <div class="admin-section" id="tab-audit">
+        <div class="admin-section-title">Audit-Log — Admin Aktionen</div>
+        <div id="auditLogList"><div class="no-data">Lädt...</div></div>
+        <div style="margin-top:14px;display:flex;gap:8px;align-items:center;">
+          <button class="admin-btn-sm" id="refreshAuditBtn"><i class="fas fa-sync"></i> Aktualisieren</button>
+          <button class="admin-btn-sm del" id="clearAuditBtn"><i class="fas fa-trash"></i> Audit leeren</button>
+        </div>
+      </div>
+      <div class="admin-section" id="tab-settings">
+        <div class="admin-section-title">Einstellungen</div>
+        <div class="settings-grid">
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Darkmode beim Start</div>
+              <div class="setting-desc">Die Seite startet automatisch im Darkmode, wenn du sie aufrufst.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingStartDark">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Live-Aktualisierung</div>
+              <div class="setting-desc">Automatisch Besucher, Chats und Audit-Daten alle 30 Sekunden neu laden.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingAutoRefresh">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:10px;">
+            <div>
+              <div class="setting-name">Cache & Einstellungen</div>
+              <div class="setting-desc">Deine Admin-Einstellungen zurücksetzen und lokale Theme-Voreinstellungen löschen.</div>
+            </div>
+            <button class="admin-btn-sm del" id="resetAdminPrefsBtn"><i class="fas fa-rotate-left"></i> Zurücksetzen</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -820,6 +865,21 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   .top-user{padding:10px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,255,0.98));border:1px solid rgba(59,130,246,0.06);display:flex;flex-direction:column;gap:6px}
   .top-user .tu-name{font-weight:700}
   .profile-card{background:linear-gradient(180deg,#fff,#fbfdff)}
+  .audit-entry{padding:14px;border-radius:12px;background:rgba(255,255,255,0.98);border:1px solid rgba(59,130,246,0.12);margin-bottom:10px;}
+  .audit-meta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px;font-family:var(--mono);font-size:.78rem;color:var(--text3);}
+  .audit-action{font-weight:700;color:var(--blue);}
+  .audit-detail{color:var(--text2);line-height:1.5;margin-bottom:6px;}
+  .audit-ids{font-family:var(--mono);font-size:.7rem;color:var(--text3);}
+  .settings-grid{display:flex;flex-direction:column;gap:14px;}
+  .setting-row{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,0.95);border:1px solid rgba(59,130,246,0.12);gap:12px;}
+  .setting-name{font-weight:700;color:var(--text);margin-bottom:6px;}
+  .setting-desc{font-family:var(--mono);font-size:.78rem;color:var(--text3);line-height:1.4;}
+  .switch{position:relative;display:inline-block;width:46px;height:26px;}
+  .switch input{opacity:0;width:0;height:0;}
+  .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.08);border-radius:999px;transition:.25s;}
+  .slider:before{position:absolute;content:'';height:18px;width:18px;left:4px;top:4px;background:#fff;border-radius:50%;box-shadow:0 6px 18px rgba(0,0,0,0.12);transition:.25s;}
+  .switch input:checked + .slider{background:rgba(37,99,235,0.8);}
+  .switch input:checked + .slider:before{transform:translateX(20px);}
 </style>
 
 <!-- HERO -->
@@ -1009,6 +1069,7 @@ let currentUser = null, chatHistory = [], chatTurnCount = 0;
 let adminChatLogs = [];
 let adminChatSearch = '';
 let adminChatUserFilter = '';
+let adminAutoRefreshTimer = null;
 const bgAudio = document.getElementById('bgAudio');
 let musicReady = false, musicOn = false;
 
@@ -1146,7 +1207,28 @@ async function fb_clearChats() {
   await _set(_ref(_db, 'meta/chatCount'), 0);
 }
 
- 
+async function fb_getAuditLogs(limit = 200) {
+  if (!_db) return [];
+  try {
+    const snap = await _get(_ref(_db, 'auditLogs'));
+    if (!snap.exists()) return [];
+    const arr = [];
+    snap.forEach(child => {
+      const v = child.val();
+      if (v) arr.push({ key: child.key, ...v });
+    });
+    arr.sort((a, b) => b.ts - a.ts);
+    return limit ? arr.slice(0, limit) : arr;
+  } catch (e) {
+    console.warn('FB getAuditLogs error', e);
+    return [];
+  }
+}
+
+async function fb_clearAuditLogs() {
+  if (!_db) return;
+  await _set(_ref(_db, 'auditLogs'), null);
+}
 
 // ============================================================
 // STATS
@@ -1899,7 +1981,45 @@ function applyChatFilters() {
   </div>`).join('');
 }
 
- 
+async function renderAuditLog() {
+  const container = document.getElementById('auditLogList');
+  if (!container) return;
+  container.innerHTML = '<div class="no-data">Lädt...</div>';
+  const logs = await fb_getAuditLogs(200);
+  if (!logs.length) {
+    container.innerHTML = '<div class="no-data">Noch keine Audit-Einträge.</div>';
+    return;
+  }
+  container.innerHTML = logs.map(log => `
+    <div class="audit-entry">
+      <div class="audit-meta"><span class="audit-time">${new Date(log.ts).toLocaleString('de-DE')}</span><span class="audit-action">${escHtml(log.action)}</span></div>
+      <div class="audit-detail">${escHtml(log.details || 'Keine Details')}</div>
+      <div class="audit-ids">Admin: ${escHtml(log.actorId || 'Unbekannt')} · Ziel: ${escHtml(log.targetId || '–')}</div>
+    </div>
+  `).join('');
+}
+
+function renderAdminSettings() {
+  const startDark = localStorage.getItem('siteTheme') !== 'light';
+  const autoRefresh = localStorage.getItem('adminAutoRefresh') === 'true';
+  const startDarkEl = document.getElementById('settingStartDark');
+  const autoRefreshEl = document.getElementById('settingAutoRefresh');
+  if (startDarkEl) startDarkEl.checked = startDark;
+  if (autoRefreshEl) autoRefreshEl.checked = autoRefresh;
+  updateAdminAutoRefresh(autoRefresh);
+}
+
+function updateAdminAutoRefresh(enabled) {
+  if (adminAutoRefreshTimer) clearInterval(adminAutoRefreshTimer);
+  if (!enabled) return;
+  adminAutoRefreshTimer = setInterval(() => {
+    if (document.getElementById('tab-visitors')?.classList.contains('on')) renderVisitors();
+    if (document.getElementById('tab-chats')?.classList.contains('on')) renderChatLog();
+    if (document.getElementById('tab-audit')?.classList.contains('on')) renderAuditLog();
+  }, 30000);
+}
+
+
 
 
 // ============================================================
@@ -1969,6 +2089,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       if(tab.dataset.tab==='visitors') await renderVisitors();
       if(tab.dataset.tab==='chats') await renderChatLog();
       if(tab.dataset.tab==='overview') await loadAdminOverview();
+      if(tab.dataset.tab==='audit') await renderAuditLog();
+      if(tab.dataset.tab==='settings') renderAdminSettings();
     });
 
   // Site theme: read saved preference and wire toggle
@@ -2012,11 +2134,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('clearVisitorsBtn').addEventListener('click',async()=>{
     if(!confirm('Alle Visitor-Daten in Firebase löschen?'))return;
     await fb_clearVisitors(); await renderVisitors(); showToast('Visitors gelöscht');
+    await fb_logAction('clearVisitors', currentUser?.id, null, 'Removed all visitors');
   });
   document.getElementById('clearChatsBtn').addEventListener('click',async()=>{
     if(!confirm('Alle Chat-Logs in Firebase löschen?'))return;
     await fb_clearChats(); await renderChatLog(); showToast('Chats gelöscht');
+    await fb_logAction('clearChats', currentUser?.id, null, 'Removed all chat logs');
   });
+  document.getElementById('refreshAuditBtn')?.addEventListener('click', async ()=>{ await renderAuditLog(); showToast('Audit aktualisiert'); });
+  document.getElementById('clearAuditBtn')?.addEventListener('click', async ()=>{ if(!confirm('Audit-Log löschen?')) return; await fb_clearAuditLogs(); await renderAuditLog(); showToast('Audit-Log gelöscht'); await fb_logAction('clearAuditLog', currentUser?.id, null, 'Audit log cleared'); });
+  document.getElementById('settingStartDark')?.addEventListener('change', e=>{ const dark = e.target.checked; localStorage.setItem('siteTheme', dark ? 'dark' : 'light'); applySiteTheme(dark ? 'dark' : 'light'); showToast('Start-Theme: '+(dark ? 'dark' : 'light')); });
+  document.getElementById('settingAutoRefresh')?.addEventListener('change', e=>{ const enabled = e.target.checked; localStorage.setItem('adminAutoRefresh', enabled); updateAdminAutoRefresh(enabled); showToast('Live Refresh: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('resetAdminPrefsBtn')?.addEventListener('click', async ()=>{ if(!confirm('Admin-Einstellungen zurücksetzen?')) return; localStorage.removeItem('adminAutoRefresh'); localStorage.removeItem('siteTheme'); applySiteTheme('dark'); renderAdminSettings(); showToast('Admin-Einstellungen zurückgesetzt'); await fb_logAction('resetSettings', currentUser?.id, null, 'Cleared admin preferences'); });
 
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdmin();closeModal();}if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();openAdmin();}});
 
