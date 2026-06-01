@@ -389,6 +389,11 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 .modal.open .modal-inner{transform:none;opacity:1}
 @keyframes modalFade{from{opacity:0}to{opacity:1}}
 
+/* Dark variant for standalone modals (used for chat thread) */
+.modal[data-admin-theme="dark"] .modal-inner{background:linear-gradient(180deg,#071122,#061018);color:#e6eef9;border:1px solid rgba(255,255,255,0.03);}
+.modal[data-admin-theme="dark"] .modal-ttl{color:#e6eef9}
+.modal[data-admin-theme="dark"] .modal-desc{color:rgba(230,238,249,0.9)}
+
 /* Confetti canvas overlay */
 #confettiCanvas{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9050;display:none}
 .profile-shell{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,250,255,.98));border:1px solid rgba(59,130,246,.16);border-radius:24px;box-shadow:0 24px 80px rgba(15,23,42,.12);overflow:hidden;}
@@ -1185,9 +1190,10 @@ async function openChatThread(key) {
     <div style="margin-bottom:8px"><div class="chat-log-label">Frage</div><div class="chat-log-q">${escHtml(it.question)}</div></div>
     <div><div class="chat-log-label">Antwort</div><div class="chat-log-a">${escHtml(it.answer)}</div></div>`;
   const modal = document.getElementById('chatThreadModal'); modal.style.display='flex'; modal.classList.add('open');
+  try{ modal.setAttribute('data-admin-theme','dark'); }catch(e){}
 }
 
-document.getElementById('chatThreadClose')?.addEventListener('click',()=>{const modal=document.getElementById('chatThreadModal'); modal.classList.remove('open'); modal.style.display='none';});
+document.getElementById('chatThreadClose')?.addEventListener('click',()=>{const modal=document.getElementById('chatThreadModal'); modal.classList.remove('open'); modal.style.display='none'; try{ modal.removeAttribute('data-admin-theme'); }catch(e){} });
 
 async function openUserProfile(userId){
   console.log('openUserProfile', userId);
@@ -1238,8 +1244,28 @@ async function openUserProfile(userId){
   const statusTextEl = document.getElementById('userProfileStatus');
   if (statusTextEl) statusTextEl.textContent = isBlacklisted ? 'Nutzer ist gesperrt' : 'Aktiv und verwaltbar';
   const modal = document.getElementById('userProfileModal'); modal.style.display='flex'; modal.classList.add('open');
+  // mark which user is opened so we can autosave on close
+  try{ document.getElementById('userProfileModal').dataset.openUser = userId; }catch(e){}
+  // attach autosave (debounced) to note textarea
+  try{
+    const ta = document.getElementById(`userNote_${userId}`);
+    if(ta){
+      let tId = null;
+      ta.addEventListener('input', ()=>{
+        if(tId) clearTimeout(tId);
+        tId = setTimeout(()=>{ saveUserNote(userId); tId = null; }, 800);
+      });
+      ta.addEventListener('blur', ()=>{ if(tId) clearTimeout(tId); saveUserNote(userId); });
+    }
+  }catch(e){}
 }
-document.getElementById('userProfileClose')?.addEventListener('click',()=>{const modal=document.getElementById('userProfileModal'); modal.classList.remove('open'); modal.style.display='none';});
+document.getElementById('userProfileClose')?.addEventListener('click',async()=>{
+  const modal=document.getElementById('userProfileModal');
+  try{
+    const uid = modal?.dataset?.openUser; if(uid) await saveUserNote(uid);
+  }catch(e){}
+  modal.classList.remove('open'); modal.style.display='none'; modal.removeAttribute('data-open-user');
+});
 const userProfileModal = document.getElementById('userProfileModal');
 userProfileModal?.addEventListener('click', e => { if (e.target === userProfileModal) { userProfileModal.classList.remove('open'); userProfileModal.style.display='none'; } });
 
