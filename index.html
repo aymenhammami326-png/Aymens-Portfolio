@@ -1471,7 +1471,6 @@ async function loadAdminOverview() {
   document.getElementById('sTodayVisitors').textContent = stats.todayCount??'—';
   document.getElementById('sChats').textContent = stats.chatCount??'—';
   document.getElementById('sOnline').textContent = stats.last24h??'—';
-  document.getElementById('sFeedbacks').textContent = stats.fbCount??'—';
   const recent = await fb_getVisitors(5);
   document.getElementById('recentVisitorsList').innerHTML = buildVisitorTable(recent);
 }
