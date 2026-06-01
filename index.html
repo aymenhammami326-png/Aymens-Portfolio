@@ -1000,6 +1000,9 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 const DC_ID = '1477023843489939487';
 const ADMIN_DC_ID = '1477023843489939487';
 const DISCORD_CLIENT_ID = '1502858431676153897';
+// TEMP: debug helper to show visitor notifications for testing on this machine.
+// Set to false after verification.
+const DEBUG_SHOW_VISITORS = true;
 
 let currentUser = null, chatHistory = [], chatTurnCount = 0;
 const bgAudio = document.getElementById('bgAudio');
@@ -1144,8 +1147,11 @@ function fb_listenFeedbacks() {
   if (!_db) return;
   _onValue(_ref(_db, 'feedbacks'), snap => {
     const arr = [];
+    const count = snap.exists() ? snap.size : 0;
+    console.log('FB listener: feedbacks snapshot received. count=', count);
     if (snap.exists()) snap.forEach(c => arr.push({ key: c.key, ...c.val() }));
     arr.sort((a, b) => b.ts - a.ts);
+    console.log('FB listener: parsed feedbacks length=', arr.length);
     renderFeedbackCards(arr);
   });
 }
@@ -1182,15 +1188,31 @@ function fb_listenVisitors() {
   if (!_db) return;
   _onValue(_ref(_db, 'visitors'), snap => {
     const count = snap.exists() ? snap.size : 0;
-    if (_lastVisitorCount > 0 && count > _lastVisitorCount && currentUser?.id === ADMIN_DC_ID) {
+    if (_lastVisitorCount > 0 && count > _lastVisitorCount && (currentUser?.id === ADMIN_DC_ID || DEBUG_SHOW_VISITORS)) {
       const arr = [];
       snap.forEach(c => arr.push(c.val()));
       arr.sort((a, b) => b.lastSeen - a.lastSeen);
       const newest = arr[0];
-      if (newest && newest.id !== currentUser.id) showVisitorNotification(newest);
+      if (newest && (!currentUser || newest.id !== currentUser.id)) {
+        console.log('Visitor change detected', newest, 'total', count);
+        showVisitorNotification(newest);
+      }
+    } else {
+      if (count !== _lastVisitorCount) console.log('Visitor count updated', { prev: _lastVisitorCount, now: count });
     }
     _lastVisitorCount = count;
   });
+}
+
+// Debug helper: force-load feedbacks and render (call from console)
+window.debugLoadFeedbacks = async function() {
+  try {
+    await waitForFirebase();
+    const fbs = await fb_getFeedbacks();
+    console.log('DEBUG: fetched feedbacks', fbs.length, fbs);
+    renderFeedbackCards(fbs);
+    return fbs;
+  } catch (e) { console.warn('DEBUG: load feedbacks failed', e); }
 }
 
 function showVisitorNotification(v) {
@@ -1508,6 +1530,14 @@ async function handleOAuthCallback() {
 
 async function onUserLoggedIn(user, showWelcome = false) {
   await waitForFirebase();
+
+  // Ensure feedbacks are loaded even before user login — helpful for visitors
+  try {
+    fb_listenFeedbacks();
+    const initialFbs = await fb_getFeedbacks();
+    console.log('Initial feedbacks loaded:', initialFbs?.length ?? 0);
+    if (initialFbs && initialFbs.length) renderFeedbackCards(initialFbs);
+  } catch (e) { console.warn('Initial feedback load failed', e); }
   await fb_recordVisitor(user);
   const ext = user.avatar?.startsWith('a_') ? 'gif' : 'png';
   const avUrl = user.avatar
