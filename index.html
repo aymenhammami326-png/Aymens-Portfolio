@@ -429,6 +429,11 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 :root[data-admin-theme="dark"] .admin-box{background:linear-gradient(180deg,#071122,#061018);border:1px solid rgba(255,255,255,0.03);}
 :root[data-admin-theme="dark"] .top-user{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
 
+/* Force dark theme scoped to the admin overlay only */
+#adminOverlay[data-admin-theme="dark"]{--bg:#071122;--bg1:#061526;--surface:rgba(255,255,255,0.02);--surface2:rgba(255,255,255,0.04);--text:#e6eef9;--text2:rgba(230,238,249,0.9);--text3:rgba(230,238,249,0.6);} 
+#adminOverlay[data-admin-theme="dark"] .admin-box{background:linear-gradient(180deg,#071122,#061018);border:1px solid rgba(255,255,255,0.03);} 
+#adminOverlay[data-admin-theme="dark"] .top-user{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
+
 .modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--text);transition:all .2s;}
 .modal-close:hover{background:var(--surface2);}
 .modal-ico{width:64px;height:64px;border-radius:16px;overflow:hidden;margin-bottom:14px;border:2px solid rgba(255,255,255,0.1);}
@@ -1911,8 +1916,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdmin();closeModal();}if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();openAdmin();}});
 
-  // Force admin dark theme (toggle removed)
-  try{ document.documentElement.setAttribute('data-admin-theme','dark'); localStorage.setItem('adminTheme','dark'); }catch(e){}
+  // Force admin dark theme (toggle removed) — scoped to admin overlay only
+  try{ const ao=document.getElementById('adminOverlay'); if(ao) ao.setAttribute('data-admin-theme','dark'); }catch(e){}
 
   // Chat
   document.getElementById('chatBtn').addEventListener('click',()=>document.getElementById('chatPanel').classList.toggle('open'));
