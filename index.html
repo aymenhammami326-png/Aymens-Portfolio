@@ -346,88 +346,6 @@ nav.sc{background:rgba(240,246,255,0.94);backdrop-filter:blur(24px);border-botto
 @media(max-width:700px){.pw-grid-new{grid-template-columns:1fr 1fr;grid-auto-rows:200px;gap:10px;}.pw-item:nth-child(n){grid-column:span 1;}.pw-item:nth-child(1){grid-column:span 2;}.pw-item-title{font-size:1rem;}}
 @media(max-width:460px){.pw-grid-new{grid-template-columns:1fr;grid-auto-rows:200px;}.pw-item:nth-child(n){grid-column:span 1 !important;}}
 
-/* ============================================================
-   FEEDBACK SECTION
-   ============================================================ */
-#feedback{background:linear-gradient(180deg,rgba(240,246,255,0) 0%,rgba(37,99,235,0.03) 50%,rgba(240,246,255,0) 100%);position:relative;overflow:hidden;}
-#feedback::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,0.04) 0%,transparent 70%);pointer-events:none;}
-.fb-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start;}
-@media(max-width:900px){.fb-layout{grid-template-columns:1fr;}}
-
-/* Submit form side */
-.fb-form-wrap{background:rgba(255,255,255,0.9);border:1px solid var(--border);border-radius:20px;padding:28px;backdrop-filter:blur(12px);position:relative;overflow:hidden;}
-.fb-form-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--blue));background-size:200%;animation:fb-bar 4s linear infinite;}
-@keyframes fb-bar{0%{background-position:0%}100%{background-position:200%}}
-.fb-form-title{font-family:var(--display);font-size:1.35rem;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:4px;}
-.fb-form-sub{font-family:var(--mono);font-size:.58rem;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px;}
-.fb-stars-wrap{display:flex;gap:6px;margin-bottom:20px;}
-.fb-star{font-size:2rem;cursor:pointer;color:rgba(37,99,235,0.15);transition:color .15s,transform .15s;line-height:1;}
-.fb-star:hover,.fb-star.active{color:#f59e0b;transform:scale(1.15);}
-.fb-star.active{filter:drop-shadow(0 0 6px rgba(245,158,11,0.4));}
-.fb-star-hint{font-family:var(--mono);font-size:.5rem;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px;height:14px;transition:opacity .2s;}
-.fb-inp{width:100%;background:rgba(10,18,28,0.04);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-family:var(--font);font-size:.88rem;color:var(--text);outline:none;transition:border-color .2s;margin-bottom:12px;resize:none;}
-.fb-inp:focus{border-color:var(--border2);background:rgba(255,255,255,0.9);}
-.fb-inp::placeholder{color:var(--text3);}
-.fb-submit{width:100%;padding:14px;border-radius:999px;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;font-size:.9rem;font-weight:700;font-family:var(--font);border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,opacity .2s;box-shadow:0 8px 24px rgba(37,99,235,0.25);display:flex;align-items:center;justify-content:center;gap:8px;}
-.fb-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 36px rgba(37,99,235,0.35);}
-.fb-submit:disabled{opacity:.5;cursor:not-allowed;}
-.fb-note{font-family:var(--mono);font-size:.48rem;color:var(--text3);text-align:center;margin-top:10px;letter-spacing:.5px;}
-.fb-success{display:none;flex-direction:column;align-items:center;gap:12px;padding:20px 0;text-align:center;}
-.fb-success.show{display:flex;}
-.fb-success-ico{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(22,163,74,.1));border:1px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
-.fb-success-t{font-family:var(--display);font-size:1.1rem;font-weight:700;color:var(--text);}
-.fb-success-s{font-size:.82rem;color:var(--text3);}
-
-/* Reviews side */
-.fb-reviews-wrap{display:flex;flex-direction:column;gap:14px;}
-.fb-avg-bar{background:rgba(255,255,255,0.9);border:1px solid var(--border);border-radius:16px;padding:20px 24px;display:flex;align-items:center;gap:20px;margin-bottom:4px;}
-.fb-avg-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:var(--text);line-height:1;}
-.fb-avg-info{flex:1;}
-.fb-avg-stars{display:flex;gap:3px;margin-bottom:4px;}
-.fb-avg-star{color:#f59e0b;font-size:1.1rem;}
-.fb-avg-star.half{background:linear-gradient(90deg,#f59e0b 50%,rgba(37,99,235,.12) 50%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
-.fb-avg-star.empty{color:rgba(37,99,235,.12);-webkit-text-fill-color:initial;}
-.fb-avg-count{font-family:var(--mono);font-size:.52rem;color:var(--text3);letter-spacing:1px;}
-.fb-bar-rows{flex:1.4;display:flex;flex-direction:column;gap:4px;}
-.fb-bar-row{display:flex;align-items:center;gap:8px;}
-.fb-bar-lbl{font-family:var(--mono);font-size:.48rem;color:var(--text3);width:12px;text-align:right;}
-.fb-bar-track{flex:1;height:5px;background:rgba(37,99,235,.08);border-radius:99px;overflow:hidden;}
-.fb-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#f59e0b,#fbbf24);transition:width .8s cubic-bezier(.16,1,.3,1);}
-.fb-bar-c{font-family:var(--mono);font-size:.42rem;color:var(--text3);width:14px;}
-
-/* ===== FEEDBACK KARUSSELL ===== */
-.fb-carousel-wrap{position:relative;overflow:hidden;min-height:180px;}
-.fb-carousel-inner{display:flex;transition:transform .55s cubic-bezier(.16,1,.3,1);}
-.fb-carousel-item{min-width:100%;box-sizing:border-box;}
-.fb-card{background:rgba(255,255,255,0.92);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;transition:border-color .3s,box-shadow .3s;position:relative;overflow:hidden;}
-.fb-card:hover{border-color:var(--border2);box-shadow:0 8px 28px rgba(37,99,235,.08);}
-.fb-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--blue),var(--cyan));}
-.fb-card-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.fb-card-av{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid var(--border2);flex-shrink:0;}
-.fb-card-av-fallback{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.9rem;flex-shrink:0;}
-.fb-card-info{flex:1;min-width:0;}
-.fb-card-name{font-size:.92rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.fb-card-handle{font-family:var(--mono);font-size:.52rem;color:var(--text3);}
-.fb-card-stars{display:flex;gap:2px;margin-left:auto;flex-shrink:0;}
-.fb-card-star{color:#f59e0b;font-size:.75rem;}
-.fb-card-text{font-size:.85rem;line-height:1.72;color:var(--text2);}
-.fb-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
-.fb-card-time{font-family:var(--mono);font-size:.48rem;color:var(--text3);letter-spacing:.5px;}
-.fb-card-del{display:none;align-items:center;gap:4px;font-family:var(--mono);font-size:.48rem;color:#ef4444;opacity:.5;cursor:pointer;transition:opacity .2s;padding:2px 6px;border-radius:4px;}
-.fb-card-del:hover{opacity:1;background:rgba(239,68,68,.08);}
-.fb-card-del.visible{display:flex;}
-.fb-empty{text-align:center;padding:40px 20px;color:var(--text3);font-family:var(--mono);font-size:.6rem;letter-spacing:2px;border:1px dashed var(--border);border-radius:var(--r);}
-.fb-new-badge{position:absolute;top:12px;right:12px;font-family:var(--mono);font-size:.42rem;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(8,145,178,.08));color:var(--blue);border:1px solid rgba(37,99,235,.2);padding:2px 8px;border-radius:999px;}
-
-/* Karussell Dots & Nav */
-.fb-carousel-dots{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:14px;}
-.fb-carousel-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all .3s;cursor:pointer;border:none;}
-.fb-carousel-dot.active{width:18px;border-radius:3px;background:var(--blue);}
-.fb-carousel-nav{display:flex;gap:8px;align-items:center;margin-top:10px;justify-content:center;}
-.fb-carousel-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.9);border:1px solid var(--border);color:var(--text3);display:flex;align-items:center;justify-content:center;font-size:.7rem;transition:all .2s;cursor:pointer;}
-.fb-carousel-btn:hover{border-color:var(--border2);color:var(--blue);}
-.fb-carousel-counter{font-family:var(--mono);font-size:.52rem;color:var(--text3);}
-
 /* CONNECT */
 .conn-list{display:flex;flex-direction:column;gap:3px;}
 .conn-row{display:flex;align-items:center;justify-content:space-between;padding:17px 20px;border-radius:var(--r);background:rgba(255,255,255,0.85);border:1px solid var(--border);color:var(--text);transition:all .3s;position:relative;overflow:hidden;}
@@ -620,17 +538,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 .chat-log-a{font-size:.78rem;color:rgba(255,255,255,.45);padding:8px 10px;background:rgba(255,255,255,.03);border-radius:6px;border-left:2px solid rgba(255,255,255,.1);line-height:1.55;}
 .chat-log-label{font-family:var(--mono);font-size:.44rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:3px;}
 
-/* Admin Feedback Items */
-.admin-fb-item{padding:14px 16px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;}
-.admin-fb-av{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(37,99,235,.3);flex-shrink:0;}
-.admin-fb-av-fallback{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#0891b2);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:.85rem;flex-shrink:0;}
-.admin-fb-info{flex:1;min-width:0;}
-.admin-fb-user{font-family:var(--mono);font-size:.6rem;color:rgba(100,160,255,.9);font-weight:700;margin-bottom:2px;}
-.admin-fb-stars{color:#f59e0b;font-size:.85rem;margin-bottom:4px;letter-spacing:1px;}
-.admin-fb-text{font-size:.83rem;color:rgba(255,255,255,.7);line-height:1.6;}
-.admin-fb-time{font-family:var(--mono);font-size:.46rem;color:rgba(255,255,255,.2);margin-top:5px;}
-.admin-fb-del{padding:5px 12px;border-radius:6px;border:1px solid rgba(220,38,38,.25);color:#f87171;font-family:var(--mono);font-size:.5rem;cursor:pointer;transition:all .2s;flex-shrink:0;margin-top:2px;}
-.admin-fb-del:hover{background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.4);}
+
 
 /* REVEAL ANIMATIONS */
 .rv{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
@@ -803,11 +711,10 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       </div>
       <button class="admin-close" id="adminClose"><i class="fas fa-xmark"></i></button>
     </div>
-    <div class="admin-tabs">
+      <div class="admin-tabs">
       <button class="admin-tab on" data-tab="overview">Overview</button>
       <button class="admin-tab" data-tab="visitors">Visitors</button>
       <button class="admin-tab" data-tab="chats">Chats</button>
-        <button id="adminThemeToggle" class="admin-tab" style="margin-left:auto">Theme</button>
     </div>
     <div class="admin-body">
       <div class="admin-section on" id="tab-overview">
@@ -818,7 +725,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
           <div class="admin-stat"><div class="admin-stat-n" id="sProjects">5</div><div class="admin-stat-l">Projekte</div></div>
           <div class="admin-stat"><div class="admin-stat-n" id="sChats">—</div><div class="admin-stat-l">AI Chats</div></div>
           <div class="admin-stat"><div class="admin-stat-n" id="sOnline">—</div><div class="admin-stat-l">Letzte 24h</div></div>
-          <!-- feedbacks stat removed -->
+          
         </div>
         <div class="admin-section-title">Neueste Besucher (Live)</div>
         <div id="recentVisitorsList"><div class="no-data">Lädt...</div></div>
@@ -847,7 +754,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
           <button class="admin-btn-sm del" id="clearChatsBtn"><i class="fas fa-trash"></i> Clear All Chats</button>
         </div>
       </div>
-      <!-- admin feedback tab removed -->
+      
     </div>
   </div>
 </div>
@@ -990,7 +897,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </section>
 
-<!-- Feedback removed -->
+
 
 <section class="sec" id="connect">
   <div class="sec-in">
@@ -1186,7 +1093,7 @@ async function fb_clearChats() {
   await _set(_ref(_db, 'meta/chatCount'), 0);
 }
 
-// Feedback functionality removed
+ 
 
 // ============================================================
 // STATS
@@ -1256,8 +1163,7 @@ function fb_listenVisitors() {
   });
 }
 
-// debugLoadFeedbacks removed with feedback functionality
-
+ 
 function showVisitorNotification(v) {
   const el = document.getElementById('visitorNotif');
   document.getElementById('visitorNotifAv').src = v.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png';
@@ -1433,16 +1339,7 @@ document.getElementById('deleteSelectedChatsBtn')?.addEventListener('click', asy
 });
 
 
-// Feedback carousel and UI logic removed
-
-// ============================================================
-// FEEDBACK FORM
-// ============================================================
-let fbSelectedStars = 0;
-const starHints = ['', 'Schwach 😕', 'Okay 😐', 'Gut 👍', 'Super 🔥', 'Legendär 🚀'];
-
-// initFeedbackForm removed
-
+ 
 // ============================================================
 // MUSIC
 // ============================================================
@@ -1524,7 +1421,7 @@ async function handleOAuthCallback() {
 async function onUserLoggedIn(user, showWelcome = false) {
   await waitForFirebase();
 
-  // initial feedback loading removed
+  
   await fb_recordVisitor(user);
   if (await isUserBlacklisted(user.id)) {
     showBlacklistScreen();
@@ -1540,7 +1437,7 @@ async function onUserLoggedIn(user, showWelcome = false) {
     fb_listenVisitors();
   }
   document.getElementById('redirectScreen').classList.add('out');
-  // feedback username display removed
+    
 
   if (showWelcome) {
     document.getElementById('wcAv').src = avUrl;
@@ -1900,7 +1797,7 @@ function applyChatFilters() {
   </div>`).join('');
 }
 
-// Admin feedback panel removed
+ 
 
 
 // ============================================================
@@ -2014,15 +1911,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdmin();closeModal();}if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();openAdmin();}});
 
-  // Theme toggle
-  const themeBtn = document.getElementById('adminThemeToggle');
-  themeBtn?.addEventListener('click', ()=>{
-    const current = localStorage.getItem('adminTheme') || 'light';
-    const next = current === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-admin-theme', next);
-    localStorage.setItem('adminTheme', next);
-    showToast('Theme: '+next);
-  });
+  // Force admin dark theme (toggle removed)
+  try{ document.documentElement.setAttribute('data-admin-theme','dark'); localStorage.setItem('adminTheme','dark'); }catch(e){}
 
   // Chat
   document.getElementById('chatBtn').addEventListener('click',()=>document.getElementById('chatPanel').classList.toggle('open'));
