@@ -979,9 +979,16 @@ async function fb_getVisitors(limit = 500) {
   if (!_db) return [];
   try {
     const snap = await _get(_ref(_db, 'visitors'));
+    console.log('FB getVisitors snapshot size:', snap?.size);
     if (!snap.exists()) return [];
     const arr = [];
-    snap.forEach(child => arr.push(child.val()));
+    snap.forEach(child => {
+      try {
+        const v = child.val();
+        console.log('  visitor child:', child.key, v);
+        arr.push(v);
+      } catch (e) { console.warn('  visitor child parse error', e); }
+    });
     arr.sort((a, b) => b.lastSeen - a.lastSeen);
     return limit ? arr.slice(0, limit) : arr;
   } catch (e) { return []; }
@@ -1503,6 +1510,7 @@ async function loadAdminOverview() {
 async function renderVisitors() {
   document.getElementById('allVisitorsList').innerHTML='<div class="no-data">Lädt...</div>';
   const visitors = await fb_getVisitors(0); // 0 = kein Limit → alle laden
+  console.log('renderVisitors: loaded', visitors.length, visitors.slice(0,6));
   document.getElementById('visitorCountLabel').textContent = visitors.length;
   document.getElementById('allVisitorsList').innerHTML = buildVisitorTable(visitors);
 }
