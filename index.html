@@ -505,6 +505,12 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 .profile-actions{display:flex;flex-wrap:wrap;gap:12px;padding-top:6px;}
 .profile-actions .admin-btn-sm{padding:12px 18px;border-radius:999px;}
 .profile-actions .admin-btn-sm.del{background:linear-gradient(135deg,#f87171,#ef4444);color:#fff;}
+
+/* admin theme variants */
+:root[data-admin-theme="dark"]{--bg:#071122;--bg1:#061526;--surface:rgba(255,255,255,0.02);--surface2:rgba(255,255,255,0.04);--text:#e6eef9;--text2:rgba(230,238,249,0.9);--text3:rgba(230,238,249,0.6);} 
+:root[data-admin-theme="dark"] .admin-box{background:linear-gradient(180deg,#071122,#061018);border:1px solid rgba(255,255,255,0.03);}
+:root[data-admin-theme="dark"] .top-user{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
+
 .modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--text);transition:all .2s;}
 .modal-close:hover{background:var(--surface2);}
 .modal-ico{width:64px;height:64px;border-radius:16px;overflow:hidden;margin-bottom:14px;border:2px solid rgba(255,255,255,0.1);}
@@ -801,6 +807,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       <button class="admin-tab on" data-tab="overview">Overview</button>
       <button class="admin-tab" data-tab="visitors">Visitors</button>
       <button class="admin-tab" data-tab="chats">Chats</button>
+        <button id="adminThemeToggle" class="admin-tab" style="margin-left:auto">Theme</button>
     </div>
     <div class="admin-body">
       <div class="admin-section on" id="tab-overview">
@@ -815,6 +822,10 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
         </div>
         <div class="admin-section-title">Neueste Besucher (Live)</div>
         <div id="recentVisitorsList"><div class="no-data">Lädt...</div></div>
+        <div style="margin-top:18px" id="topUsersWrap">
+          <div class="admin-section-title">Top-Users</div>
+          <div id="topUsersList"><div class="no-data">Lädt...</div></div>
+        </div>
       </div>
       <div class="admin-section" id="tab-visitors">
         <div class="admin-section-title">Alle Besucher — Discord Auth (<span id="visitorCountLabel">0</span> gesamt)</div>
@@ -841,6 +852,15 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </div>
 <div class="admin-toast" id="adminToast"></div>
+
+<style>
+  .admin-box{max-width:1100px;padding:14px;border-radius:14px}
+  .admin-header .admin-title{font-size:1rem}
+  #topUsersList{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+  .top-user{padding:10px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,255,0.98));border:1px solid rgba(59,130,246,0.06);display:flex;flex-direction:column;gap:6px}
+  .top-user .tu-name{font-weight:700}
+  .profile-card{background:linear-gradient(180deg,#fff,#fbfdff)}
+</style>
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -1191,6 +1211,29 @@ async function fb_getStats() {
   } catch (e) { return {}; }
 }
 
+// ============================================================
+// Admin helpers: Top Users & Audit Log
+// ============================================================
+async function renderTopUsers(){
+  const visitors = await fb_getVisitors(0);
+  const logs = await fb_getChatLogs(0);
+  // compute chat counts per user
+  const chatCount = {};
+  logs.forEach(l=>{ if(l.userId) chatCount[l.userId] = (chatCount[l.userId]||0)+1; });
+  // combine with visits
+  const combined = visitors.map(v=>({ id:v.id, username:v.username, visits:v.visits||0, chats: chatCount[v.id]||0, avatar:v.avatar }));
+  combined.sort((a,b)=> (b.chats||0) - (a.chats||0) || (b.visits||0)-(a.visits||0));
+  const top = combined.slice(0,12);
+  const el = document.getElementById('topUsersList');
+  if(!top.length){ el.innerHTML = '<div class="no-data">Keine Daten</div>'; return; }
+  el.innerHTML = top.map(u=>`<div class="top-user"><div style="display:flex;gap:8px;align-items:center"><img src="${u.avatar||'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:36px;height:36px;border-radius:8px;object-fit:cover"><div><div class="tu-name">${escHtml(u.username||u.id)}</div><div style="font-family:var(--mono);font-size:.75rem;color:var(--text3)">@${escHtml(u.id)}</div></div></div><div style="display:flex;gap:8px;margin-top:8px"><div style="font-weight:800">${u.chats}</div><div style="color:var(--text3)">chats</div><div style="margin-left:auto;font-weight:700">${u.visits} visits</div></div></div>`).join('');
+}
+
+async function fb_logAction(action, actorId, targetId, details){
+  if(!_db) return;
+  try{ await _push(_ref(_db, 'auditLogs'), { ts: Date.now(), action, actorId: actorId||null, targetId: targetId||null, details: details||'' }); }catch(e){console.warn('audit log error',e);}
+}
+
 // Live visitor listener
 let _lastVisitorCount = 0;
 function fb_listenVisitors() {
@@ -1267,6 +1310,14 @@ async function openUserProfile(userId){
       <div class="profile-section-title">Letzte Fragen</div>\
       ${logs.length ? `<ul class="profile-questions">${logs.slice(0,8).map(l=>`<li>${escHtml(l.question)}</li>`).join('')}</ul>` : '<div class="profile-empty">Keine Fragen gefunden.</div>'} \
     </div>\
+    <div class="profile-section">\
+      <div class="profile-section-title">Moderator-Notiz</div>\
+      <textarea id="userNote_${userId}" placeholder="Kurze Notiz für Moderatoren" style="width:100%;min-height:72px;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);">${escHtml(user?.moderatorNote||'')}</textarea>\
+      <div style="margin-top:8px;display:flex;gap:8px">\
+        <button class="admin-btn-sm" onclick="saveUserNote('${userId}')">Speichern</button>\
+        <button class="admin-btn-sm" onclick="document.getElementById('userNote_${userId}').value=''">Löschen</button>\
+      </div>\
+    </div>\
     <div class="profile-actions">\
       <button class="admin-btn-sm" onclick="markUser('${userId}')">Markieren</button>\
       <button class="admin-btn-sm" onclick="copyToClipboard('${userId}')">ID kopieren</button>\
@@ -1289,6 +1340,18 @@ async function markUser(id){
   await _set(ref, { ...existing, flagged: true, id });
   showToast('User markiert');
   openUserProfile(id);
+  try{ await fb_logAction('mark', currentUser?.id, id, 'marked by admin'); }catch(e){}
+}
+
+async function saveUserNote(id){
+  const ta = document.getElementById(`userNote_${id}`);
+  if(!ta) return; const note = ta.value||'';
+  const ref = _ref(_db, `visitors/${id}`);
+  const snap = await _get(ref); const existing = snap.exists() ? snap.val() : {};
+  await _set(ref, { ...existing, moderatorNote: note, id });
+  showToast('Notiz gespeichert');
+  try{ await fb_logAction('note', currentUser?.id, id, note.slice(0,200)); }catch(e){}
+  openUserProfile(id);
 }
 async function toggleBlacklist(id, currentBlacklisted){
   const confirmMsg = currentBlacklisted ? 'Nutzer entsperren?' : 'Nutzer sperren?';
@@ -1305,6 +1368,7 @@ async function toggleBlacklist(id, currentBlacklisted){
     showBlacklistScreen();
     return;
   }
+  try{ await fb_logAction(newState ? 'ban' : 'unban', currentUser?.id, id, 'toggle blacklist'); }catch(e){}
   openUserProfile(id);
 }
 
@@ -1317,8 +1381,9 @@ async function exportChatsCSV(){
   const a = document.createElement('a'); a.href=url; a.download='chatlogs.csv'; a.click(); URL.revokeObjectURL(url);
 }
 
-async function deleteChatConfirm(key){ if(!confirm('Chat löschen?')) return; await deleteChat(key); await renderChatLog(); }
 async function deleteChat(key){ if(!_db) return; await _remove(_ref(_db, `chatLogs/${key}`)); showToast('Chat gelöscht'); }
+
+async function deleteChatConfirm(key){ if(!confirm('Chat löschen?')) return; await deleteChat(key); try{ await fb_logAction('deleteChat', currentUser?.id, key, 'deleted chat'); }catch(e){} await renderChatLog(); }
 
 function copyToClipboard(text){
   if(!text) return; 
@@ -1779,6 +1844,8 @@ async function loadAdminOverview() {
   document.getElementById('sOnline').textContent = stats.last24h??'—';
   const recent = await fb_getVisitors(5);
   document.getElementById('recentVisitorsList').innerHTML = buildRecentVisitorTable(recent);
+  // render top users as part of overview
+  await renderTopUsers();
 }
 
 // ===== ALLE VISITORS laden =====
@@ -1946,6 +2013,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdmin();closeModal();}if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();openAdmin();}});
+
+  // Theme toggle
+  const themeBtn = document.getElementById('adminThemeToggle');
+  themeBtn?.addEventListener('click', ()=>{
+    const current = localStorage.getItem('adminTheme') || 'light';
+    const next = current === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-admin-theme', next);
+    localStorage.setItem('adminTheme', next);
+    showToast('Theme: '+next);
+  });
 
   // Chat
   document.getElementById('chatBtn').addEventListener('click',()=>document.getElementById('chatPanel').classList.toggle('open'));
