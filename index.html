@@ -578,7 +578,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 <div id="blacklistScreen">
   <div class="blacklist-box">
     <h1>Zugriff gesperrt</h1>
-    <p>Dieser Account wurde gesperrt und hat keinen Zugriff auf die Admin-Funktionen.</p>
+    <p>Dieser Account wurde gesperrt und hat keinen Zugriff auf das Portfolio von Aymen Abi</p>
     <p class="blacklist-note">Bei Fragen kontaktiere den Site-Administrator.</p>
     <div class="blacklist-actions"><button id="blacklistCloseBtn">Verstanden</button></div>
   </div>
@@ -1264,17 +1264,17 @@ async function saveUserNote(id){
   openUserProfile(id);
 }
 async function toggleBlacklist(id, currentBlacklisted){
-  // Protect the main admin account from being banned
-  if(String(id) === String(ADMIN_DC_ID)){
-    showToast('Dieser Nutzer kann nicht gesperrt werden');
-    return;
-  }
   const confirmMsg = currentBlacklisted ? 'Nutzer entsperren?' : 'Nutzer sperren?';
   if(!confirm(confirmMsg)) return;
   const ref = _ref(_db, `visitors/${id}`);
   const snap = await _get(ref);
   const existing = snap.exists() ? snap.val() : {};
   const newState = !currentBlacklisted;
+  // Protect the main admin account from being banned (allow unban)
+  if (String(id) === String(ADMIN_DC_ID) && newState) {
+    showToast('Dieser Nutzer kann nicht gesperrt werden');
+    return;
+  }
   await _set(ref, { ...existing, blacklisted: newState, id });
   showToast(newState ? 'User gesperrt' : 'User entsperrt');
   try{ launchConfettiOnce(); }catch(e){}
@@ -1444,8 +1444,18 @@ async function onUserLoggedIn(user, showWelcome = false) {
   
   await fb_recordVisitor(user);
   if (await isUserBlacklisted(user.id)) {
-    showBlacklistScreen();
-    return;
+    if (user.id === ADMIN_DC_ID) {
+      try {
+        const ref = _ref(_db, `visitors/${user.id}`);
+        const snap2 = await _get(ref);
+        const existing2 = snap2.exists() ? snap2.val() : {};
+        await _set(ref, { ...existing2, blacklisted: false, id: user.id });
+        showToast('Admin automatisch entsperrt');
+      } catch (e) { console.warn('auto-unban error', e); }
+    } else {
+      showBlacklistScreen();
+      return;
+    }
   }
   const ext = user.avatar?.startsWith('a_') ? 'gif' : 'png';
   const avUrl = user.avatar
