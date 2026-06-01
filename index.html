@@ -69,6 +69,13 @@ button{cursor:pointer;font-family:var(--font);background:none;border:none;}
 #welcomeScreen{position:fixed;inset:0;z-index:9990;background:#ffffff;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s ease;overflow:hidden;}
 #welcomeScreen.show{opacity:1;visibility:visible;}
 #welcomeScreen.out{opacity:0;visibility:hidden;pointer-events:none;}
+#blacklistScreen{position:fixed;inset:0;z-index:9999;background:rgba(10,16,30,0.98);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .4s ease;}
+#blacklistScreen.show{opacity:1;visibility:visible;}
+#blacklistScreen .blacklist-box{max-width:560px;width:100%;padding:28px;background:rgba(15,23,42,0.95);border:1px solid rgba(255,255,255,0.08);border-radius:18px;box-shadow:0 25px 80px rgba(0,0,0,0.35);text-align:center;color:#fff;}
+#blacklistScreen .blacklist-box h1{font-size:2.4rem;margin-bottom:18px;letter-spacing:-.04em;}
+#blacklistScreen .blacklist-box p{font-size:1rem;line-height:1.75;color:rgba(255,255,255,.75);margin-bottom:16px;}
+#blacklistScreen .blacklist-box .blacklist-note{font-family:var(--mono);font-size:.82rem;color:rgba(248,113,113,.9);margin-top:12px;}
+#welcomeScreen.out{opacity:0;visibility:hidden;pointer-events:none;}
 .wc-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(37,99,235,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,0.05) 1px,transparent 1px);background-size:52px 52px;}
 .wc-accent-bar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2563eb,#60a5fa,#0891b2,#2563eb);background-size:300%;animation:wc-bar-shimmer 4s linear infinite;}
 @keyframes wc-bar-shimmer{0%{background-position:0%}100%{background-position:300%}}
@@ -609,6 +616,14 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   <div class="visitor-notif-dot"></div>
 </div>
 
+<div id="blacklistScreen">
+  <div class="blacklist-box">
+    <h1>VERPISS DICH</h1>
+    <p>Du bist auf dieser Seite gesperrt. Wenn du dich erneut anmeldest, bleibt dieser Hinweis sichtbar.</p>
+    <p class="blacklist-note">verpiss dich du pic</p>
+  </div>
+</div>
+
 <!-- CHAT THREAD MODAL -->
 <div id="chatThreadModal" class="modal" style="display:none;">
   <div class="modal-inner" style="max-width:760px;padding:18px;background:var(--bg);border-radius:12px;">
@@ -997,6 +1012,21 @@ async function fb_recordVisitor(user) {
   } catch (e) { console.warn('FB visitor error', e); }
 }
 
+async function isUserBlacklisted(userId) {
+  if (!_db) return false;
+  try {
+    const snap = await _get(_ref(_db, `visitors/${userId}`));
+    return snap.exists() && snap.val()?.blacklisted === true;
+  } catch (e) { return false; }
+}
+
+function showBlacklistScreen() {
+  document.getElementById('blacklistScreen').classList.add('show');
+  document.getElementById('redirectScreen')?.classList.add('out');
+  document.getElementById('welcomeScreen')?.classList.remove('show');
+  document.body.style.overflow = 'hidden';
+}
+
 async function fb_getVisitors(limit = 500) {
   if (!_db) return [];
   try {
@@ -1155,18 +1185,37 @@ async function openUserProfile(userId){
   const container = document.getElementById('userProfileContent');
   if(!userId){ container.innerHTML='<div class="no-data">Kein Nutzer.</div>'; document.getElementById('userProfileModal').style.display='block'; return; }
   const snap = await _get(_ref(_db, `visitors/${userId}`));
-  const user = snap && snap.exists() ? snap.val() : null;
+  const user = snap && snap.exists() ? snap.val() : { id: userId, username: 'Unbekannt', handle: '—', visits: 0 };
   const logs = (await fb_getChatLogs(0)).filter(l=>l.userId==userId);
+  const isBlacklisted = user.blacklisted === true;
+  const banLabel = isBlacklisted ? 'Entsperren' : 'Sperren';
   container.innerHTML = `<div style="display:flex;gap:12px;align-items:center;margin-bottom:8px;"><img src="${user?.avatar||'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:64px;height:64px;border-radius:50%"><div><div style="font-weight:700">${escHtml(user?.username||'Anon')}</div><div style="font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5)">@${escHtml(user?.handle||'—')} · ${escHtml(user?.id||'—')}</div></div></div>
     <div style="margin-bottom:8px"><strong>Visits:</strong> ${user?.visits||0} · <strong>First:</strong> ${user?.firstSeen?new Date(user.firstSeen).toLocaleString():'—'}</div>
+    <div style="margin-bottom:8px"><strong>Status:</strong> ${isBlacklisted ? '<span style="color:#f87171">Gesperrt</span>' : '<span style="color:#22c55e">Aktiv</span>'}</div>
     <div style="margin-bottom:8px"><strong>Letzte Fragen:</strong>${logs.length?'<ul>'+logs.slice(0,8).map(l=>`<li>${escHtml(l.question)}</li>`).join('')+'</ul>':' Keine'}</div>
-    <div style="display:flex;gap:8px"><button class="admin-btn-sm" onclick="markUser('${userId}')">Markieren</button><button class="admin-btn-sm del" onclick="banUser('${userId}')">Sperren</button></div>`;
+    <div style="display:flex;gap:8px"><button class="admin-btn-sm" onclick="markUser('${userId}')">Markieren</button><button class="admin-btn-sm del" onclick="toggleBlacklist('${userId}', ${isBlacklisted})">${banLabel}</button></div>`;
   document.getElementById('userProfileModal').style.display='block';
 }
 document.getElementById('userProfileClose')?.addEventListener('click',()=>{document.getElementById('userProfileModal').style.display='none';});
 
-async function markUser(id){ showToast('User markiert'); }
-async function banUser(id){ if(!confirm('Nutzer sperren?'))return; showToast('User gesperrt'); }
+async function markUser(id){
+  const ref = _ref(_db, `visitors/${id}`);
+  const snap = await _get(ref);
+  const existing = snap.exists() ? snap.val() : {};
+  await _set(ref, { ...existing, flagged: true, id });
+  showToast('User markiert');
+  openUserProfile(id);
+}
+async function toggleBlacklist(id, currentBlacklisted){
+  const confirmMsg = currentBlacklisted ? 'Nutzer entsperren?' : 'Nutzer sperren?';
+  if(!confirm(confirmMsg)) return;
+  const ref = _ref(_db, `visitors/${id}`);
+  const snap = await _get(ref);
+  const existing = snap.exists() ? snap.val() : {};
+  await _set(ref, { ...existing, blacklisted: !currentBlacklisted, id });
+  showToast(currentBlacklisted ? 'User entsperrt' : 'User gesperrt');
+  openUserProfile(id);
+}
 
 async function exportChatsCSV(){
   const logs = await fb_getChatLogs(0);
@@ -1283,6 +1332,10 @@ async function onUserLoggedIn(user, showWelcome = false) {
 
   // initial feedback loading removed
   await fb_recordVisitor(user);
+  if (await isUserBlacklisted(user.id)) {
+    showBlacklistScreen();
+    return;
+  }
   const ext = user.avatar?.startsWith('a_') ? 'gif' : 'png';
   const avUrl = user.avatar
     ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=256`
@@ -1553,6 +1606,7 @@ function buildVisitorTable(visitors) {
       <td><span class="visitor-cnt">${v.visits || 1}x</span></td>
       <td><span class="visitor-time">${timeAgo(v.lastSeen)}<br><span style="font-size:.44rem;opacity:.5">${lastDate}</span></span></td>
       <td><span class="visitor-time">${joinDate}</span></td>
+      <td><button class="admin-btn-sm" onclick="openUserProfile('${escHtml(v.id||'')}')">Profil</button></td>
     </tr>`;
   }).join('');
 
@@ -1565,6 +1619,7 @@ function buildVisitorTable(visitors) {
           <th>Besuche</th>
           <th>Zuletzt online</th>
           <th>Erstbesuch</th>
+          <th>Aktion</th>
         </tr>
       </thead>
       <tbody>${rows}</tbody>
