@@ -1126,8 +1126,15 @@ async function fb_getFeedbacks() {
     const snap = await _get(_ref(_db, 'feedbacks'));
     if (!snap.exists()) return [];
     const arr = [];
-    snap.forEach(child => arr.push({ key: child.key, ...child.val() }));
-    arr.sort((a, b) => b.ts - a.ts);
+    snap.forEach(child => {
+      try {
+        const val = child.val();
+        console.log('fb_getFeedbacks: child key=', child.key, 'val=', val);
+        if (val && typeof val === 'object') arr.push({ key: child.key, ...val });
+        else console.warn('fb_getFeedbacks: skipping invalid/null feedback for key=', child.key);
+      } catch (e) { console.warn('fb_getFeedbacks: error parsing child', child.key, e); }
+    });
+    arr.sort((a, b) => (b.ts || 0) - (a.ts || 0));
     return arr;
   } catch (e) { return []; }
 }
