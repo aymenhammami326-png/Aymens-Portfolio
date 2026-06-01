@@ -972,6 +972,9 @@ const DISCORD_CLIENT_ID = '1502858431676153897';
 const DEBUG_SHOW_VISITORS = true;
 
 let currentUser = null, chatHistory = [], chatTurnCount = 0;
+let adminChatLogs = [];
+let adminChatSearch = '';
+let adminChatUserFilter = '';
 const bgAudio = document.getElementById('bgAudio');
 let musicReady = false, musicOn = false;
 
@@ -1627,6 +1630,21 @@ function buildVisitorTable(visitors) {
   </div>`;
 }
 
+function buildRecentVisitorTable(visitors) {
+  if (!visitors.length) return '<div class="no-data">Noch keine Besucher.</div>';
+  const rows = visitors.map(v => {
+    const lastDate = v.lastSeen ? new Date(v.lastSeen).toLocaleString('de-DE', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' }) : '—';
+    return `<div class="visitor-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img class="visitor-av" src="${escHtml(v.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png')}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
+        <div><div class="visitor-name">${escHtml(v.username || 'Unbekannt')}</div><div class="visitor-handle">@${escHtml(v.handle || '—')}</div></div>
+      </div>
+      <div style="font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.6);">${timeAgo(v.lastSeen)}</div>
+    </div>`;
+  }).join('');
+  return `<div class="recent-visitors-list">${rows}</div>`;
+}
+
 async function loadAdminOverview() {
   const stats = await fb_getStats();
   document.getElementById('sVisitors').textContent = stats.total??'—';
@@ -1634,7 +1652,7 @@ async function loadAdminOverview() {
   document.getElementById('sChats').textContent = stats.chatCount??'—';
   document.getElementById('sOnline').textContent = stats.last24h??'—';
   const recent = await fb_getVisitors(5);
-  document.getElementById('recentVisitorsList').innerHTML = buildVisitorTable(recent);
+  document.getElementById('recentVisitorsList').innerHTML = buildRecentVisitorTable(recent);
 }
 
 // ===== ALLE VISITORS laden =====
@@ -1648,18 +1666,30 @@ async function renderVisitors() {
 
 async function renderChatLog() {
   document.getElementById('chatLogList').innerHTML='<div class="no-data">Lädt...</div>';
-  const logs = await fb_getChatLogs(0);
-  console.log('renderChatLog:', logs.length, 'items');
-  document.getElementById('chatCountLabel').textContent = logs.length;
+  adminChatLogs = await fb_getChatLogs(0);
+  adminChatLogs = adminChatLogs.map(log => ({ ...log, userId: log.userId || 'anon', username: log.username || 'Anon' }));
+  applyChatFilters();
+}
+
+function applyChatFilters() {
+  const logs = adminChatLogs.filter(log => {
+    const matchesText = !adminChatSearch || `${log.question} ${log.answer} ${log.username}`.toLowerCase().includes(adminChatSearch.toLowerCase());
+    const matchesUser = !adminChatUserFilter || log.userId === adminChatUserFilter;
+    return matchesText && matchesUser;
+  });
+
   const container = document.getElementById('chatLogList');
+  document.getElementById('chatCountLabel').textContent = logs.length;
   if(!logs.length){container.innerHTML='<div class="no-data">Noch keine Chat-Nachrichten.</div>';return;}
-  // populate user filter
-  const users = Array.from(new Map(logs.map(l=>[l.userId||l.userId||l.userId, l])).values()).map(l=>({id:l.userId||'anon', name:l.username||'Anon'}));
+
+  const users = Array.from(new Map(adminChatLogs.map(l=>[l.userId, l])).values()).map(l=>({id:l.userId, name:l.username}));
   const userFilter = document.getElementById('chatUserFilter');
-  if(userFilter){
-    const existing = Array.from(userFilter.options).map(o=>o.value);
-    users.forEach(u=>{ if(u && !existing.includes(u.id)) { const opt = document.createElement('option'); opt.value=u.id; opt.textContent=u.name; userFilter.appendChild(opt); } });
+  if(userFilter) {
+    userFilter.innerHTML = '<option value="">Alle Nutzer</option>';
+    users.forEach(u=>{ if(u) { const opt = document.createElement('option'); opt.value=u.id; opt.textContent=u.name; userFilter.appendChild(opt); } });
+    userFilter.value = adminChatUserFilter;
   }
+
   container.innerHTML = logs.map(log=>`<div class="chat-log-item" data-key="${log.key}">\
     <div style="display:flex;gap:8px;align-items:flex-start">\
       <input type=checkbox class="chat-item-chk" data-key="${log.key}" style="margin-top:6px">\
@@ -1669,14 +1699,12 @@ async function renderChatLog() {
         <div class="chat-log-label" style="margin-top:8px">Antwort</div><div class="chat-log-a">${escHtml(log.answer)}</div>\
       </div>\
       <div style="margin-left:8px;display:flex;flex-direction:column;gap:6px">\
-        <button class="admin-btn-sm" data-key="${log.key}" onclick="openChatThread('${log.key}')">Thread</button>\
-        <button class="admin-btn-sm" data-user="${log.userId||''}" onclick="openUserProfile('${log.userId||''}')">Profil</button>\
-        <button class="admin-btn-sm del" data-key="${log.key}" onclick="deleteChatConfirm('${log.key}')">Löschen</button>\
+        <button class="admin-btn-sm" onclick='openChatThread(${JSON.stringify(log.key)})'>Thread</button>\
+        <button class="admin-btn-sm" onclick='openUserProfile(${JSON.stringify(log.userId||'anon')})'>Profil</button>\
+        <button class="admin-btn-sm del" onclick='deleteChatConfirm(${JSON.stringify(log.key)})'>Löschen</button>\
       </div>\
     </div>\
   </div>`).join('');
-  // attach bulk checkbox handlers
-  container.querySelectorAll('.chat-item-chk').forEach(c=>c.addEventListener('change', ()=>{}));
 }
 
 // Admin feedback panel removed
@@ -1750,6 +1778,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       if(tab.dataset.tab==='chats') await renderChatLog();
       if(tab.dataset.tab==='overview') await loadAdminOverview();
     });
+  });
+
+  const chatSearchInput = document.getElementById('chatSearch');
+  const chatUserSelect = document.getElementById('chatUserFilter');
+  chatSearchInput?.addEventListener('input', e => {
+    adminChatSearch = e.target.value;
+    applyChatFilters();
+  });
+  chatUserSelect?.addEventListener('change', e => {
+    adminChatUserFilter = e.target.value;
+    applyChatFilters();
   });
 
   document.getElementById('clearVisitorsBtn').addEventListener('click',async()=>{
