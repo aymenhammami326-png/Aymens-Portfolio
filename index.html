@@ -644,6 +644,14 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </div>
 
+<div id="maintenanceScreen" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(5,12,26,0.98);align-items:center;justify-content:center;">
+  <div style="max-width:560px;width:100%;padding:28px;background:linear-gradient(180deg,rgba(12,20,37,.98),rgba(8,16,30,.98));border:1px solid rgba(255,255,255,0.06);border-radius:18px;box-shadow:0 35px 120px rgba(2,6,23,0.7);text-align:center;color:#fff;">
+    <h1>Wartungsmodus aktiviert</h1>
+    <p>Die Seite wird gerade gewartet. Nur Admins haben Zugriff.</p>
+    <p class="blacklist-note">Bitte später erneut versuchen oder den Admin kontaktieren.</p>
+  </div>
+</div>
+
 <!-- CHAT THREAD MODAL -->
 <div id="chatThreadModal" class="modal" style="display:none;">
   <div class="modal-inner" style="max-width:760px;padding:18px;background:var(--bg);border-radius:12px;">
@@ -862,6 +870,136 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
               <span class="slider"></span>
             </label>
           </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Wartungsmodus</div>
+              <div class="setting-desc">Schaltet die Website für normale Besucher vorübergehend ab und zeigt nur Admins Zugang.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingMaintenanceMode">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Besucher-Benachrichtigungen</div>
+              <div class="setting-desc">Einblenden von aktuellen Besucher-Popups auf der Seite.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingVisitorNotifications">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Besucher nach Aktivität sortieren</div>
+              <div class="setting-desc">Zeigt zuerst die zuletzt aktiven Besucher in der Liste.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingSortVisitorsRecent">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Chat-Protokollierung</div>
+              <div class="setting-desc">Speichert jede Chat-Nachricht in Firebase für spätere Analyse.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingChatAutoSave">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Admin-Sicherheitsmodus</div>
+              <div class="setting-desc">Fordert beim Admin-Zugang eine zusätzliche Bestätigung an.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingAdminSecurityLock">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Debug-Protokollierung</div>
+              <div class="setting-desc">Aktiviert zusätzliche Debug-Ausgaben in der Konsole für Fehleranalyse.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingDebugLogging">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Musik beim Start</div>
+              <div class="setting-desc">Startet den Hintergrundtrack automatisch, sobald der Nutzer die Seite betritt.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingMusicAutoStart">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Reduzierte Animationen</div>
+              <div class="setting-desc">Schaltet Bewegungen und Animationen aus, um die Performance zu verbessern.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingReducedAnimations">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Partikeleffekte deaktivieren</div>
+              <div class="setting-desc">Stoppt Konfetti, Partikel und zusätzliche Animationen auf der Seite.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingDisableParticles">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Automatischer Admin-Logout</div>
+              <div class="setting-desc">Schließt das Admin-Dashboard automatisch nach 10 Minuten Inaktivität.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingAutoLogout">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Kompakte Besucheransicht</div>
+              <div class="setting-desc">Zeigt die Besucher-Tabelle dichter und platzsparender an.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingCompactVisitorRows">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Chat-Benachrichtigungen</div>
+              <div class="setting-desc">Aktiviert Hinweise für neue Chat-Aktivität im Admin-Dashboard.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingChatNotifications">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-name">Fehlerbericht aktivieren</div>
+              <div class="setting-desc">Ermöglicht detailliertere Fehlerhinweise und Konsolenlogs im Admin-Bereich.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="settingErrorReporting">
+              <span class="slider"></span>
+            </label>
+          </div>
           <div class="setting-row" style="flex-direction:column;align-items:flex-start;gap:10px;">
             <div>
               <div class="setting-name">Cache & Einstellungen</div>
@@ -898,6 +1036,9 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   .slider:before{position:absolute;content:'';height:18px;width:18px;left:4px;top:4px;background:#fff;border-radius:50%;box-shadow:0 6px 18px rgba(0,0,0,0.12);transition:.25s;}
   .switch input:checked + .slider{background:rgba(37,99,235,0.8);}
   .switch input:checked + .slider:before{transform:translateX(20px);}
+  html.reduced-motion *, html.reduced-motion *::before, html.reduced-motion *::after {animation:none!important;transition:none!important;scroll-behavior:auto!important;} 
+  #allVisitorsList.compact-visitors .visitors-table th, #allVisitorsList.compact-visitors .visitors-table td {padding:6px 8px;}
+  #allVisitorsList.compact-visitors .visitor-row {padding:8px 10px;}
 </style>
 
 <!-- HERO -->
@@ -1053,7 +1194,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </footer>
 
-<audio id="bgAudio" src="Lights.mp3" loop preload="auto"></audio>
+<audio id="bgAudio" src="Benzin.mp3" loop preload="auto"></audio>
 
   <canvas id="confettiCanvas"></canvas>
 
@@ -1093,6 +1234,7 @@ let selectedVisitorIds = new Set();
 let adminAuditSearch = '';
 let adminAuditActionFilter = 'all';
 let adminAutoRefreshTimer = null;
+let adminLogoutTimer = null;
 const bgAudio = document.getElementById('bgAudio');
 let musicReady = false, musicOn = false;
 
@@ -1146,6 +1288,26 @@ function showBlacklistScreen() {
   document.getElementById('redirectScreen')?.classList.add('out');
   document.getElementById('welcomeScreen')?.classList.remove('show');
   document.body.style.overflow = 'hidden';
+}
+
+function updateVisitorNotifications() {
+  const enabled = getAdminSetting('adminVisitorNotifications', true);
+  const notif = document.getElementById('visitorNotif');
+  if (!notif) return;
+  notif.style.display = enabled ? 'flex' : 'none';
+}
+
+function checkMaintenanceMode() {
+  const enabled = getAdminSetting('adminMaintenanceMode', false);
+  const overlay = document.getElementById('maintenanceScreen');
+  if (!overlay) return;
+  if (enabled && (!currentUser || currentUser.id !== ADMIN_DC_ID)) {
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    return true;
+  }
+  overlay.style.display = 'none';
+  return false;
 }
 
 async function fb_getVisitors(limit = 500) {
@@ -1540,9 +1702,73 @@ document.getElementById('deleteSelectedChatsBtn')?.addEventListener('click', asy
 // ============================================================
 // MUSIC
 // ============================================================
+function getAdminSetting(key, defaultValue) {
+  const value = localStorage.getItem(key);
+  if (value === null || value === undefined) return defaultValue;
+  return value === 'true';
+}
+
+function setAdminSetting(key, enabled) {
+  localStorage.setItem(key, enabled);
+}
+
+function debugLog(...args) {
+  if (getAdminSetting('adminDebugLogging', false)) console.debug(...args);
+}
+
+function applyReducedMotion(enabled) {
+  document.documentElement.classList.toggle('reduced-motion', enabled);
+}
+function applyVisitorListDensity(enabled) {
+  const list = document.getElementById('allVisitorsList');
+  if (!list) return;
+  list.classList.toggle('compact-visitors', enabled);
+}
+function scheduleAdminAutoLogout() {
+  if (adminLogoutTimer) clearTimeout(adminLogoutTimer);
+  adminLogoutTimer = setTimeout(() => {
+    closeAdmin();
+    showToast('Admin-Panel automatisch geschlossen');
+  }, 10 * 60 * 1000);
+}
+function shouldShowChatNotifications() {
+  return getAdminSetting('adminChatNotifications', false);
+}
+function shouldReportErrors() {
+  return getAdminSetting('adminErrorReporting', false);
+}
+function spawnParticles() {
+  if (getAdminSetting('adminDisableParticles', false)) return;
+  const wc = document.getElementById('welcomeScreen');
+  const colors = ['#3b82f6','#60a5fa','#2563eb','#93c5fd'];
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div'); p.className = 'wc-particle';
+    const size = Math.random() * 8 + 2;
+    const tx = (Math.random() - .5) * 500; const ty = -(Math.random() * 300 + 80);
+    p.style.cssText = `width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:50%;left:${Math.random()*100}%;top:${50+Math.random()*20}%;--tx:${tx}px;--ty:${ty}px;--d:${1.5+Math.random()*2}s;--delay:${Math.random()*.4}s;position:absolute;pointer-events:none;z-index:3;`;
+    wc.appendChild(p); setTimeout(() => p.remove(), 3500);
+  }
+}
+
+function ensureAudioStartPosition() {
+  if (!bgAudio) return;
+  const startSec = 5;
+  const setPosition = () => {
+    try {
+      if (Math.abs(bgAudio.currentTime - startSec) > 0.2) bgAudio.currentTime = startSec;
+    } catch (e) {}
+  };
+  if (bgAudio.readyState >= 1) {
+    setPosition();
+  } else {
+    bgAudio.addEventListener('loadedmetadata', function once() { setPosition(); bgAudio.removeEventListener('loadedmetadata', once); });
+  }
+}
+
 function playMusic() {
   if (musicReady) return;
   bgAudio.volume = 0.5;
+  ensureAudioStartPosition();
   bgAudio.play().then(() => { musicReady = true; musicOn = true; updateMusicNavUi(); }).catch(() => {});
 }
 function updateMusicNavUi() {
@@ -1654,12 +1880,14 @@ async function onUserLoggedIn(user, showWelcome = false) {
     const ws = document.getElementById('welcomeScreen');
     ws.classList.add('show');
     document.getElementById('wcEnterBtn').onclick = () => {
-      playMusic(); spawnParticles();
+      if (getAdminSetting('adminMusicAutoStart', true)) playMusic();
+      spawnParticles();
       setTimeout(() => { ws.classList.add('out'); ws.classList.remove('show'); document.body.style.overflow = ''; startSite(); }, 280);
     };
     setTimeout(() => {
       if (ws.classList.contains('show')) {
-        playMusic(); ws.classList.add('out'); ws.classList.remove('show');
+        if (getAdminSetting('adminMusicAutoStart', true)) playMusic();
+        ws.classList.add('out'); ws.classList.remove('show');
         document.body.style.overflow = ''; startSite();
       }
     }, 12000);
@@ -1684,6 +1912,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.stopPropagation(); popup.classList.toggle('open');
     if (!musicReady && parseInt(volSlider.value) > 0) {
       bgAudio.volume = parseInt(volSlider.value) / 100;
+      ensureAudioStartPosition();
       bgAudio.play().then(() => { musicReady = true; musicOn = true; updateMusicNavUi(); }).catch(() => {});
     }
   });
@@ -1694,7 +1923,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const v = parseInt(e.target.value); volLabel.textContent = v + '%';
     if (bgAudio) bgAudio.volume = v / 100;
     if (v === 0) { if (!bgAudio.paused) { bgAudio.pause(); musicOn = false; updateMusicNavUi(); } }
-    else { if (bgAudio.paused) { bgAudio.play().then(() => { musicReady = true; musicOn = true; updateMusicNavUi(); }).catch(() => {}); } else { musicOn = true; updateMusicNavUi(); } }
+    else { if (bgAudio.paused) { ensureAudioStartPosition(); bgAudio.play().then(() => { musicReady = true; musicOn = true; updateMusicNavUi(); }).catch(() => {}); } else { musicOn = true; updateMusicNavUi(); } }
   });
 });
 
@@ -1812,7 +2041,9 @@ async function sendChat() {
   console.log('sendChat reply', reply);
   typing.remove(); appendMsg('bot',reply||'Keine Antwort erhalten.');
   send.disabled=false; inp.focus();
-  await fb_saveChatLog(q,reply||'[Fehler]',currentUser);
+  if (getAdminSetting('adminChatAutoSave', true)) {
+    await fb_saveChatLog(q,reply||'[Fehler]',currentUser);
+  }
 }
 
 // ============================================================
@@ -1864,6 +2095,7 @@ async function openAdmin() {
   document.getElementById('dbDot').className='db-dot ok';
   document.getElementById('dbStatusText').textContent='Firebase Realtime DB · Verbunden ✓';
   await loadAdminOverview();
+  renderAdminSettings();
 }
 function closeAdmin(){document.getElementById('adminOverlay').classList.remove('open');document.body.style.overflow='';}
 window.closeAdmin=closeAdmin;
@@ -1971,6 +2203,12 @@ async function renderVisitors() {
     }
     return true;
   });
+  const sortByRecent = getAdminSetting('adminSortVisitorsByRecent', true);
+  if (sortByRecent) {
+    filtered.sort((a, b) => (b.lastSeen || 0) - (a.lastSeen || 0));
+  } else {
+    filtered.sort((a, b) => String(a.username || '').localeCompare(String(b.username || '')));
+  }
   document.getElementById('visitorCountLabel').textContent = filtered.length;
   document.getElementById('allVisitorsList').innerHTML = buildVisitorTable(filtered);
   updateVisitorSelectionInfo();
@@ -2044,13 +2282,60 @@ async function renderAuditLog() {
 }
 
 function renderAdminSettings() {
-  const startDark = localStorage.getItem('siteTheme') !== 'light';
-  const autoRefresh = localStorage.getItem('adminAutoRefresh') === 'true';
+  const startDark = getAdminSetting('siteTheme', true);
+  const autoRefresh = getAdminSetting('adminAutoRefresh', true);
+  const maintenance = getAdminSetting('adminMaintenanceMode', false);
+  const visitorNotifications = getAdminSetting('adminVisitorNotifications', true);
+  const sortVisitorsRecent = getAdminSetting('adminSortVisitorsByRecent', true);
+  const chatAutoSave = getAdminSetting('adminChatAutoSave', true);
+  const adminSecurityLock = getAdminSetting('adminSecurityLock', false);
+  const debugLogging = getAdminSetting('adminDebugLogging', false);
+  const musicAutoStart = getAdminSetting('adminMusicAutoStart', true);
+  const reducedAnimations = getAdminSetting('adminReducedAnimations', false);
+  const disableParticles = getAdminSetting('adminDisableParticles', false);
+  const autoLogout = getAdminSetting('adminAutoLogout', false);
+  const compactVisitorRows = getAdminSetting('adminCompactVisitorRows', false);
+  const chatNotifications = getAdminSetting('adminChatNotifications', false);
+  const errorReporting = getAdminSetting('adminErrorReporting', false);
+
   const startDarkEl = document.getElementById('settingStartDark');
   const autoRefreshEl = document.getElementById('settingAutoRefresh');
+  const maintenanceEl = document.getElementById('settingMaintenanceMode');
+  const visitorNotificationsEl = document.getElementById('settingVisitorNotifications');
+  const sortVisitorsEl = document.getElementById('settingSortVisitorsRecent');
+  const chatAutoSaveEl = document.getElementById('settingChatAutoSave');
+  const adminSecurityLockEl = document.getElementById('settingAdminSecurityLock');
+  const debugLoggingEl = document.getElementById('settingDebugLogging');
+  const musicAutoStartEl = document.getElementById('settingMusicAutoStart');
+  const reducedAnimationsEl = document.getElementById('settingReducedAnimations');
+  const disableParticlesEl = document.getElementById('settingDisableParticles');
+  const autoLogoutEl = document.getElementById('settingAutoLogout');
+  const compactVisitorRowsEl = document.getElementById('settingCompactVisitorRows');
+  const chatNotificationsEl = document.getElementById('settingChatNotifications');
+  const errorReportingEl = document.getElementById('settingErrorReporting');
+
   if (startDarkEl) startDarkEl.checked = startDark;
   if (autoRefreshEl) autoRefreshEl.checked = autoRefresh;
+  if (maintenanceEl) maintenanceEl.checked = maintenance;
+  if (visitorNotificationsEl) visitorNotificationsEl.checked = visitorNotifications;
+  if (sortVisitorsEl) sortVisitorsEl.checked = sortVisitorsRecent;
+  if (chatAutoSaveEl) chatAutoSaveEl.checked = chatAutoSave;
+  if (adminSecurityLockEl) adminSecurityLockEl.checked = adminSecurityLock;
+  if (debugLoggingEl) debugLoggingEl.checked = debugLogging;
+  if (musicAutoStartEl) musicAutoStartEl.checked = musicAutoStart;
+  if (reducedAnimationsEl) reducedAnimationsEl.checked = reducedAnimations;
+  if (disableParticlesEl) disableParticlesEl.checked = disableParticles;
+  if (autoLogoutEl) autoLogoutEl.checked = autoLogout;
+  if (compactVisitorRowsEl) compactVisitorRowsEl.checked = compactVisitorRows;
+  if (chatNotificationsEl) chatNotificationsEl.checked = chatNotifications;
+  if (errorReportingEl) errorReportingEl.checked = errorReporting;
+
   updateAdminAutoRefresh(autoRefresh);
+  updateVisitorNotifications();
+  checkMaintenanceMode();
+  applyReducedMotion(reducedAnimations);
+  applyVisitorListDensity(compactVisitorRows);
+  if (autoLogout) scheduleAdminAutoLogout();
 }
 
 function updateAdminAutoRefresh(enabled) {
@@ -2270,9 +2555,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   document.getElementById('refreshAuditBtn')?.addEventListener('click', async ()=>{ await renderAuditLog(); showToast('Audit aktualisiert'); });
   document.getElementById('clearAuditBtn')?.addEventListener('click', async ()=>{ if(!confirm('Audit-Log löschen?')) return; await fb_clearAuditLogs(); await renderAuditLog(); showToast('Audit-Log gelöscht'); await fb_logAction('clearAuditLog', currentUser?.id, null, 'Audit log cleared'); });
-  document.getElementById('settingStartDark')?.addEventListener('change', e=>{ const dark = e.target.checked; localStorage.setItem('siteTheme', dark ? 'dark' : 'light'); applySiteTheme(dark ? 'dark' : 'light'); showToast('Start-Theme: '+(dark ? 'dark' : 'light')); });
-  document.getElementById('settingAutoRefresh')?.addEventListener('change', e=>{ const enabled = e.target.checked; localStorage.setItem('adminAutoRefresh', enabled); updateAdminAutoRefresh(enabled); showToast('Live Refresh: '+(enabled ? 'AN' : 'AUS')); });
-  document.getElementById('resetAdminPrefsBtn')?.addEventListener('click', async ()=>{ if(!confirm('Admin-Einstellungen zurücksetzen?')) return; localStorage.removeItem('adminAutoRefresh'); localStorage.removeItem('siteTheme'); applySiteTheme('dark'); renderAdminSettings(); showToast('Admin-Einstellungen zurückgesetzt'); await fb_logAction('resetSettings', currentUser?.id, null, 'Cleared admin preferences'); });
+  document.getElementById('settingStartDark')?.addEventListener('change', e=>{ const dark = e.target.checked; setAdminSetting('siteTheme', dark ? 'dark' : 'light'); applySiteTheme(dark ? 'dark' : 'light'); showToast('Start-Theme: '+(dark ? 'dark' : 'light')); });
+  document.getElementById('settingAutoRefresh')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminAutoRefresh', enabled); updateAdminAutoRefresh(enabled); showToast('Live Refresh: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingMaintenanceMode')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminMaintenanceMode', enabled); checkMaintenanceMode(); showToast('Wartungsmodus: '+(enabled ? 'aktiv' : 'deaktiviert')); });
+  document.getElementById('settingVisitorNotifications')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminVisitorNotifications', enabled); updateVisitorNotifications(); showToast('Besucher-Benachrichtigungen: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingSortVisitorsRecent')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminSortVisitorsByRecent', enabled); renderVisitors(); showToast('Besucher sortieren: '+(enabled ? 'Zuletzt aktiv' : 'Alphabetisch')); });
+  document.getElementById('settingChatAutoSave')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminChatAutoSave', enabled); showToast('Chat-Protokollierung: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingAdminSecurityLock')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminSecurityLock', enabled); showToast('Admin-Sicherheitsmodus: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingDebugLogging')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminDebugLogging', enabled); showToast('Debug-Protokollierung: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingMusicAutoStart')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminMusicAutoStart', enabled); showToast('Musik beim Start: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingReducedAnimations')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminReducedAnimations', enabled); applyReducedMotion(enabled); showToast('Reduzierte Animationen: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingDisableParticles')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminDisableParticles', enabled); showToast('Partikeleffekte: '+(enabled ? 'AUS' : 'AN')); });
+  document.getElementById('settingAutoLogout')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminAutoLogout', enabled); if(enabled) scheduleAdminAutoLogout(); else if(adminLogoutTimer) { clearTimeout(adminLogoutTimer); adminLogoutTimer = null; } showToast('Automatischer Admin-Logout: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingCompactVisitorRows')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminCompactVisitorRows', enabled); applyVisitorListDensity(enabled); showToast('Kompakte Besucheransicht: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingChatNotifications')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminChatNotifications', enabled); showToast('Chat-Benachrichtigungen: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('settingErrorReporting')?.addEventListener('change', e=>{ const enabled = e.target.checked; setAdminSetting('adminErrorReporting', enabled); showToast('Fehlerbericht: '+(enabled ? 'AN' : 'AUS')); });
+  document.getElementById('resetAdminPrefsBtn')?.addEventListener('click', async ()=>{ if(!confirm('Admin-Einstellungen zurücksetzen?')) return; localStorage.removeItem('adminAutoRefresh'); localStorage.removeItem('siteTheme'); localStorage.removeItem('adminMaintenanceMode'); localStorage.removeItem('adminVisitorNotifications'); localStorage.removeItem('adminSortVisitorsByRecent'); localStorage.removeItem('adminChatAutoSave'); localStorage.removeItem('adminSecurityLock'); localStorage.removeItem('adminDebugLogging'); localStorage.removeItem('adminMusicAutoStart'); localStorage.removeItem('adminReducedAnimations'); localStorage.removeItem('adminDisableParticles'); localStorage.removeItem('adminAutoLogout'); localStorage.removeItem('adminCompactVisitorRows'); localStorage.removeItem('adminChatNotifications'); localStorage.removeItem('adminErrorReporting'); applySiteTheme('dark'); renderAdminSettings(); showToast('Admin-Einstellungen zurückgesetzt'); await fb_logAction('resetSettings', currentUser?.id, null, 'Cleared admin preferences'); });
 
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdmin();closeModal();}if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();openAdmin();}});
 
