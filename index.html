@@ -472,6 +472,8 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 .profile-top{display:flex;gap:18px;align-items:center;}
 .profile-avatar{width:92px;height:92px;border-radius:24px;overflow:hidden;border:1px solid rgba(59,130,246,.18);box-shadow:0 16px 40px rgba(37,99,235,.12);}
 .profile-avatar img{width:100%;height:100%;object-fit:cover;}
+.profile-avatar img{transition:transform .25s ease}
+.profile-avatar:hover img{transform:scale(1.05)}
 .profile-info{display:grid;gap:8px;}
 .profile-name{font-size:1.4rem;font-weight:800;color:#0f172a;}
 .profile-handle{font-family:var(--mono);font-size:.82rem;color:var(--blue);}
@@ -1253,6 +1255,8 @@ async function openUserProfile(userId){
     </div>\
     <div class="profile-actions">\
       <button class="admin-btn-sm" onclick="markUser('${userId}')">Markieren</button>\
+      <button class="admin-btn-sm" onclick="copyToClipboard('${userId}')">ID kopieren</button>\
+      <button class="admin-btn-sm" onclick="exportUserChats('${userId}')"><i class="fas fa-file-export"></i> Export</button>\
       <button class="admin-btn-sm del" onclick="toggleBlacklist('${userId}', ${isBlacklisted})">${banLabel}</button>\
     </div>\
   </div>`;
@@ -1278,8 +1282,14 @@ async function toggleBlacklist(id, currentBlacklisted){
   const ref = _ref(_db, `visitors/${id}`);
   const snap = await _get(ref);
   const existing = snap.exists() ? snap.val() : {};
-  await _set(ref, { ...existing, blacklisted: !currentBlacklisted, id });
-  showToast(currentBlacklisted ? 'User entsperrt' : 'User gesperrt');
+  const newState = !currentBlacklisted;
+  await _set(ref, { ...existing, blacklisted: newState, id });
+  showToast(newState ? 'User gesperrt' : 'User entsperrt');
+  // If the current logged-in user gets banned, show the blacklist overlay immediately
+  if (newState && currentUser && currentUser.id === id) {
+    showBlacklistScreen();
+    return;
+  }
   openUserProfile(id);
 }
 
@@ -1294,6 +1304,25 @@ async function exportChatsCSV(){
 
 async function deleteChatConfirm(key){ if(!confirm('Chat löschen?')) return; await deleteChat(key); await renderChatLog(); }
 async function deleteChat(key){ if(!_db) return; await _remove(_ref(_db, `chatLogs/${key}`)); showToast('Chat gelöscht'); }
+
+function copyToClipboard(text){
+  if(!text) return; 
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>showToast('ID kopiert')).catch(()=>{alert('Kopieren fehlgeschlagen: '+text)});
+  } else {
+    const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); showToast('ID kopiert');}catch(e){alert('Kopieren fehlgeschlagen: '+text);} ta.remove();
+  }
+}
+
+async function exportUserChats(userId){
+  const logs = (await fb_getChatLogs(0)).filter(l=>l.userId==userId);
+  if(!logs.length){ showToast('Keine Chats für Nutzer'); return; }
+  const cols = ['ts','userId','username','question','answer'];
+  const csv = [cols.join(',')].concat(logs.map(l=>cols.map(c=>`"${String(l[c]||'').replace(/"/g,'""')}"`).join(','))).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = `user_${userId}_chats.csv`; a.click(); URL.revokeObjectURL(url);
+  showToast('Export gestartet');
+}
 
 document.getElementById('exportChatsBtn')?.addEventListener('click', exportChatsCSV);
 document.getElementById('deleteSelectedChatsBtn')?.addEventListener('click', async ()=>{
