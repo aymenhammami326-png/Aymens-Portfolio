@@ -660,7 +660,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       <a href="#home" class="nl on" data-s="home">Home</a>
       <a href="#about" class="nl" data-s="about">About</a>
       <a href="#pastworks" class="nl" data-s="pastworks">Past Works</a>
-      <a href="#feedback" class="nl" data-s="feedback">Feedback</a>
       <a href="#connect" class="nl" data-s="connect">Connect</a>
     </div>
     <div class="nav-r">
@@ -719,7 +718,6 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       <button class="admin-tab on" data-tab="overview">Overview</button>
       <button class="admin-tab" data-tab="visitors">Visitors</button>
       <button class="admin-tab" data-tab="chats">Chats</button>
-      <button class="admin-tab" data-tab="feedbacks">Feedbacks</button>
     </div>
     <div class="admin-body">
       <div class="admin-section on" id="tab-overview">
@@ -730,7 +728,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
           <div class="admin-stat"><div class="admin-stat-n" id="sProjects">5</div><div class="admin-stat-l">Projekte</div></div>
           <div class="admin-stat"><div class="admin-stat-n" id="sChats">—</div><div class="admin-stat-l">AI Chats</div></div>
           <div class="admin-stat"><div class="admin-stat-n" id="sOnline">—</div><div class="admin-stat-l">Letzte 24h</div></div>
-          <div class="admin-stat"><div class="admin-stat-n" id="sFeedbacks">—</div><div class="admin-stat-l">Feedbacks</div></div>
+          <!-- feedbacks stat removed -->
         </div>
         <div class="admin-section-title">Neueste Besucher (Live)</div>
         <div id="recentVisitorsList"><div class="no-data">Lädt...</div></div>
@@ -749,13 +747,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
           <button class="admin-btn-sm del" id="clearChatsBtn"><i class="fas fa-trash"></i> Clear All Chats</button>
         </div>
       </div>
-      <div class="admin-section" id="tab-feedbacks">
-        <div class="admin-section-title">Feedback Verwaltung (<span id="fbCountLabel">0</span> Bewertungen)</div>
-        <div id="adminFbList"><div class="no-data">Lädt...</div></div>
-        <div style="margin-top:14px;display:flex;gap:8px;">
-          <button class="admin-btn-sm del" id="clearFeedbacksBtn"><i class="fas fa-trash"></i> Clear All Feedbacks</button>
-        </div>
-      </div>
+      <!-- admin feedback tab removed -->
     </div>
   </div>
 </div>
@@ -889,69 +881,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   </div>
 </section>
 
-<!-- FEEDBACK SECTION -->
-<section class="sec" id="feedback">
-  <div class="sec-in">
-    <div class="sec-hdr rv">
-      <div class="sec-tag">// Community</div>
-      <h2 class="sec-title">Feedback <span class="hi">&amp; Bewertungen</span></h2>
-      <p class="sec-sub">Was andere über meine Arbeit sagen — authentisch und live.</p>
-    </div>
-    <div class="fb-layout">
-      <!-- Form -->
-      <div class="rv-l">
-        <div class="fb-form-wrap" id="fbFormWrap">
-          <div class="fb-form-title">Deine Bewertung</div>
-          <div class="fb-form-sub">Teile deine Erfahrung</div>
-          <div class="fb-stars-wrap" id="fbStarsWrap">
-            <span class="fb-star" data-v="1">★</span>
-            <span class="fb-star" data-v="2">★</span>
-            <span class="fb-star" data-v="3">★</span>
-            <span class="fb-star" data-v="4">★</span>
-            <span class="fb-star" data-v="5">★</span>
-          </div>
-          <div class="fb-star-hint" id="fbStarHint">Klicke um zu bewerten</div>
-          <div id="fbFormTotal" style="font-family:var(--mono);font-size:.52rem;color:var(--text3);margin-top:6px;">— Bewertungen insgesamt</div>
-          <textarea class="fb-inp" id="fbText" rows="4" placeholder="Schreib etwas über deine Erfahrung mit Aymen... (mindestens 10 Zeichen)"></textarea>
-          <button class="fb-submit" id="fbSubmit" disabled>
-            <i class="fas fa-paper-plane"></i>
-            <span>Feedback absenden</span>
-          </button>
-          <div class="fb-note">Du bist eingeloggt als <span id="fbUserName" style="color:var(--blue)">—</span> · Sichtbar für alle</div>
-          <div class="fb-success" id="fbSuccess">
-            <div class="fb-success-ico">✨</div>
-            <div class="fb-success-t">Danke für dein Feedback!</div>
-            <div class="fb-success-s">Deine Bewertung ist jetzt live sichtbar.</div>
-          </div>
-        </div>
-      </div>
-      <!-- Reviews -->
-      <div class="rv">
-        <div class="fb-avg-bar" id="fbAvgBar">
-          <div class="fb-avg-num" id="fbAvgNum">—</div>
-          <div class="fb-avg-info">
-            <div class="fb-avg-stars" id="fbAvgStars"></div>
-            <div class="fb-avg-count" id="fbAvgCount">Noch keine Bewertungen</div>
-          </div>
-          <div class="fb-bar-rows" id="fbBarRows"></div>
-        </div>
-        <!-- KARUSSELL -->
-        <div class="fb-carousel-wrap" id="fbCarouselWrap">
-          <div class="fb-carousel-inner" id="fbCarouselInner"></div>
-        </div>
-        <div id="fbCarouselControls" style="display:none;margin-top:10px;align-items:center;justify-content:space-between;">
-          <button class="fb-carousel-btn" id="fbPrevBtn"><i class="fas fa-chevron-left"></i></button>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
-            <div class="fb-carousel-dots" id="fbCarouselDots"></div>
-            <div class="fb-carousel-counter" id="fbCarouselCounter"></div>
-          </div>
-          <button class="fb-carousel-btn" id="fbNextBtn"><i class="fas fa-chevron-right"></i></button>
-        </div>
-        <div id="fbEmptyMsg" class="fb-empty" style="display:none">Noch keine Bewertungen. Sei der Erste! ✨</div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- Feedback removed -->
 
 <section class="sec" id="connect">
   <div class="sec-in">
@@ -970,7 +900,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
     <span class="ft-logo">[ A ]</span>
     <div class="ft-links">
       <a href="#home">Home</a><a href="#about">About</a>
-      <a href="#pastworks">Past Works</a><a href="#feedback">Feedback</a><a href="#connect">Kontakt</a>
+      <a href="#pastworks">Past Works</a><a href="#connect">Kontakt</a>
     </div>
     <span class="ft-copy">© 2026 Aymen</span>
   </div>
@@ -1098,70 +1028,7 @@ async function fb_clearChats() {
   await _set(_ref(_db, 'meta/chatCount'), 0);
 }
 
-// ============================================================
-// FIREBASE: Feedback
-// ============================================================
-async function fb_submitFeedback(user, stars, text) {
-  if (!_db) return null;
-  const ext = user.avatar?.startsWith('a_') ? 'gif' : 'png';
-  const avUrl = user.avatar
-    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=128`
-    : `https://cdn.discordapp.com/embed/avatars/0.png`;
-  const fbRef = _ref(_db, 'feedbacks');
-  const newRef = await _push(fbRef, {
-    ts: Date.now(),
-    userId: user.id,
-    username: user.global_name || user.username,
-    handle: user.username,
-    avatar: avUrl,
-    stars: stars,
-    text: text
-  });
-  return newRef.key;
-}
-
-async function fb_getFeedbacks() {
-  if (!_db) return [];
-  try {
-    const snap = await _get(_ref(_db, 'feedbacks'));
-    if (!snap.exists()) return [];
-    const arr = [];
-    snap.forEach(child => {
-      try {
-        const val = child.val();
-        console.log('fb_getFeedbacks: child key=', child.key, 'val=', val);
-        if (val && typeof val === 'object') arr.push({ key: child.key, ...val });
-        else console.warn('fb_getFeedbacks: skipping invalid/null feedback for key=', child.key);
-      } catch (e) { console.warn('fb_getFeedbacks: error parsing child', child.key, e); }
-    });
-    arr.sort((a, b) => (b.ts || 0) - (a.ts || 0));
-    return arr;
-  } catch (e) { return []; }
-}
-
-async function fb_deleteFeedback(key) {
-  if (!_db) return;
-  await _remove(_ref(_db, `feedbacks/${key}`));
-}
-
-async function fb_clearFeedbacks() {
-  if (!_db) return;
-  await _set(_ref(_db, 'feedbacks'), null);
-}
-
-// Live feedback listener
-function fb_listenFeedbacks() {
-  if (!_db) return;
-  _onValue(_ref(_db, 'feedbacks'), snap => {
-    const arr = [];
-    const count = snap.exists() ? snap.size : 0;
-    console.log('FB listener: feedbacks snapshot received. count=', count);
-    if (snap.exists()) snap.forEach(c => arr.push({ key: c.key, ...c.val() }));
-    arr.sort((a, b) => b.ts - a.ts);
-    console.log('FB listener: parsed feedbacks length=', arr.length);
-    renderFeedbackCards(arr);
-  });
-}
+// Feedback functionality removed
 
 // ============================================================
 // STATS
@@ -1171,11 +1038,10 @@ async function fb_getStats() {
   try {
     const visitorsSnap = await _get(_ref(_db, 'visitors'));
     const chatCntSnap = await _get(_ref(_db, 'meta/chatCount'));
-    const fbSnap = await _get(_ref(_db, 'feedbacks'));
     const today = new Date().toISOString().slice(0, 10);
     let total = 0, todayCount = 0, last24h = 0;
     const cutoff = Date.now() - 86400000;
-    if (visitorsSnap.exists()) {
+    if (visitorsSnap && visitorsSnap.exists()) {
       visitorsSnap.forEach(child => {
         total++;
         const v = child.val();
@@ -1183,9 +1049,7 @@ async function fb_getStats() {
         if (v.lastSeen >= cutoff) last24h++;
       });
     }
-    let fbCount = 0;
-    if (fbSnap.exists()) fbSnap.forEach(() => fbCount++);
-    return { total, todayCount, last24h, chatCount: chatCntSnap.exists() ? chatCntSnap.val() : 0, fbCount };
+    return { total, todayCount, last24h, chatCount: chatCntSnap && chatCntSnap.exists() ? chatCntSnap.val() : 0 };
   } catch (e) { return {}; }
 }
 
@@ -1211,16 +1075,7 @@ function fb_listenVisitors() {
   });
 }
 
-// Debug helper: force-load feedbacks and render (call from console)
-window.debugLoadFeedbacks = async function() {
-  try {
-    await waitForFirebase();
-    const fbs = await fb_getFeedbacks();
-    console.log('DEBUG: fetched feedbacks', fbs.length, fbs);
-    renderFeedbackCards(fbs);
-    return fbs;
-  } catch (e) { console.warn('DEBUG: load feedbacks failed', e); }
-}
+// debugLoadFeedbacks removed with feedback functionality
 
 function showVisitorNotification(v) {
   const el = document.getElementById('visitorNotif');
@@ -1230,164 +1085,7 @@ function showVisitorNotification(v) {
   setTimeout(() => el.classList.remove('show'), 4500);
 }
 
-// ============================================================
-// FEEDBACK KARUSSELL
-// ============================================================
-let fbCarouselIndex = 0;
-let fbCarouselItems = [];
-let fbCarouselTimer = null;
-
-function renderFeedbackCards(feedbacks) {
-  fbCarouselItems = feedbacks;
-  fbCarouselIndex = 0;
-
-  const inner = document.getElementById('fbCarouselInner');
-  const dotsEl = document.getElementById('fbCarouselDots');
-  const controls = document.getElementById('fbCarouselControls');
-  const emptyMsg = document.getElementById('fbEmptyMsg');
-  const counter = document.getElementById('fbCarouselCounter');
-
-  updateAvgBar(feedbacks);
-
-  if (!feedbacks.length) {
-    inner.innerHTML = '';
-    if (dotsEl) dotsEl.innerHTML = '';
-    if (controls) controls.style.display = 'none';
-    if (emptyMsg) emptyMsg.style.display = 'block';
-    stopCarousel();
-    return;
-  }
-
-  if (emptyMsg) emptyMsg.style.display = 'none';
-  if (controls) controls.style.display = 'flex';
-
-  // Render alle Karten als Slides
-  inner.innerHTML = feedbacks.map((fb, idx) => buildFeedbackCard(fb, idx)).join('');
-
-  // Dots rendern
-  if (dotsEl) {
-    dotsEl.innerHTML = feedbacks.map((_, i) =>
-      `<button class="fb-carousel-dot${i === 0 ? ' active' : ''}" data-i="${i}"></button>`
-    ).join('');
-    dotsEl.querySelectorAll('.fb-carousel-dot').forEach(dot => {
-      dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.i)));
-    });
-  }
-
-  updateCarouselUI();
-  startCarousel();
-}
-
-function buildFeedbackCard(fb, idx) {
-  const isAdmin = currentUser?.id === ADMIN_DC_ID;
-  const starsHtml = Array.from({ length: 5 }, (_, i) =>
-    `<span class="fb-card-star">${i < fb.stars ? '★' : '☆'}</span>`
-  ).join('');
-  const timeAgoStr = timeAgo(fb.ts);
-  const isNew = (Date.now() - fb.ts) < 3600000;
-  const initials = (fb.username || 'U').slice(0, 2).toUpperCase();
-  const avHtml = fb.avatar
-    ? `<img class="fb-card-av" src="${escHtml(fb.avatar)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-    : '';
-  const fallbackHtml = `<div class="fb-card-av-fallback" style="${fb.avatar ? 'display:none' : ''}">${initials}</div>`;
-
-  return `<div class="fb-carousel-item">
-    <div class="fb-card">
-      ${isNew ? '<div class="fb-new-badge">NEU</div>' : ''}
-      <div class="fb-card-head">
-        ${avHtml}${fallbackHtml}
-        <div class="fb-card-info">
-          <div class="fb-card-name">${escHtml(fb.username || 'Anonym')}</div>
-          <div class="fb-card-handle">@${escHtml(fb.handle || 'user')}</div>
-        </div>
-        <div class="fb-card-stars">${starsHtml}</div>
-      </div>
-      <div class="fb-card-text">${escHtml(fb.text)}</div>
-      <div class="fb-card-footer">
-        <div class="fb-card-time">${timeAgoStr}</div>
-        ${isAdmin ? `<div class="fb-card-del visible" onclick="adminDeleteFeedback('${fb.key}',this)"><i class="fas fa-trash"></i> Löschen</div>` : ''}
-      </div>
-    </div>
-  </div>`;
-}
-
-function goToSlide(idx) {
-  if (!fbCarouselItems.length) return;
-  fbCarouselIndex = (idx + fbCarouselItems.length) % fbCarouselItems.length;
-  updateCarouselUI();
-  resetCarouselTimer();
-}
-
-function updateCarouselUI() {
-  const inner = document.getElementById('fbCarouselInner');
-  const dots = document.querySelectorAll('.fb-carousel-dot');
-  const counter = document.getElementById('fbCarouselCounter');
-  if (inner) inner.style.transform = `translateX(-${fbCarouselIndex * 100}%)`;
-  dots.forEach((d, i) => d.classList.toggle('active', i === fbCarouselIndex));
-  if (counter) counter.textContent = `${fbCarouselIndex + 1} / ${fbCarouselItems.length}`;
-}
-
-function startCarousel() {
-  stopCarousel();
-  if (fbCarouselItems.length <= 1) return;
-  fbCarouselTimer = setInterval(() => {
-    fbCarouselIndex = (fbCarouselIndex + 1) % fbCarouselItems.length;
-    updateCarouselUI();
-  }, 3000);
-}
-
-function stopCarousel() {
-  if (fbCarouselTimer) { clearInterval(fbCarouselTimer); fbCarouselTimer = null; }
-}
-
-function resetCarouselTimer() {
-  if (fbCarouselItems.length <= 1) return;
-  stopCarousel();
-  startCarousel();
-}
-
-function updateAvgBar(feedbacks) {
-  if (!feedbacks.length) {
-    document.getElementById('fbAvgNum').textContent = '—';
-    document.getElementById('fbAvgStars').innerHTML = '';
-    document.getElementById('fbAvgCount').textContent = 'Noch keine Bewertungen';
-    const formTotalEl = document.getElementById('fbFormTotal'); if (formTotalEl) formTotalEl.textContent = 'Noch keine Bewertungen';
-    document.getElementById('fbBarRows').innerHTML = '';
-    return;
-  }
-  const avg = feedbacks.reduce((s, f) => s + f.stars, 0) / feedbacks.length;
-  document.getElementById('fbAvgNum').textContent = avg.toFixed(1);
-  document.getElementById('fbAvgCount').textContent = `${feedbacks.length} Bewertung${feedbacks.length !== 1 ? 'en' : ''}`;
-
-  const formTotalEl = document.getElementById('fbFormTotal'); if (formTotalEl) formTotalEl.textContent = `${feedbacks.length} Bewertung${feedbacks.length !== 1 ? 'en' : ''} insgesamt`;
-
-  const starsEl = document.getElementById('fbAvgStars');
-  starsEl.innerHTML = Array.from({ length: 5 }, (_, i) => {
-    const fill = Math.min(1, Math.max(0, avg - i));
-    if (fill >= 1) return '<span class="fb-avg-star">★</span>';
-    if (fill >= 0.5) return '<span class="fb-avg-star half">★</span>';
-    return '<span class="fb-avg-star empty">★</span>';
-  }).join('');
-
-  const counts = [0, 0, 0, 0, 0];
-  feedbacks.forEach(f => { if (f.stars >= 1 && f.stars <= 5) counts[f.stars - 1]++; });
-  const max = Math.max(...counts, 1);
-  document.getElementById('fbBarRows').innerHTML = [5, 4, 3, 2, 1].map(n => {
-    const c = counts[n - 1];
-    const pct = Math.round((c / max) * 100);
-    return `<div class="fb-bar-row">
-      <span class="fb-bar-lbl">${n}</span>
-      <div class="fb-bar-track"><div class="fb-bar-fill" style="width:${pct}%"></div></div>
-      <span class="fb-bar-c">${c}</span>
-    </div>`;
-  }).join('');
-}
-
-window.adminDeleteFeedback = async function(key, el) {
-  if (!confirm('Dieses Feedback löschen?')) return;
-  await fb_deleteFeedback(key);
-  showToast('Feedback gelöscht');
-};
+// Feedback carousel and UI logic removed
 
 // ============================================================
 // FEEDBACK FORM
@@ -1395,67 +1093,7 @@ window.adminDeleteFeedback = async function(key, el) {
 let fbSelectedStars = 0;
 const starHints = ['', 'Schwach 😕', 'Okay 😐', 'Gut 👍', 'Super 🔥', 'Legendär 🚀'];
 
-function initFeedbackForm() {
-  const stars = document.querySelectorAll('.fb-star');
-  const hint = document.getElementById('fbStarHint');
-  const submitBtn = document.getElementById('fbSubmit');
-  const textArea = document.getElementById('fbText');
-
-  stars.forEach(star => {
-    star.addEventListener('mouseenter', () => {
-      const v = parseInt(star.dataset.v);
-      stars.forEach((s, i) => s.classList.toggle('active', i < v));
-      hint.textContent = starHints[v];
-    });
-    star.addEventListener('mouseleave', () => {
-      stars.forEach((s, i) => s.classList.toggle('active', i < fbSelectedStars));
-      hint.textContent = fbSelectedStars ? starHints[fbSelectedStars] : 'Klicke um zu bewerten';
-    });
-    star.addEventListener('click', () => {
-      fbSelectedStars = parseInt(star.dataset.v);
-      stars.forEach((s, i) => s.classList.toggle('active', i < fbSelectedStars));
-      hint.textContent = starHints[fbSelectedStars];
-      checkFbSubmit();
-    });
-  });
-
-  textArea.addEventListener('input', checkFbSubmit);
-
-  function checkFbSubmit() {
-    submitBtn.disabled = !(fbSelectedStars > 0 && textArea.value.trim().length >= 10);
-  }
-
-  document.getElementById('fbSubmit').addEventListener('click', async () => {
-    if (!currentUser) return;
-    const text = textArea.value.trim();
-    if (!fbSelectedStars || text.length < 10) return;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wird gesendet...';
-    try {
-      await fb_submitFeedback(currentUser, fbSelectedStars, text);
-      const form = document.getElementById('fbFormWrap');
-      form.querySelector('textarea')?.remove();
-      submitBtn.style.display = 'none';
-      form.querySelector('.fb-stars-wrap').style.display = 'none';
-      form.querySelector('.fb-star-hint').style.display = 'none';
-      form.querySelector('.fb-note').style.display = 'none';
-      document.getElementById('fbSuccess').classList.add('show');
-    } catch (e) {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Feedback absenden';
-    }
-  });
-
-  // Karussell Buttons
-  document.getElementById('fbPrevBtn')?.addEventListener('click', () => goToSlide(fbCarouselIndex - 1));
-  document.getElementById('fbNextBtn')?.addEventListener('click', () => goToSlide(fbCarouselIndex + 1));
-
-  // Pause bei Hover
-  document.getElementById('fbCarouselWrap')?.addEventListener('mouseenter', stopCarousel);
-  document.getElementById('fbCarouselWrap')?.addEventListener('mouseleave', () => {
-    if (fbCarouselItems.length > 1) startCarousel();
-  });
-}
+// initFeedbackForm removed
 
 // ============================================================
 // MUSIC
@@ -1538,13 +1176,7 @@ async function handleOAuthCallback() {
 async function onUserLoggedIn(user, showWelcome = false) {
   await waitForFirebase();
 
-  // Ensure feedbacks are loaded even before user login — helpful for visitors
-  try {
-    fb_listenFeedbacks();
-    const initialFbs = await fb_getFeedbacks();
-    console.log('Initial feedbacks loaded:', initialFbs?.length ?? 0);
-    if (initialFbs && initialFbs.length) renderFeedbackCards(initialFbs);
-  } catch (e) { console.warn('Initial feedback load failed', e); }
+  // initial feedback loading removed
   await fb_recordVisitor(user);
   const ext = user.avatar?.startsWith('a_') ? 'gif' : 'png';
   const avUrl = user.avatar
@@ -1556,7 +1188,7 @@ async function onUserLoggedIn(user, showWelcome = false) {
     fb_listenVisitors();
   }
   document.getElementById('redirectScreen').classList.add('out');
-  document.getElementById('fbUserName').textContent = user.global_name || user.username;
+  // feedback username display removed
 
   if (showWelcome) {
     document.getElementById('wcAv').src = avUrl;
@@ -1582,8 +1214,6 @@ async function onUserLoggedIn(user, showWelcome = false) {
 
 function startSite() {
   startReveal(); initLanyard(); showChatBtn(); loadPastWorks(); initCardTilt();
-  initFeedbackForm();
-  fb_listenFeedbacks();
 }
 
 // ============================================================
@@ -1863,57 +1493,8 @@ async function renderChatLog() {
   container.innerHTML = logs.map(log=>`<div class="chat-log-item"><div class="chat-log-meta"><img class="chat-log-av" src="${log.avatar}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><span class="chat-log-user">${escHtml(log.username)}</span><span class="chat-log-time">${timeAgo(log.ts)} · ${new Date(log.ts).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</span></div><div class="chat-log-label">Frage</div><div class="chat-log-q">${escHtml(log.question)}</div><div class="chat-log-label" style="margin-top:8px">Antwort</div><div class="chat-log-a">${escHtml(log.answer)}</div></div>`).join('');
 }
 
-// ===== ALLE FEEDBACKS im Admin anzeigen =====
-async function renderAdminFeedbacks() {
-  document.getElementById('adminFbList').innerHTML='<div class="no-data">Lädt...</div>';
-  const feedbacks = await fb_getFeedbacks(); // lädt ALLE ohne Limit
-  document.getElementById('fbCountLabel').textContent = feedbacks.length;
-  const container = document.getElementById('adminFbList');
+// Admin feedback panel removed
 
-  if (!feedbacks.length) {
-    container.innerHTML='<div class="no-data">Noch keine Feedbacks vorhanden.</div>';
-    return;
-  }
-
-  container.innerHTML = feedbacks.map(fb => {
-    const starsStr = '★'.repeat(fb.stars) + '☆'.repeat(5 - fb.stars);
-    const joinDate = new Date(fb.ts).toLocaleString('de-DE', {
-      day: '2-digit', month: '2-digit', year: '2-digit',
-      hour: '2-digit', minute: '2-digit'
-    });
-    const initials = (fb.username || 'U').slice(0, 2).toUpperCase();
-    const avHtml = fb.avatar
-      ? `<img class="admin-fb-av" src="${escHtml(fb.avatar)}" alt=""
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-      : '';
-    const fallback = `<div class="admin-fb-av-fallback" style="${fb.avatar ? 'display:none' : ''}">${initials}</div>`;
-
-    return `<div class="admin-fb-item">
-      ${avHtml}${fallback}
-      <div class="admin-fb-info">
-        <div class="admin-fb-user">
-          ${escHtml(fb.username || 'Anonym')}
-          <span style="color:rgba(255,255,255,.25);font-weight:400;margin-left:4px">@${escHtml(fb.handle || 'user')}</span>
-          <span style="font-family:var(--mono);font-size:.44rem;color:rgba(100,160,255,.5);margin-left:6px">${escHtml(fb.userId || '')}</span>
-        </div>
-        <div class="admin-fb-stars">${starsStr} <span style="font-family:var(--mono);font-size:.52rem;color:rgba(255,255,255,.3);margin-left:4px">${fb.stars}/5</span></div>
-        <div class="admin-fb-text">${escHtml(fb.text)}</div>
-        <div class="admin-fb-time">${timeAgo(fb.ts)} · ${joinDate}</div>
-      </div>
-      <button class="admin-fb-del" onclick="adminDelFbFromPanel('${fb.key}',this)">
-        <i class="fas fa-trash"></i>
-      </button>
-    </div>`;
-  }).join('');
-}
-
-window.adminDelFbFromPanel = async function(key, btn) {
-  if (!confirm('Feedback löschen?')) return;
-  btn.textContent = '...';
-  await fb_deleteFeedback(key);
-  await renderAdminFeedbacks();
-  showToast('Feedback gelöscht');
-};
 
 // ============================================================
 // SCROLL REVEAL
@@ -1982,7 +1563,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       if(tab.dataset.tab==='visitors') await renderVisitors();
       if(tab.dataset.tab==='chats') await renderChatLog();
       if(tab.dataset.tab==='overview') await loadAdminOverview();
-      if(tab.dataset.tab==='feedbacks') await renderAdminFeedbacks();
     });
   });
 
@@ -1993,10 +1573,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('clearChatsBtn').addEventListener('click',async()=>{
     if(!confirm('Alle Chat-Logs in Firebase löschen?'))return;
     await fb_clearChats(); await renderChatLog(); showToast('Chats gelöscht');
-  });
-  document.getElementById('clearFeedbacksBtn').addEventListener('click',async()=>{
-    if(!confirm('Alle Feedbacks löschen?'))return;
-    await fb_clearFeedbacks(); await renderAdminFeedbacks(); showToast('Feedbacks gelöscht');
   });
 
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAdmin();closeModal();}if(e.ctrlKey&&e.shiftKey&&e.key==='A'){e.preventDefault();openAdmin();}});
