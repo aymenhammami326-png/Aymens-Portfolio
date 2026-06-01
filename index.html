@@ -911,6 +911,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
             <span class="fb-star" data-v="5">★</span>
           </div>
           <div class="fb-star-hint" id="fbStarHint">Klicke um zu bewerten</div>
+          <div id="fbFormTotal" style="font-family:var(--mono);font-size:.52rem;color:var(--text3);margin-top:6px;">— Bewertungen insgesamt</div>
           <textarea class="fb-inp" id="fbText" rows="4" placeholder="Schreib etwas über deine Erfahrung mit Aymen... (mindestens 10 Zeichen)"></textarea>
           <button class="fb-submit" id="fbSubmit" disabled>
             <i class="fas fa-paper-plane"></i>
@@ -938,7 +939,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
         <div class="fb-carousel-wrap" id="fbCarouselWrap">
           <div class="fb-carousel-inner" id="fbCarouselInner"></div>
         </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;" id="fbCarouselControls" style="display:none">
+        <div id="fbCarouselControls" style="display:none;margin-top:10px;align-items:center;justify-content:space-between;">
           <button class="fb-carousel-btn" id="fbPrevBtn"><i class="fas fa-chevron-left"></i></button>
           <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
             <div class="fb-carousel-dots" id="fbCarouselDots"></div>
@@ -1321,12 +1322,15 @@ function updateAvgBar(feedbacks) {
     document.getElementById('fbAvgNum').textContent = '—';
     document.getElementById('fbAvgStars').innerHTML = '';
     document.getElementById('fbAvgCount').textContent = 'Noch keine Bewertungen';
+    const formTotalEl = document.getElementById('fbFormTotal'); if (formTotalEl) formTotalEl.textContent = 'Noch keine Bewertungen';
     document.getElementById('fbBarRows').innerHTML = '';
     return;
   }
   const avg = feedbacks.reduce((s, f) => s + f.stars, 0) / feedbacks.length;
   document.getElementById('fbAvgNum').textContent = avg.toFixed(1);
   document.getElementById('fbAvgCount').textContent = `${feedbacks.length} Bewertung${feedbacks.length !== 1 ? 'en' : ''}`;
+
+  const formTotalEl = document.getElementById('fbFormTotal'); if (formTotalEl) formTotalEl.textContent = `${feedbacks.length} Bewertung${feedbacks.length !== 1 ? 'en' : ''} insgesamt`;
 
   const starsEl = document.getElementById('fbAvgStars');
   starsEl.innerHTML = Array.from({ length: 5 }, (_, i) => {
