@@ -1016,6 +1016,7 @@ async function fb_getChatLogs(limit = 200) {
   if (!_db) return [];
   try {
     const snap = await _get(_ref(_db, 'chatLogs'));
+    console.log('FB getChatLogs snapshot size:', snap?.size);
     if (!snap.exists()) return [];
     const arr = [];
     snap.forEach(child => arr.push({ key: child.key, ...child.val() }));
@@ -1344,6 +1345,7 @@ function appendMsg(type, text) {
 
 async function sendChat() {
   const inp=document.getElementById('chatInput'); const q=inp.value.trim(); if(!q)return;
+  console.log('sendChat start', q);
   inp.value=''; inp.style.height='auto';
   const send=document.getElementById('chatSend'); send.disabled=true;
   appendMsg('user',q); chatHistory.push({role:'user',content:q}); chatTurnCount++;
@@ -1355,6 +1357,7 @@ async function sendChat() {
     if(res.ok){const data=await res.json();reply=data.choices?.[0]?.message?.content||'';if(reply)chatHistory.push({role:'assistant',content:reply});}
     else{reply='KI gerade nicht verfügbar. Discord: @aymen0323423';}
   } catch(e){reply='Verbindungsfehler. Versuch es nochmal.';}
+  console.log('sendChat reply', reply);
   typing.remove(); appendMsg('bot',reply||'Keine Antwort erhalten.');
   send.disabled=false; inp.focus();
   await fb_saveChatLog(q,reply||'[Fehler]',currentUser);
