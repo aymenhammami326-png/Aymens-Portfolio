@@ -1019,7 +1019,25 @@ async function fb_getChatLogs(limit = 200) {
     console.log('FB getChatLogs snapshot size:', snap?.size);
     if (!snap.exists()) return [];
     const arr = [];
-    snap.forEach(child => arr.push({ key: child.key, ...child.val() }));
+    snap.forEach(child => {
+      try {
+        const v = child.val();
+        console.log('  child:', child.key, Array.isArray(v) ? 'array' : typeof v, Object.keys(v||{}).length);
+        arr.push({ key: child.key, ...v });
+      } catch (e) { console.warn('  child parse error', e); }
+    });
+    // If DB contains a single wrapper node with many messages inside (arr.length===1),
+    // flatten it to individual log entries so rendering shows all messages.
+    if (arr.length === 1) {
+      const first = arr[0];
+      const nested = Object.values(first).filter(x => x && typeof x === 'object' && x.ts);
+      if (nested.length > 1) {
+        console.log('FB getChatLogs: detected nested batch, flattening', nested.length);
+        const flat = Object.entries(first).map(([k, v]) => ({ key: k, ...v })).filter(x => x && x.ts);
+        // replace arr with flattened list
+        arr.length = 0; arr.push(...flat);
+      }
+    }
     arr.sort((a, b) => b.ts - a.ts);
     console.log('FB getChatLogs loaded', arr.length);
     return limit ? arr.slice(0, limit) : arr;
