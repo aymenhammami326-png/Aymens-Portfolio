@@ -562,6 +562,12 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 .admin-stat-n{font-family:var(--display);font-size:2rem;font-weight:800;color:rgba(100,160,255,.9);}
 .admin-stat-l{font-family:var(--mono);font-size:.48rem;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
 .admin-section-title{font-family:var(--mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.06);}
+.admin-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px;}
+.admin-control-input{flex:1 1 220px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.05);color:rgba(255,255,255,.95);min-width:160px;}
+.admin-control-input:focus{outline:none;border-color:rgba(59,130,246,.35);box-shadow:0 0 0 3px rgba(37,99,235,.08);}
+.admin-action-group{display:flex;flex-wrap:wrap;gap:8px;}
+.admin-selection-info{font-family:var(--mono);font-size:.7rem;color:rgba(255,255,255,.5);margin-bottom:14px;}
+.visitor-select-checkbox{width:18px;height:18px;accent-color:#60a5fa;}
 
 /* ===== VISITORS TABLE — vollständig ===== */
 .visitors-table{width:100%;border-collapse:collapse;}
@@ -612,8 +618,8 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 .visitor-notif-sub{font-family:var(--mono);font-size:.48rem;color:rgba(100,160,255,.6);letter-spacing:1px;}
 .visitor-notif-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0;animation:avp 2s ease-out infinite;}
 
-@media(max-width:900px){.hero-inner{grid-template-columns:1fr;gap:40px;}.hero{padding:0 24px;}}
-@media(max-width:600px){.hero{padding:0 18px;}.hero-inner{padding-top:88px;}.h-btns{flex-direction:column;}.h-btns .btn-p,.h-btns .btn-o{justify-content:center;}.dc-card{width:100%;}}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;gap:40px;}.hero{padding:0 24px;} .admin-box{width:100vw;max-width:100vw;border-radius:0;}.admin-header{padding:18px;}.admin-body{padding:18px;}.admin-tabs{padding:10px 18px;}} 
+@media(max-width:760px){.hero{padding:0 18px;}.hero-inner{padding-top:88px;}.h-btns{flex-direction:column;}.h-btns .btn-p,.h-btns .btn-o{justify-content:center;}.dc-card{width:100%;} .admin-controls{flex-direction:column;align-items:stretch;} .admin-action-group{width:100%;justify-content:flex-start;} .admin-btn-sm{width:100%;justify-content:center;} .visitors-table th,.visitors-table td{font-size:.68rem;padding:8px;} .visitor-name{display:block;} #visitorSelectionInfo{margin-bottom:12px;} #adminOverlay{padding:10px;} }
 </style>
 </head>
 <body>
@@ -795,31 +801,43 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       </div>
       <div class="admin-section" id="tab-visitors">
         <div class="admin-section-title">Alle Besucher — Discord Auth (<span id="visitorCountLabel">0</span> gesamt)</div>
+        <div class="admin-controls">
+          <input id="visitorSearch" placeholder="Suche Nutzer oder ID" class="admin-control-input">
+          <select id="visitorStatusFilter" class="admin-control-input"><option value="all">Alle Besucher</option><option value="active">Aktive</option><option value="blacklisted">Gesperrt</option></select>
+          <div class="admin-action-group">
+            <button class="admin-btn-sm" id="visitorProfileSelectedBtn"><i class="fas fa-user"></i> Profil</button>
+            <button class="admin-btn-sm del" id="visitorBanSelectedBtn"><i class="fas fa-user-lock"></i> Sperren</button>
+            <button class="admin-btn-sm" id="visitorUnbanSelectedBtn"><i class="fas fa-user-check"></i> Entsperren</button>
+          </div>
+        </div>
+        <div id="visitorSelectionInfo" class="admin-selection-info">0 Nutzer ausgewählt</div>
         <div id="allVisitorsList"><div class="no-data">Lädt...</div></div>
-        <div style="margin-top:14px;display:flex;gap:8px;">
-          <button class="admin-btn-sm del" id="clearVisitorsBtn"><i class="fas fa-trash"></i> Clear All Visitors</button>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="admin-btn-sm del" id="clearVisitorsBtn"><i class="fas fa-trash"></i> Alle Besucher löschen</button>
         </div>
       </div>
       <div class="admin-section" id="tab-chats">
         <div class="admin-section-title">KI-Chat Verlauf — Alle Geräte (<span id="chatCountLabel">0</span> Nachrichten)</div>
-        <div class="admin-controls" style="display:flex;gap:8px;align-items:center;margin:10px 0 12px;">
-          <input id="chatSearch" placeholder="Suche Chat (Volltext)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:transparent;color:inherit"> 
-          <select id="chatUserFilter" style="padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:transparent;color:inherit"><option value="">Alle Nutzer</option></select>
+        <div class="admin-controls">
+          <input id="chatSearch" placeholder="Suche Chat (Volltext)" class="admin-control-input"> 
+          <select id="chatUserFilter" class="admin-control-input"><option value="">Alle Nutzer</option></select>
           <button class="admin-btn-sm" id="exportChatsBtn"><i class="fas fa-file-csv"></i> Export</button>
           <button class="admin-btn-sm del" id="deleteSelectedChatsBtn"><i class="fas fa-trash"></i> Löschen</button>
         </div>
         <div id="chatLogList"><div class="no-data">Lädt...</div></div>
-        <div style="margin-top:14px;display:flex;gap:8px;">
-          <button class="admin-btn-sm del" id="clearChatsBtn"><i class="fas fa-trash"></i> Clear All Chats</button>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="admin-btn-sm del" id="clearChatsBtn"><i class="fas fa-trash"></i> Alle Chats löschen</button>
         </div>
       </div>
       <div class="admin-section" id="tab-audit">
         <div class="admin-section-title">Audit-Log — Admin Aktionen</div>
-        <div id="auditLogList"><div class="no-data">Lädt...</div></div>
-        <div style="margin-top:14px;display:flex;gap:8px;align-items:center;">
+        <div class="admin-controls">
+          <input id="auditSearch" placeholder="Suche Audit-Einträge" class="admin-control-input">
+          <select id="auditActionFilter" class="admin-control-input"><option value="all">Alle Aktionen</option><option value="ban">Ban</option><option value="unban">Unban</option><option value="clearVisitors">Visitors löschen</option><option value="clearChats">Chats löschen</option><option value="clearAuditLog">Audit löschen</option><option value="note">Notiz</option><option value="mark">Markieren</option></select>
           <button class="admin-btn-sm" id="refreshAuditBtn"><i class="fas fa-sync"></i> Aktualisieren</button>
           <button class="admin-btn-sm del" id="clearAuditBtn"><i class="fas fa-trash"></i> Audit leeren</button>
         </div>
+        <div id="auditLogList"><div class="no-data">Lädt...</div></div>
       </div>
       <div class="admin-section" id="tab-settings">
         <div class="admin-section-title">Einstellungen</div>
@@ -1069,6 +1087,11 @@ let currentUser = null, chatHistory = [], chatTurnCount = 0;
 let adminChatLogs = [];
 let adminChatSearch = '';
 let adminChatUserFilter = '';
+let adminVisitorSearch = '';
+let adminVisitorFilter = 'all';
+let selectedVisitorIds = new Set();
+let adminAuditSearch = '';
+let adminAuditActionFilter = 'all';
 let adminAutoRefreshTimer = null;
 const bgAudio = document.getElementById('bgAudio');
 let musicReady = false, musicOn = false;
@@ -1872,6 +1895,9 @@ function buildVisitorTable(visitors) {
 
     return `<tr class="visitor-row">
       <td style="white-space:nowrap;">
+        <input type="checkbox" class="visitor-select-checkbox" data-user="${escHtml(v.id||'')}" ${selectedVisitorIds.has(v.id) ? 'checked' : ''}>
+      </td>
+      <td style="white-space:nowrap;">
         <img class="visitor-av" src="${escHtml(v.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png')}" alt=""
           onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'">
         <span class="visitor-name">${escHtml(v.username || 'Unbekannt')}</span><br>
@@ -1889,6 +1915,7 @@ function buildVisitorTable(visitors) {
     <table class="visitors-table">
       <thead>
         <tr>
+          <th><input type="checkbox" id="visitorSelectAll"></th>
           <th>Discord Nutzer</th>
           <th>ID</th>
           <th>Besuche</th>
@@ -1934,8 +1961,19 @@ async function renderVisitors() {
   document.getElementById('allVisitorsList').innerHTML='<div class="no-data">Lädt...</div>';
   const visitors = await fb_getVisitors(0); // 0 = kein Limit → alle laden
   console.log('renderVisitors: loaded', visitors.length, visitors.slice(0,6));
-  document.getElementById('visitorCountLabel').textContent = visitors.length;
-  document.getElementById('allVisitorsList').innerHTML = buildVisitorTable(visitors);
+  const filtered = visitors.filter(v => {
+    if (adminVisitorFilter === 'active' && v.blacklisted) return false;
+    if (adminVisitorFilter === 'blacklisted' && !v.blacklisted) return false;
+    if (adminVisitorSearch) {
+      const term = adminVisitorSearch.toLowerCase();
+      const haystack = `${v.username||''} ${v.handle||''} ${v.id||''}`.toLowerCase();
+      if (!haystack.includes(term)) return false;
+    }
+    return true;
+  });
+  document.getElementById('visitorCountLabel').textContent = filtered.length;
+  document.getElementById('allVisitorsList').innerHTML = buildVisitorTable(filtered);
+  updateVisitorSelectionInfo();
 }
 
 async function renderChatLog() {
@@ -1985,7 +2023,13 @@ async function renderAuditLog() {
   const container = document.getElementById('auditLogList');
   if (!container) return;
   container.innerHTML = '<div class="no-data">Lädt...</div>';
-  const logs = await fb_getAuditLogs(200);
+  let logs = await fb_getAuditLogs(200);
+  logs = logs.filter(log => {
+    if (adminAuditActionFilter !== 'all' && log.action !== adminAuditActionFilter) return false;
+    if (!adminAuditSearch) return true;
+    const term = adminAuditSearch.toLowerCase();
+    return `${log.action} ${log.actorId || ''} ${log.targetId || ''} ${log.details || ''}`.toLowerCase().includes(term);
+  });
   if (!logs.length) {
     container.innerHTML = '<div class="no-data">Noch keine Audit-Einträge.</div>';
     return;
@@ -2017,6 +2061,48 @@ function updateAdminAutoRefresh(enabled) {
     if (document.getElementById('tab-chats')?.classList.contains('on')) renderChatLog();
     if (document.getElementById('tab-audit')?.classList.contains('on')) renderAuditLog();
   }, 30000);
+}
+
+function updateVisitorSelectionInfo() {
+  const info = document.getElementById('visitorSelectionInfo');
+  if (!info) return;
+  const count = selectedVisitorIds.size;
+  info.textContent = count ? `${count} Nutzer ausgewählt` : '0 Nutzer ausgewählt';
+}
+
+async function bulkVisitorBlacklist(blacklist) {
+  const ids = Array.from(selectedVisitorIds);
+  if (!ids.length) { showToast('Keine Nutzer ausgewählt'); return; }
+  const action = blacklist ? 'sperren' : 'entsperren';
+  if (!confirm(`Ausgewählte Nutzer ${action}?`)) return;
+  for (const id of ids) {
+    if (String(id) === String(ADMIN_DC_ID) && blacklist) {
+      showToast('Admin kann nicht gesperrt werden');
+      continue;
+    }
+    const ref = _ref(_db, `visitors/${id}`);
+    const snap = await _get(ref);
+    const existing = snap.exists() ? snap.val() : {};
+    await _set(ref, { ...existing, blacklisted: blacklist, id });
+    try { await fb_logAction(blacklist ? 'ban' : 'unban', currentUser?.id, id, `bulk ${blacklist ? 'ban' : 'unban'}`); } catch (e) {}
+  }
+  selectedVisitorIds.clear();
+  await renderVisitors();
+  showToast(`Ausgewählte Nutzer ${action}`);
+}
+
+function openSelectedVisitorProfile() {
+  const ids = Array.from(selectedVisitorIds);
+  if (!ids.length) { showToast('Keine Nutzer ausgewählt'); return; }
+  openUserProfile(ids[0]);
+}
+
+function updateVisitorSelectionFromCheckbox(cb) {
+  const id = cb?.dataset?.user;
+  if (!id) return;
+  if (cb.checked) selectedVisitorIds.add(id);
+  else selectedVisitorIds.delete(id);
+  updateVisitorSelectionInfo();
 }
 
 
@@ -2101,10 +2187,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   siteThemeBtn?.addEventListener('click', ()=>{ const cur = localStorage.getItem('siteTheme') || 'light'; const next = cur==='light' ? 'dark' : 'light'; localStorage.setItem('siteTheme', next); applySiteTheme(next); showToast('Theme: '+next); });
   });
 
+  const visitorSearchInput = document.getElementById('visitorSearch');
+  const visitorStatusSelect = document.getElementById('visitorStatusFilter');
+  const visitorSelectAll = document.getElementById('visitorSelectAll');
+  const visitorProfileSelectedBtn = document.getElementById('visitorProfileSelectedBtn');
+  const visitorBanSelectedBtn = document.getElementById('visitorBanSelectedBtn');
+  const visitorUnbanSelectedBtn = document.getElementById('visitorUnbanSelectedBtn');
   const chatSearchInput = document.getElementById('chatSearch');
   const chatUserSelect = document.getElementById('chatUserFilter');
+  const auditSearchInput = document.getElementById('auditSearch');
+  const auditActionSelect = document.getElementById('auditActionFilter');
   const chatLogListEl = document.getElementById('chatLogList');
   const allVisitorsListEl = document.getElementById('allVisitorsList');
+
+  visitorSearchInput?.addEventListener('input', e => {
+    adminVisitorSearch = e.target.value;
+    renderVisitors();
+  });
+  visitorStatusSelect?.addEventListener('change', e => {
+    adminVisitorFilter = e.target.value;
+    renderVisitors();
+  });
+  visitorProfileSelectedBtn?.addEventListener('click', openSelectedVisitorProfile);
+  visitorBanSelectedBtn?.addEventListener('click', () => bulkVisitorBlacklist(true));
+  visitorUnbanSelectedBtn?.addEventListener('click', () => bulkVisitorBlacklist(false));
 
   chatSearchInput?.addEventListener('input', e => {
     adminChatSearch = e.target.value;
@@ -2113,6 +2219,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   chatUserSelect?.addEventListener('change', e => {
     adminChatUserFilter = e.target.value;
     applyChatFilters();
+  });
+  auditSearchInput?.addEventListener('input', e => {
+    adminAuditSearch = e.target.value;
+    renderAuditLog();
+  });
+  auditActionSelect?.addEventListener('change', e => {
+    adminAuditActionFilter = e.target.value;
+    renderAuditLog();
   });
 
   chatLogListEl?.addEventListener('click', e => {
@@ -2126,9 +2240,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   allVisitorsListEl?.addEventListener('click', e => {
+    const checkbox = e.target.closest('.visitor-select-checkbox');
+    if (checkbox) {
+      updateVisitorSelectionFromCheckbox(checkbox);
+      return;
+    }
+    const selectAll = e.target.closest('#visitorSelectAll');
+    if (selectAll) {
+      const checked = selectAll.checked;
+      document.querySelectorAll('.visitor-select-checkbox').forEach(cb => {
+        cb.checked = checked;
+        updateVisitorSelectionFromCheckbox(cb);
+      });
+      return;
+    }
     const btn = e.target.closest('button.visitor-profile-btn');
-    if (!btn) return;
-    openUserProfile(btn.dataset.user);
+    if (btn) return openUserProfile(btn.dataset.user);
   });
 
   document.getElementById('clearVisitorsBtn').addEventListener('click',async()=>{
