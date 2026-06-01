@@ -1198,6 +1198,8 @@ async function openUserProfile(userId){
   const logs = (await fb_getChatLogs(0)).filter(l=>l.userId==userId);
   const isBlacklisted = user.blacklisted === true;
   const banLabel = isBlacklisted ? 'Entsperren' : 'Sperren';
+  // don't show ban button for protected admin
+  const banButton = (userId === ADMIN_DC_ID) ? '' : `<button class="admin-btn-sm del" onclick="toggleBlacklist('${userId}', ${isBlacklisted})">${banLabel}</button>`;
   container.innerHTML = `<div class="profile-card">\
     <div class="profile-top">\
       <div class="profile-avatar"><img src="${user?.avatar||'https://cdn.discordapp.com/embed/avatars/0.png'}" alt="${escHtml(user?.username||'Anon')}"></div>\
@@ -1230,7 +1232,7 @@ async function openUserProfile(userId){
       <button class="admin-btn-sm" onclick="markUser('${userId}')">Markieren</button>\
       <button class="admin-btn-sm" onclick="copyToClipboard('${userId}')">ID kopieren</button>\
       <button class="admin-btn-sm" onclick="exportUserChats('${userId}')"><i class="fas fa-file-export"></i> Export</button>\
-      <button class="admin-btn-sm del" onclick="toggleBlacklist('${userId}', ${isBlacklisted})">${banLabel}</button>\
+      ${banButton}\\
     </div>\
   </div>`;
   const statusTextEl = document.getElementById('userProfileStatus');
@@ -1262,6 +1264,11 @@ async function saveUserNote(id){
   openUserProfile(id);
 }
 async function toggleBlacklist(id, currentBlacklisted){
+  // Protect the main admin account from being banned
+  if(String(id) === String(ADMIN_DC_ID)){
+    showToast('Dieser Nutzer kann nicht gesperrt werden');
+    return;
+  }
   const confirmMsg = currentBlacklisted ? 'Nutzer entsperren?' : 'Nutzer sperren?';
   if(!confirm(confirmMsg)) return;
   const ref = _ref(_db, `visitors/${id}`);
