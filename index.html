@@ -998,6 +998,7 @@ async function fb_clearVisitors() {
 async function fb_saveChatLog(q, a, user) {
   if (!_db) return;
   try {
+    console.log('FB saveChatLog:', { question: q, answer: a, userId: user?.id || 'anon' });
     const ext = user?.avatar?.startsWith('a_') ? 'gif' : 'png';
     const avUrl = user?.avatar
       ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.${ext}?size=64`
@@ -1007,6 +1008,7 @@ async function fb_saveChatLog(q, a, user) {
     const cntRef = _ref(_db, 'meta/chatCount');
     const snap = await _get(cntRef);
     await _set(cntRef, (snap.exists() ? snap.val() : 0) + 1);
+    console.log('FB saveChatLog success');
   } catch (e) { console.warn('FB chat log error', e); }
 }
 
@@ -1018,8 +1020,9 @@ async function fb_getChatLogs(limit = 200) {
     const arr = [];
     snap.forEach(child => arr.push({ key: child.key, ...child.val() }));
     arr.sort((a, b) => b.ts - a.ts);
+    console.log('FB getChatLogs loaded', arr.length);
     return limit ? arr.slice(0, limit) : arr;
-  } catch (e) { return []; }
+  } catch (e) { console.warn('FB getChatLogs error', e); return []; }
 }
 
 async function fb_clearChats() {
@@ -1486,6 +1489,7 @@ async function renderVisitors() {
 async function renderChatLog() {
   document.getElementById('chatLogList').innerHTML='<div class="no-data">Lädt...</div>';
   const logs = await fb_getChatLogs(0);
+  console.log('renderChatLog:', logs.length, 'items');
   document.getElementById('chatCountLabel').textContent = logs.length;
   const container = document.getElementById('chatLogList');
   if(!logs.length){container.innerHTML='<div class="no-data">Noch keine Chat-Nachrichten.</div>';return;}
