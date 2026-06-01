@@ -609,6 +609,22 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   <div class="visitor-notif-dot"></div>
 </div>
 
+<!-- CHAT THREAD MODAL -->
+<div id="chatThreadModal" class="modal" style="display:none;">
+  <div class="modal-inner" style="max-width:760px;padding:18px;background:var(--bg);border-radius:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-weight:700">Chat Thread</div><button id="chatThreadClose" class="admin-btn-sm">Close</button></div>
+    <div id="chatThreadContent"><div class="no-data">Keine Nachricht ausgewählt.</div></div>
+  </div>
+</div>
+
+<!-- USER PROFILE MODAL -->
+<div id="userProfileModal" class="modal" style="display:none;">
+  <div class="modal-inner" style="max-width:520px;padding:18px;background:var(--bg);border-radius:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-weight:700">User Profil</div><button id="userProfileClose" class="admin-btn-sm">Close</button></div>
+    <div id="userProfileContent"><div class="no-data">Kein Nutzer ausgewählt.</div></div>
+  </div>
+</div>
+
 <!-- REDIRECT -->
 <div id="redirectScreen">
   <div class="rd-wrap">
@@ -742,6 +758,12 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
       </div>
       <div class="admin-section" id="tab-chats">
         <div class="admin-section-title">KI-Chat Verlauf — Alle Geräte (<span id="chatCountLabel">0</span> Nachrichten)</div>
+        <div class="admin-controls" style="display:flex;gap:8px;align-items:center;margin:10px 0 12px;">
+          <input id="chatSearch" placeholder="Suche Chat (Volltext)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:transparent;color:inherit"> 
+          <select id="chatUserFilter" style="padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.06);background:transparent;color:inherit"><option value="">Alle Nutzer</option></select>
+          <button class="admin-btn-sm" id="exportChatsBtn"><i class="fas fa-file-csv"></i> Export</button>
+          <button class="admin-btn-sm del" id="deleteSelectedChatsBtn"><i class="fas fa-trash"></i> Löschen</button>
+        </div>
         <div id="chatLogList"><div class="no-data">Lädt...</div></div>
         <div style="margin-top:14px;display:flex;gap:8px;">
           <button class="admin-btn-sm del" id="clearChatsBtn"><i class="fas fa-trash"></i> Clear All Chats</button>
@@ -1113,6 +1135,60 @@ function showVisitorNotification(v) {
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 4500);
 }
+
+// ------------------ Admin: Chats helpers ------------------
+async function openChatThread(key) {
+  const logs = await fb_getChatLogs(0);
+  const items = logs.filter(l=>l.key===key || l.key==key);
+  const container = document.getElementById('chatThreadContent');
+  if(!items.length){ container.innerHTML = '<div class="no-data">Thread nicht gefunden.</div>'; document.getElementById('chatThreadModal').style.display='block'; return; }
+  const it = items[0];
+  container.innerHTML = `<div style="display:flex;gap:12px;align-items:center;margin-bottom:8px;"><img src="${it.avatar}" style="width:48px;height:48px;border-radius:50%"><div><div style="font-weight:700">${escHtml(it.username||'Anon')}</div><div style="font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5)">${it.userId||'anon'}</div></div></div>
+    <div style="margin-bottom:8px"><div class="chat-log-label">Frage</div><div class="chat-log-q">${escHtml(it.question)}</div></div>
+    <div><div class="chat-log-label">Antwort</div><div class="chat-log-a">${escHtml(it.answer)}</div></div>`;
+  document.getElementById('chatThreadModal').style.display='block';
+}
+
+document.getElementById('chatThreadClose')?.addEventListener('click',()=>{document.getElementById('chatThreadModal').style.display='none';});
+
+async function openUserProfile(userId){
+  const container = document.getElementById('userProfileContent');
+  if(!userId){ container.innerHTML='<div class="no-data">Kein Nutzer.</div>'; document.getElementById('userProfileModal').style.display='block'; return; }
+  const snap = await _get(_ref(_db, `visitors/${userId}`));
+  const user = snap && snap.exists() ? snap.val() : null;
+  const logs = (await fb_getChatLogs(0)).filter(l=>l.userId==userId);
+  container.innerHTML = `<div style="display:flex;gap:12px;align-items:center;margin-bottom:8px;"><img src="${user?.avatar||'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:64px;height:64px;border-radius:50%"><div><div style="font-weight:700">${escHtml(user?.username||'Anon')}</div><div style="font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5)">@${escHtml(user?.handle||'—')} · ${escHtml(user?.id||'—')}</div></div></div>
+    <div style="margin-bottom:8px"><strong>Visits:</strong> ${user?.visits||0} · <strong>First:</strong> ${user?.firstSeen?new Date(user.firstSeen).toLocaleString():'—'}</div>
+    <div style="margin-bottom:8px"><strong>Letzte Fragen:</strong>${logs.length?'<ul>'+logs.slice(0,8).map(l=>`<li>${escHtml(l.question)}</li>`).join('')+'</ul>':' Keine'}</div>
+    <div style="display:flex;gap:8px"><button class="admin-btn-sm" onclick="markUser('${userId}')">Markieren</button><button class="admin-btn-sm del" onclick="banUser('${userId}')">Sperren</button></div>`;
+  document.getElementById('userProfileModal').style.display='block';
+}
+document.getElementById('userProfileClose')?.addEventListener('click',()=>{document.getElementById('userProfileModal').style.display='none';});
+
+async function markUser(id){ showToast('User markiert'); }
+async function banUser(id){ if(!confirm('Nutzer sperren?'))return; showToast('User gesperrt'); }
+
+async function exportChatsCSV(){
+  const logs = await fb_getChatLogs(0);
+  if(!logs.length){ showToast('Keine Chats zu exportieren'); return; }
+  const cols = ['ts','userId','username','question','answer'];
+  const csv = [cols.join(',')].concat(logs.map(l=>cols.map(c=>`"${String(l[c]||'').replace(/"/g,'""')}"`).join(','))).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'}); const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='chatlogs.csv'; a.click(); URL.revokeObjectURL(url);
+}
+
+async function deleteChatConfirm(key){ if(!confirm('Chat löschen?')) return; await deleteChat(key); await renderChatLog(); }
+async function deleteChat(key){ if(!_db) return; await _remove(_ref(_db, `chatLogs/${key}`)); showToast('Chat gelöscht'); }
+
+document.getElementById('exportChatsBtn')?.addEventListener('click', exportChatsCSV);
+document.getElementById('deleteSelectedChatsBtn')?.addEventListener('click', async ()=>{
+  const sels = Array.from(document.querySelectorAll('.chat-item-chk:checked')).map(c=>c.dataset.key).filter(Boolean);
+  if(!sels.length){ showToast('Keine Chats ausgewählt'); return; }
+  if(!confirm(`Lösche ${sels.length} Chats?`)) return;
+  for(const k of sels) await deleteChat(k);
+  await renderChatLog();
+});
+
 
 // Feedback carousel and UI logic removed
 
@@ -1522,7 +1598,30 @@ async function renderChatLog() {
   document.getElementById('chatCountLabel').textContent = logs.length;
   const container = document.getElementById('chatLogList');
   if(!logs.length){container.innerHTML='<div class="no-data">Noch keine Chat-Nachrichten.</div>';return;}
-  container.innerHTML = logs.map(log=>`<div class="chat-log-item"><div class="chat-log-meta"><img class="chat-log-av" src="${log.avatar}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><span class="chat-log-user">${escHtml(log.username)}</span><span class="chat-log-time">${timeAgo(log.ts)} · ${new Date(log.ts).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</span></div><div class="chat-log-label">Frage</div><div class="chat-log-q">${escHtml(log.question)}</div><div class="chat-log-label" style="margin-top:8px">Antwort</div><div class="chat-log-a">${escHtml(log.answer)}</div></div>`).join('');
+  // populate user filter
+  const users = Array.from(new Map(logs.map(l=>[l.userId||l.userId||l.userId, l])).values()).map(l=>({id:l.userId||'anon', name:l.username||'Anon'}));
+  const userFilter = document.getElementById('chatUserFilter');
+  if(userFilter){
+    const existing = Array.from(userFilter.options).map(o=>o.value);
+    users.forEach(u=>{ if(u && !existing.includes(u.id)) { const opt = document.createElement('option'); opt.value=u.id; opt.textContent=u.name; userFilter.appendChild(opt); } });
+  }
+  container.innerHTML = logs.map(log=>`<div class="chat-log-item" data-key="${log.key}">\
+    <div style="display:flex;gap:8px;align-items:flex-start">\
+      <input type=checkbox class="chat-item-chk" data-key="${log.key}" style="margin-top:6px">\
+      <div style="flex:1">\
+        <div class="chat-log-meta"><img class="chat-log-av" src="${log.avatar}" alt="" onerror="this.src='https://cdn.discordapp.com/embed/avatars/0.png'"><span class="chat-log-user">${escHtml(log.username)}</span><span class="chat-log-time">${timeAgo(log.ts)} · ${new Date(log.ts).toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})}</span></div>\
+        <div class="chat-log-label">Frage</div><div class="chat-log-q">${escHtml(log.question)}</div>\
+        <div class="chat-log-label" style="margin-top:8px">Antwort</div><div class="chat-log-a">${escHtml(log.answer)}</div>\
+      </div>\
+      <div style="margin-left:8px;display:flex;flex-direction:column;gap:6px">\
+        <button class="admin-btn-sm" data-key="${log.key}" onclick="openChatThread('${log.key}')">Thread</button>\
+        <button class="admin-btn-sm" data-user="${log.userId||''}" onclick="openUserProfile('${log.userId||''}')">Profil</button>\
+        <button class="admin-btn-sm del" data-key="${log.key}" onclick="deleteChatConfirm('${log.key}')">Löschen</button>\
+      </div>\
+    </div>\
+  </div>`).join('');
+  // attach bulk checkbox handlers
+  container.querySelectorAll('.chat-item-chk').forEach(c=>c.addEventListener('change', ()=>{}));
 }
 
 // Admin feedback panel removed
