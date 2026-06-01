@@ -1185,6 +1185,7 @@ async function openChatThread(key) {
 document.getElementById('chatThreadClose')?.addEventListener('click',()=>{document.getElementById('chatThreadModal').style.display='none';});
 
 async function openUserProfile(userId){
+  console.log('openUserProfile', userId);
   const container = document.getElementById('userProfileContent');
   if(!userId){ container.innerHTML='<div class="no-data">Kein Nutzer.</div>'; document.getElementById('userProfileModal').style.display='block'; return; }
   const snap = await _get(_ref(_db, `visitors/${userId}`));
@@ -1609,7 +1610,7 @@ function buildVisitorTable(visitors) {
       <td><span class="visitor-cnt">${v.visits || 1}x</span></td>
       <td><span class="visitor-time">${timeAgo(v.lastSeen)}<br><span style="font-size:.44rem;opacity:.5">${lastDate}</span></span></td>
       <td><span class="visitor-time">${joinDate}</span></td>
-      <td><button class="admin-btn-sm" onclick="openUserProfile('${escHtml(v.id||'')}')">Profil</button></td>
+      <td><button class="admin-btn-sm visitor-profile-btn" data-user="${escHtml(v.id||'')}">Profil</button></td>
     </tr>`;
   }).join('');
 
@@ -1699,9 +1700,9 @@ function applyChatFilters() {
         <div class="chat-log-label" style="margin-top:8px">Antwort</div><div class="chat-log-a">${escHtml(log.answer)}</div>\
       </div>\
       <div style="margin-left:8px;display:flex;flex-direction:column;gap:6px">\
-        <button class="admin-btn-sm" onclick='openChatThread(${JSON.stringify(log.key)})'>Thread</button>\
-        <button class="admin-btn-sm" onclick='openUserProfile(${JSON.stringify(log.userId||'anon')})'>Profil</button>\
-        <button class="admin-btn-sm del" onclick='deleteChatConfirm(${JSON.stringify(log.key)})'>Löschen</button>\
+        <button class="admin-btn-sm chat-thread-btn" data-key="${log.key}">Thread</button>\
+        <button class="admin-btn-sm chat-profile-btn" data-user="${escHtml(log.userId||'anon')}">Profil</button>\
+        <button class="admin-btn-sm del chat-delete-btn" data-key="${log.key}">Löschen</button>\
       </div>\
     </div>\
   </div>`).join('');
@@ -1782,6 +1783,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const chatSearchInput = document.getElementById('chatSearch');
   const chatUserSelect = document.getElementById('chatUserFilter');
+  const chatLogListEl = document.getElementById('chatLogList');
+  const allVisitorsListEl = document.getElementById('allVisitorsList');
+
   chatSearchInput?.addEventListener('input', e => {
     adminChatSearch = e.target.value;
     applyChatFilters();
@@ -1789,6 +1793,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   chatUserSelect?.addEventListener('change', e => {
     adminChatUserFilter = e.target.value;
     applyChatFilters();
+  });
+
+  chatLogListEl?.addEventListener('click', e => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const key = btn.dataset.key;
+    const userId = btn.dataset.user;
+    if (btn.classList.contains('chat-thread-btn')) return openChatThread(key);
+    if (btn.classList.contains('chat-profile-btn')) return openUserProfile(userId);
+    if (btn.classList.contains('chat-delete-btn')) return deleteChatConfirm(key);
+  });
+
+  allVisitorsListEl?.addEventListener('click', e => {
+    const btn = e.target.closest('button.visitor-profile-btn');
+    if (!btn) return;
+    openUserProfile(btn.dataset.user);
   });
 
   document.getElementById('clearVisitorsBtn').addEventListener('click',async()=>{
@@ -1813,6 +1833,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('modalBg')?.addEventListener('click',closeModal);
   document.getElementById('modalClose')?.addEventListener('click',closeModal);
 });
+
+window.openUserProfile = openUserProfile;
+window.openChatThread = openChatThread;
+window.deleteChatConfirm = deleteChatConfirm;
+window.markUser = markUser;
+window.toggleBlacklist = toggleBlacklist;
 </script>
 </body>
 </html>
