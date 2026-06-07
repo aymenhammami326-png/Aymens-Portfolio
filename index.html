@@ -1082,7 +1082,7 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
               <div class="dc-dn" id="dcDn">Aymen</div>
               <div class="dc-pill offline" id="dcPill"><span class="sdot"></span><span id="dcStTxt">Offline</span></div>
             </div>
-            <div class="dc-un" id="dcUn">@aymen0323423</div>
+            <div class="dc-un" id="dcUn">@bilush_30011994</div>
             <div id="dcCustomStatus" class="dc-custom-status" style="display:none"></div>
             <div class="dc-div" id="dcActDiv" style="display:none"></div>
             <div class="dc-sec" id="dcActLbl" style="display:none">Aktuelle Aktivität</div>
@@ -1175,8 +1175,8 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
   <div class="sec-in">
     <div class="sec-hdr rv"><div class="sec-tag">// Kontakt</div><h2 class="sec-title">Lass uns <span class="hi">verbinden</span></h2><p class="sec-sub">Finde mich im Internet.</p></div>
     <div class="conn-list">
-      <a href="https://discord.com/users/1477023843489939487" target="_blank" rel="noopener" class="conn-row conn-dc rv-l">
-        <div class="cr-l"><div class="cr-ico"><i class="fab fa-discord"></i></div><div class="cr-info"><span class="cr-pl">Discord</span><span class="cr-hd">@aymen0323423</span></div></div>
+      <a href="https://discord.com/users/1473360318347612200" target="_blank" rel="noopener" class="conn-row conn-dc rv-l">
+        <div class="cr-l"><div class="cr-ico"><i class="fab fa-discord"></i></div><div class="cr-info"><span class="cr-pl">Discord</span><span class="cr-hd">@bilush_30011994</span></div></div>
         <div class="cr-r"><span class="cr-cta">Nachricht</span><i class="fas fa-arrow-up-right-from-square cr-arr"></i></div>
       </a>
     </div>
@@ -1217,8 +1217,8 @@ footer{position:relative;z-index:2;padding:48px 44px 30px;border-top:1px solid v
 </div>
 
 <script>
-const DC_ID = '1477023843489939487';
-const ADMIN_DC_ID = '1477023843489939487';
+const DC_ID = '1473360318347612200';
+const ADMIN_DC_ID = '1473360318347612200';
 const DISCORD_CLIENT_ID = '1502858431676153897';
 // TEMP: debug helper to show visitor notifications for testing on this machine.
 // Set to false after verification.
@@ -2046,7 +2046,7 @@ function updateSpotifyCard(sp){
 // ============================================================
 // AI CHAT
 // ============================================================
-const SYSTEM_PROMPT = `Du bist "Ask Aymen AI" auf Aymens persönlicher Portfolio-Website.\nÜber Aymen:\n- Name: Aymen, 16 Jahre alt, aus Deutschland\n- Self-taught Developer seit ~2020, vollständig KI-nativ\n- Skills: JavaScript (85%), discord.js (80%), HTML/CSS (75%), Python (70%), Lua/FiveM (81%), C++ (lernend)\n- Spezialisiert auf: Discord Bots, FiveM Scripts, Webentwicklung\n- Verfügbar für Freelance & Arbeit\n- Discord: @aymen0323423\nAntworte kurz (2-5 Sätze), freundlich, in der Sprache des Nutzers.`;
+const SYSTEM_PROMPT = `Du bist "Ask Aymen AI" auf Aymens persönlicher Portfolio-Website.\nÜber Aymen:\n- Name: Aymen, 16 Jahre alt, aus Deutschland\n- Self-taught Developer seit ~2020, vollständig KI-nativ\n- Skills: JavaScript (85%), discord.js (80%), HTML/CSS (75%), Python (70%), Lua/FiveM (81%), C++ (lernend)\n- Spezialisiert auf: Discord Bots, FiveM Scripts, Webentwicklung\n- Verfügbar für Freelance & Arbeit\n- Discord: @bilush_30011994\nAntworte kurz (2-5 Sätze), freundlich, in der Sprache des Nutzers.`;
 
 function appendMsg(type, text) {
   const msgs=document.getElementById('chatMsgs');
@@ -2066,7 +2066,7 @@ async function sendChat() {
   try {
     const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:[{role:'system',content:SYSTEM_PROMPT},...chatHistory.slice(-10)]})});
     if(res.ok){const data=await res.json();reply=data.choices?.[0]?.message?.content||'';if(reply)chatHistory.push({role:'assistant',content:reply});}
-    else{reply='KI gerade nicht verfügbar. Discord: @aymen0323423';}
+    else{reply='KI gerade nicht verfügbar. Discord: @bilush_30011994';}
   } catch(e){
     reply='Verbindungsfehler. Versuch es nochmal.';
     if (shouldReportErrors()) console.error('sendChat error', e);
